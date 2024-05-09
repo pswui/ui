@@ -63,7 +63,5 @@ My goal is to create **fully typesafe**, **highly customizable** component with 
 * Library/Framework Support
   * [ ] React
   * [ ] Svelte
-* CLI [1]
+* CLI - _I'm not sure about this._
   * [ ] Add
-
-[1] I'm really not sure about this yet.
