@@ -11,6 +11,7 @@ My goal is to create **fully typesafe**, **highly customizable** component with 
 * **Hate script.** If you can do that with CSS, just do that with CSS. Why use JS?
 * **Love transitions.** Actually _Implementing In-Out Transition_ is much more difficult thing to do in react, especially with DOM manipulation. It really should be in the plan.
 * **Stick with defaults.** Just let others do their customization. And, well, TailwindCSS's default theme is pretty cool.
+* **Keep component isolated.** Leave them alone. Don't make one dependent to others.
 
 ## Milestones
 
