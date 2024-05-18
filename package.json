@@ -1,0 +1,14 @@
+{
+  "name": "ui",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/p-sw/ui",
+  "author": "p-sw <shinwoo.park@psw.kr>",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*",
+    "components"
+  ],
+  "private": true,
+  "packageManager": "yarn@4.2.2+sha256.1aa43a5304405be7a7cb9cb5de7b97de9c4e8ddd3273e4dad00d6ae3eb39f0ef"
+}
