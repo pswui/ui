@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --dark-bg-color: #000;
+    --dark-text-color: #fff;
+    --dark-btn-bg-color: #2f2f2f;
+    --dark-btn-text-color: #fff;
+    --dark-code-bg-color: #1f1f1f;
+  }
+
+  body {
+    @apply bg-white dark:bg-[var(--dark-bg-color)] text-black dark:text-[var(--dark-text-color)] transition-colors duration-300;
+  }
+  .sbdocs.sbdocs-preview.dark {
+    @apply dark:bg-[var(--dark-bg-color)] dark:text-[var(--dark-text-color)] transition-colors duration-300;
+
+    & .sb-bar {
+      @apply dark:bg-[var(--dark-bg-color)] dark:text-[var(--dark-text-color)];
+    }
+
+    & .sb-bar button, .docs-story > div:nth-child(2) > button, .docs-story + div > div:nth-child(2) > button {
+      @apply dark:bg-[var(--dark-btn-bg-color)] dark:text-[var(--dark-btn-text-color)];
+    }
+    
+    & .prismjs {
+      @apply pb-8;
+      
+      & > div {
+        @apply dark:bg-[var(--dark-code-bg-color)] rounded-md p-4;
+      }
+    }
+  }
+}
+
