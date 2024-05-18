@@ -8,7 +8,10 @@ const variants = vcn({
       default:
         "bg-white border border-gray-300 dark:bg-black dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors",
       ghost:
-        "bg-black/0 hover:bg-black/20 dark:bg-white/0 dark:hover:bg-white/10 transition-colors",
+        "bg-black/0 hover:bg-black/10 dark:bg-white/0 dark:hover:bg-white/20 transition-colors",
+      outline:
+        "bg-transparent border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors",
+      link: "bg-transparent hover:underline transition-colors",
     },
     size: {
       sm: "px-2 py-1 text-sm",
