@@ -73,4 +73,10 @@ My goal is to create **fully typesafe**, **highly customizable** component with 
 corepack enable
 corepack install yarn@4.2.2
 corepack use yarn@4.2.2
+
+# Install Packages
+yarn install
+
+# Run Storybook
+yarn workspace react storybook
 ```
