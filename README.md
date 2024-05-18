@@ -20,7 +20,7 @@ My goal is to create **fully typesafe**, **highly customizable** component with 
   - [ ] Avatar
   - [ ] Badge
   - [ ] Breadcrumb
-  - [ ] Button
+  - [x] Button
   - [ ] Calendar
   - [ ] Card
   - [ ] Carousel
