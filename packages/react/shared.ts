@@ -25,7 +25,7 @@ export function vcn<V extends Record<string, Record<string, string>>>({
   (
     anyProps: Record<string, any>,
     options?: {
-      includeClassName?: boolean;
+      excludeClassName?: boolean;
     }
   ) => [RawVariantProps<V> & { className?: string }, Record<string, any>],
 ] {
@@ -52,7 +52,7 @@ export function vcn<V extends Record<string, Record<string, string>>>({
         ([variantProps, otherProps], [key, value]) => {
           if (
             variantKeys.includes(key) ||
-            (options.includeClassName && key === "className")
+            (!options.excludeClassName && key === "className")
           ) {
             return [{ ...variantProps, [key]: value }, otherProps];
           }
