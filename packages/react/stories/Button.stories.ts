@@ -14,6 +14,7 @@ const meta: Meta<typeof Button> = {
     },
     decoration: { options: ["none", "link"], control: "select" },
     onClick: { table: { disable: true } },
+    preset: { options: ["default", "ghost", "link"], control: "select" },
   },
   args: { children: "Button", onClick: () => console.log("clicked") },
 };
@@ -23,19 +24,13 @@ type Story = StoryObj<typeof Button>;
 
 export const Default: Story = {
   args: {
-    border: "solid",
-    background: "default",
-    decoration: "none",
-    size: "md",
+    preset: "default",
   },
 };
 
 export const Ghost: Story = {
   args: {
-    border: "none",
-    background: "ghost",
-    decoration: "none",
-    size: "md",
+    preset: "ghost",
   },
 };
 
@@ -50,9 +45,6 @@ export const Outline: Story = {
 
 export const Link: Story = {
   args: {
-    border: "none",
-    background: "link",
-    decoration: "link",
-    size: "md",
+    preset: "link",
   },
 };
