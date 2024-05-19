@@ -26,7 +26,7 @@ const variants = vcn({
 });
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends Omit<React.ComponentPropsWithoutRef<"button">, "className">,
     VariantProps<typeof variants> {}
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
