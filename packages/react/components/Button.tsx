@@ -1,7 +1,7 @@
 import React from "react";
 import { vcn, VariantProps } from "@/shared";
 
-const variants = vcn({
+const [buttonVariants, resolveVariants] = vcn({
   base: "flex flex-row items-center justify-between rounded-md",
   variants: {
     variant: {
@@ -27,11 +27,18 @@ const variants = vcn({
 
 export interface ButtonProps
   extends Omit<React.ComponentPropsWithoutRef<"button">, "className">,
-    VariantProps<typeof variants> {}
+    VariantProps<typeof buttonVariants> {}
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
-    return <button ref={ref} {...props} className={variants(props)} />;
+    const [variantProps, otherProps] = resolveVariants(props);
+    return (
+      <button
+        ref={ref}
+        {...otherProps}
+        className={buttonVariants(variantProps)}
+      />
+    );
   }
 );
 
