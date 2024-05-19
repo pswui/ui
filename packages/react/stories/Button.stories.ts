@@ -2,14 +2,17 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../components/Button";
 
 const meta: Meta<typeof Button> = {
+  title: "React/Button",
   component: Button,
   tags: ["autodocs"],
   argTypes: {
-    variant: {
-      options: ["default", "ghost", "outline", "link"],
+    size: { options: ["sm", "md", "lg"], control: "select" },
+    border: { options: ["none", "solid", "outline"], control: "select" },
+    background: {
+      options: ["default", "ghost", "link"],
       control: "select",
     },
-    size: { options: ["sm", "md", "lg"], control: "select" },
+    decoration: { options: ["none", "link"], control: "select" },
     onClick: { table: { disable: true } },
   },
   args: { children: "Button", onClick: () => console.log("clicked") },
@@ -20,28 +23,36 @@ type Story = StoryObj<typeof Button>;
 
 export const Default: Story = {
   args: {
-    variant: "default",
+    border: "solid",
+    background: "default",
+    decoration: "none",
     size: "md",
   },
 };
 
 export const Ghost: Story = {
   args: {
-    variant: "ghost",
+    border: "none",
+    background: "ghost",
+    decoration: "none",
     size: "md",
   },
 };
 
 export const Outline: Story = {
   args: {
-    variant: "outline",
+    border: "outline",
+    background: "ghost",
+    decoration: "none",
     size: "md",
   },
 };
 
 export const Link: Story = {
   args: {
-    variant: "link",
+    border: "none",
+    background: "link",
+    decoration: "link",
     size: "md",
   },
 };
