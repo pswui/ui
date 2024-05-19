@@ -22,12 +22,15 @@ export function vcn<V extends Record<string, Record<string, string>>>({
   };
 }): [
   (variantProps: RawVariantProps<V> & { className?: string }) => string,
-  (
-    anyProps: Record<string, any>,
+  <AnyPropBeforeResolve extends Record<string, any>>(
+    anyProps: AnyPropBeforeResolve,
     options?: {
       excludeClassName?: boolean;
     }
-  ) => [RawVariantProps<V> & { className?: string }, Record<string, any>],
+  ) => [
+    RawVariantProps<V> & { className?: string },
+    Omit<AnyPropBeforeResolve, keyof RawVariantProps<V> | "className">,
+  ],
 ] {
   return [
     ({ className, ...variantProps }) => {
@@ -59,7 +62,10 @@ export function vcn<V extends Record<string, Record<string, string>>>({
           return [variantProps, { ...otherProps, [key]: value }];
         },
         [{}, {}]
-      );
+      ) as [
+        RawVariantProps<V> & { className?: string },
+        Omit<typeof anyProps, keyof RawVariantProps<V> | "className">,
+      ];
     },
   ];
 }
