@@ -32,6 +32,26 @@ const [buttonVariants, resolveVariants] = vcn({
     background: "default",
     decoration: "none",
   },
+  presets: {
+    default: {
+      border: "solid",
+      background: "default",
+      decoration: "none",
+      size: "md",
+    },
+    ghost: {
+      border: "none",
+      background: "ghost",
+      decoration: "none",
+      size: "md",
+    },
+    link: {
+      border: "none",
+      background: "link",
+      decoration: "link",
+      size: "md",
+    },
+  },
 });
 
 export interface ButtonProps
