@@ -1,5 +1,15 @@
 import { twMerge } from "tailwind-merge";
 
+type BooleanString<T extends string> = T extends "true"
+  ? true
+  : T extends "false"
+    ? false
+    : T;
+
+type RawVariantProps<V extends Record<string, Record<string, string>>> = {
+  [VariantKey in keyof V]?: BooleanString<keyof V[VariantKey] & string>;
+};
+
 export function vcn<V extends Record<string, Record<string, string>>>({
   base,
   variants,
@@ -7,10 +17,10 @@ export function vcn<V extends Record<string, Record<string, string>>>({
 }: {
   base: string;
   variants: V;
-  defaults: { [VariantKey in keyof V]: keyof V[VariantKey] };
-}): (
-  variantProps: Partial<typeof defaults> & { className?: string }
-) => string {
+  defaults: {
+    [VariantKey in keyof V]: BooleanString<keyof V[VariantKey] & string>;
+  };
+}): (variantProps: RawVariantProps<V> & { className?: string }) => string {
   return ({ className, ...variantProps }) => {
     return twMerge(
       base,
@@ -19,7 +29,7 @@ export function vcn<V extends Record<string, Record<string, string>>>({
       ).map<string>(
         ([variantKey, defaultValue]) =>
           variants[variantKey][
-            (variantProps as unknown as Partial<typeof defaults>)[variantKey] ??
+            (variantProps as unknown as RawVariantProps<V>)[variantKey] ??
               defaultValue
           ]
       ),
