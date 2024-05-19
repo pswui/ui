@@ -35,4 +35,4 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 
-export { Button, variants as buttonVariants };
+export { Button };
