@@ -15,7 +15,7 @@ export function vcn<V extends Record<string, Record<string, string>>>({
   variants,
   defaults,
 }: {
-  base: string;
+  base?: string | undefined;
   variants: V;
   defaults: {
     [VariantKey in keyof V]: BooleanString<keyof V[VariantKey] & string>;
