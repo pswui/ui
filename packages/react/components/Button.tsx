@@ -1,5 +1,5 @@
 import React from "react";
-import { vcn, VariantProps } from "../shared";
+import { vcn, VariantProps } from "@/shared";
 
 const variants = vcn({
   base: "flex flex-row items-center justify-between rounded-md",
