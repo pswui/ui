@@ -55,7 +55,6 @@ const withThemeByClassName = <TRenderer extends Renderer = any>(
 
       if (newThemeClasses.length > 0) {
         parentElement.forEach((element) => {
-          console.log(element);
           element.classList.add(...newThemeClasses);
         });
       }
