@@ -15,28 +15,26 @@ My goal is to create **fully typesafe**, **highly customizable** component with 
 ## Milestones
 
 - Component Implementation
+  - [ ] DateTimeInput
+  - [ ] TextInput
+  - [ ] PasswordInput
+  - [ ] NumberInput
+  - [ ] FileInput
+  - [ ] Textarea
   - [ ] Accordion
   - [ ] Alert
   - [ ] Avatar
   - [ ] Badge
   - [ ] Breadcrumb
   - [x] Button
-  - [ ] Calendar
   - [ ] Card
-  - [ ] Carousel
   - [ ] Checkbox
-  - [ ] Combobox
-  - [ ] Command
   - [ ] Context Menu
   - [ ] Data Table
-  - [ ] Date Picker
-  - [ ] Dialog
+  - [x] Dialog
   - [ ] Drawer
   - [ ] Dropdown Menu
-  - [ ] Form
-  - [ ] Hover Card
-  - [ ] Input
-  - [ ] Input OTP
+  - [ ] Hover
   - [ ] Label
   - [ ] Menubar
   - [ ] Navigation Menu
@@ -44,18 +42,14 @@ My goal is to create **fully typesafe**, **highly customizable** component with 
   - [ ] Popover
   - [ ] Progress
   - [ ] Radio Group
-  - [ ] Resizable
   - [ ] Scroll Area
   - [ ] Select
   - [ ] Separator
-  - [ ] Sheet
   - [ ] Skeleton
   - [ ] Slider
-  - [ ] Sonner
   - [ ] Switch
   - [ ] Table
   - [ ] Tabs
-  - [ ] Textarea
   - [ ] Toast
   - [ ] Toggle
   - [ ] Toggle Group
@@ -63,7 +57,7 @@ My goal is to create **fully typesafe**, **highly customizable** component with 
 - Library/Framework Support
   - [ ] React
   - [ ] Svelte
-- CLI - _I'm not sure about this._
+- CLI
   - [ ] Add
 
 ## Building local development environment
