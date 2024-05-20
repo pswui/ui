@@ -76,12 +76,11 @@ type VariantKV<V extends VariantType> = {
  * }
  * ```
  */
-type PresetType<V extends VariantType> = Record<
-  string,
-  Partial<VariantKV<V>> & { className?: string }
->;
+type PresetType<V extends VariantType, N extends string> = {
+  [PresetName in N]: Partial<VariantKV<V>> & { className?: string };
+};
 
-export function vcn<V extends VariantType>({
+export function vcn<V extends VariantType, N extends string>({
   base,
   variants,
   defaults,
@@ -90,12 +89,12 @@ export function vcn<V extends VariantType>({
   base?: string | undefined;
   variants: V /* VariantType */;
   defaults: VariantKV<V>;
-  presets?: PresetType<V>;
+  presets?: PresetType<V, N>;
 }): [
   (
     variantProps: Partial<VariantKV<V>> & {
       className?: string;
-      preset?: keyof PresetType<V>;
+      preset?: N | undefined;
     }
   ) => string,
   <AnyPropBeforeResolve extends Record<string, any>>(
@@ -107,7 +106,7 @@ export function vcn<V extends VariantType>({
   ) => [
     Partial<VariantKV<V>> & {
       className?: string;
-      preset?: keyof PresetType<V>;
+      preset?: N | undefined;
     },
     Omit<
       AnyPropBeforeResolve,
@@ -124,7 +123,7 @@ export function vcn<V extends VariantType>({
      * @returns The class name.
      */
     ({ className, preset, ...variantProps }) => {
-      const currentPreset: PresetType<V>[string] | null =
+      const currentPreset: PresetType<V, N>[N] | null =
         presets && preset ? presets[preset] ?? null : null;
       const presetVariantKeys: (keyof V)[] = Object.keys(currentPreset ?? {});
       return twMerge(
@@ -191,7 +190,7 @@ export function vcn<V extends VariantType>({
  * }
  * ```
  */
-export type VariantProps<F extends ReturnType<typeof vcn>[0]> = F extends (
+export type VariantProps<F extends (props: any) => string> = F extends (
   props: infer P
 ) => string
   ? P
