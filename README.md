@@ -50,10 +50,10 @@ My goal is to create **fully typesafe**, **highly customizable** component with 
   - [ ] Switch
   - [ ] Table
   - [ ] Tabs
-  - [ ] Toast
+  - [x] Toast
   - [ ] Toggle
   - [ ] Toggle Group
-  - [ ] Tooltip
+  - [x] Tooltip
 - Library/Framework Support
   - [ ] React
   - [ ] Svelte
