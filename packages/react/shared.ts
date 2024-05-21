@@ -143,18 +143,15 @@ export function vcn<V extends VariantType, N extends string>({
      * Otherwise, it will parse A as variant props.
      *
      * @param anyProps - Any props that have passed to the component.
-     * @param options - Options.
      * @returns [variantProps, otherProps]
      */
-    (anyProps, options = {}) => {
+    (anyProps) => {
       const variantKeys = Object.keys(variants) as (keyof V)[];
 
       return Object.entries(anyProps).reduce(
         ([variantProps, otherProps], [key, value]) => {
           if (
-            variantKeys.includes(key) ||
-            (!options.excludeClassName && key === "className") ||
-            (!options.excludePreset && key === "preset")
+            variantKeys.includes(key)
           ) {
             return [{ ...variantProps, [key]: value }, otherProps];
           }
@@ -162,8 +159,8 @@ export function vcn<V extends VariantType, N extends string>({
         },
         [{}, {}]
       ) as [
-        Partial<VariantKV<V>> & { className?: string },
-        Omit<typeof anyProps, keyof Partial<VariantKV<V>> | "className">,
+        Partial<VariantKV<V>>,
+        Omit<typeof anyProps, keyof Partial<VariantKV<V>> | "preset" | "className">,
       ];
     },
   ];
