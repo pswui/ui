@@ -85,15 +85,17 @@ export const WithCloseOnClick = () => {
             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
             aliquip ex ea commodo consequat.
           </p>
-          <DialogClose>
-            <Button
-              onClick={(e) => {
-                console.log(`Closed dialog: `, e.currentTarget);
-              }}
-            >
-              Close Dialog
-            </Button>
-          </DialogClose>
+          <DialogFooter>
+            <DialogClose>
+              <Button
+                onClick={(e) => {
+                  console.log(`Closed dialog: `, e.currentTarget);
+                }}
+              >
+                Close Dialog
+              </Button>
+            </DialogClose>
+          </DialogFooter>
         </DialogContent>
       </DialogOverlay>
     </DialogRoot>
