@@ -72,6 +72,7 @@ type VariantKV<V extends VariantType> = {
  *     opened: false,
  *     size: "md",
  *     color: "green",
+ *     className: "transition-opacity",
  *   },
  * }
  * ```
@@ -80,7 +81,14 @@ type PresetType<V extends VariantType, N extends string> = {
   [PresetName in N]: Partial<VariantKV<V>> & { className?: string };
 };
 
-export function vcn<V extends VariantType, N extends string>({
+/**
+ * A utility function to provide variants and presets to the component
+ *
+ * @param config - Variant Configuration
+ * @returns function (variantProps) -> class name,
+ * @returns function (anyProps) -> [variantProps, otherProps]
+ */
+export function vcn<V extends VariantType, N extends string /* Preset names */>({
   base,
   variants,
   defaults,
@@ -133,7 +141,7 @@ export function vcn<V extends VariantType, N extends string>({
                   : defaultValue)
             ]
         ),
-        currentPreset?.className,
+        currentPreset?.className, // preset's classname comes after user's variant props? huh..
         className
       );
     },
