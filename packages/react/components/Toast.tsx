@@ -23,9 +23,9 @@ const [toastVariant] = vcn({
       loading: "border-black/50 dark:border-white/50 animate-pulse",
     },
     life: {
-      born: "translate-y-1/2 scale-50",
+      born: "translate-y-1/2 scale-90 ease-out",
       normal: "translate-y-0 scale-100 ease-out",
-      dead: "translate-y-1/2 scale-50 ease-in",
+      dead: "translate-y-1/2 scale-90 ease-in",
     },
   },
   defaults: {
