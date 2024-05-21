@@ -94,7 +94,7 @@ export function vcn<V extends VariantType, N extends string>({
   (
     variantProps: Partial<VariantKV<V>> & {
       className?: string;
-      preset?: N | undefined;
+      preset?: N;
     }
   ) => string,
   <AnyPropBeforeResolve extends Record<string, any>>(
