@@ -99,18 +99,11 @@ export function vcn<V extends VariantType, N extends string>({
   ) => string,
   <AnyPropBeforeResolve extends Record<string, any>>(
     anyProps: AnyPropBeforeResolve,
-    options?: {
-      excludePreset?: boolean;
-      excludeClassName?: boolean;
-    }
   ) => [
-    Partial<VariantKV<V>> & {
-      className?: string;
-      preset?: N | undefined;
-    },
+    Partial<VariantKV<V>>,
     Omit<
       AnyPropBeforeResolve,
-      keyof Partial<VariantKV<V>> | "className" | "preset"
+      keyof Partial<VariantKV<V>> | "preset" | "className"
     >,
   ],
 ] {
