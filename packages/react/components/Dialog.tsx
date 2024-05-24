@@ -20,7 +20,16 @@ interface DialogContext {
 const initialDialogContext: DialogContext = { opened: false };
 const DialogContext = React.createContext<
   [DialogContext, Dispatch<SetStateAction<DialogContext>>]
->([initialDialogContext, () => {}]);
+>([
+  initialDialogContext,
+  () => {
+    if (process.env.NODE_ENV && process.env.NODE_ENV !== "development") {
+      console.warn(
+        "It seems like you're using DialogContext outside of a provider."
+      );
+    }
+  },
+]);
 
 const useDialogContext = () => React.useContext(DialogContext);
 
