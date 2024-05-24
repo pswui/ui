@@ -23,7 +23,7 @@ const DialogContext = React.createContext<
 >([
   initialDialogContext,
   () => {
-    if (process.env.NODE_ENV && process.env.NODE_ENV !== "development") {
+    if (process.env.NODE_ENV && process.env.NODE_ENV === "development") {
       console.warn(
         "It seems like you're using DialogContext outside of a provider."
       );
