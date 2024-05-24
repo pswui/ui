@@ -241,7 +241,7 @@ function combinedRef<I>(refs: React.Ref<I | null>[]) {
 }
 
 interface SlotProps {
-  children?: Exclude<React.ReactNode, Iterable<React.ReactNode>> | string;
+  children?: React.ReactNode;
 }
 export const Slot = React.forwardRef<any, SlotProps>((props, ref) => {
   const { children, ...slotProps } = props;
@@ -254,16 +254,6 @@ export const Slot = React.forwardRef<any, SlotProps>((props, ref) => {
   } as any);
 });
 
-export interface MustAsChild {
-  children: React.ReactElement<
-    unknown,
-    string | React.JSXElementConstructor<any>
-  >;
-}
-
-export interface OptionalAsChild<T extends boolean> {
-  children?: T extends true
-    ? React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
-    : React.ReactNode;
-  asChild?: T;
+export interface AsChild {
+  asChild?: boolean;
 }
