@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { MustAsChild, Slot, VariantProps, vcn } from "../shared";
+import { Slot, VariantProps, vcn } from "../shared";
 import ReactDOM from "react-dom";
 
 /**
@@ -51,7 +51,9 @@ const DialogRoot = ({ children }: DialogRootProps) => {
  * =========================
  */
 
-interface DialogTriggerProps extends MustAsChild {}
+interface DialogTriggerProps {
+  children: React.ReactNode;
+}
 
 const DialogTrigger = ({ children }: DialogTriggerProps) => {
   const [_, setState] = useDialogContext();
@@ -210,7 +212,9 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContent>(
  * =========================
  */
 
-interface DialogCloseProps extends MustAsChild {}
+interface DialogCloseProps {
+  children: React.ReactNode;
+}
 
 const DialogClose = ({ children }: DialogCloseProps) => {
   const [_, setState] = useDialogContext();
