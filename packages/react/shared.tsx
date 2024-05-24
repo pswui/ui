@@ -112,7 +112,10 @@ export function vcn<
   <AnyPropBeforeResolve extends Record<string, any>>(
     anyProps: AnyPropBeforeResolve
   ) => [
-    Partial<VariantKV<V>>,
+    Partial<VariantKV<V>> & {
+      className?: string;
+      preset?: N;
+    },
     Omit<
       AnyPropBeforeResolve,
       keyof Partial<VariantKV<V>> | "preset" | "className"
@@ -162,14 +165,21 @@ export function vcn<
 
       return Object.entries(anyProps).reduce(
         ([variantProps, otherProps], [key, value]) => {
-          if (variantKeys.includes(key)) {
+          if (
+            variantKeys.includes(key) ||
+            key === "className" ||
+            key === "preset"
+          ) {
             return [{ ...variantProps, [key]: value }, otherProps];
           }
           return [variantProps, { ...otherProps, [key]: value }];
         },
         [{}, {}]
       ) as [
-        Partial<VariantKV<V>>,
+        Partial<VariantKV<V>> & {
+          className?: string;
+          preset?: N;
+        },
         Omit<
           typeof anyProps,
           keyof Partial<VariantKV<V>> | "preset" | "className"
