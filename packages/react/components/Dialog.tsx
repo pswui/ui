@@ -217,13 +217,11 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContent>(
  * =========================
  */
 
-interface DialogCloseProps<T extends React.ReactNode> {
-  children: T extends any[] ? never : T;
+interface DialogCloseProps {
+  children: Exclude<React.ReactNode, Iterable<React.ReactNode>>;
 }
 
-const DialogClose = <T extends React.ReactNode>({
-  children,
-}: DialogCloseProps<T>) => {
+const DialogClose = ({ children }: DialogCloseProps) => {
   const [_, setState] = useDialogContext();
   // const onClick = () => setState((p) => ({ ...p, opened: false }));
 
