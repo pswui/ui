@@ -1,3 +1,4 @@
+import React from "react";
 import { twMerge } from "tailwind-merge";
 
 /**
@@ -88,7 +89,10 @@ type PresetType<V extends VariantType, N extends string> = {
  * @returns function (variantProps) -> class name,
  * @returns function (anyProps) -> [variantProps, otherProps]
  */
-export function vcn<V extends VariantType, N extends string /* Preset names */>({
+export function vcn<
+  V extends VariantType,
+  N extends string /* Preset names */,
+>({
   base,
   variants,
   defaults,
@@ -106,7 +110,7 @@ export function vcn<V extends VariantType, N extends string /* Preset names */>(
     }
   ) => string,
   <AnyPropBeforeResolve extends Record<string, any>>(
-    anyProps: AnyPropBeforeResolve,
+    anyProps: AnyPropBeforeResolve
   ) => [
     Partial<VariantKV<V>>,
     Omit<
@@ -158,9 +162,7 @@ export function vcn<V extends VariantType, N extends string /* Preset names */>(
 
       return Object.entries(anyProps).reduce(
         ([variantProps, otherProps], [key, value]) => {
-          if (
-            variantKeys.includes(key)
-          ) {
+          if (variantKeys.includes(key)) {
             return [{ ...variantProps, [key]: value }, otherProps];
           }
           return [variantProps, { ...otherProps, [key]: value }];
@@ -168,7 +170,10 @@ export function vcn<V extends VariantType, N extends string /* Preset names */>(
         [{}, {}]
       ) as [
         Partial<VariantKV<V>>,
-        Omit<typeof anyProps, keyof Partial<VariantKV<V>> | "preset" | "className">,
+        Omit<
+          typeof anyProps,
+          keyof Partial<VariantKV<V>> | "preset" | "className"
+        >,
       ];
     },
   ];
@@ -193,3 +198,72 @@ export type VariantProps<F extends (props: any) => string> = F extends (
 ) => string
   ? P
   : never;
+
+function mergeReactProps(
+  parentProps: Record<string, any>,
+  childProps: Record<string, any>
+) {
+  const overrideProps = { ...childProps };
+
+  for (const propName in childProps) {
+    const parentPropValue = parentProps[propName];
+    const childPropValue = childProps[propName];
+
+    const isHandler = /^on[A-Z]/.test(propName);
+    if (isHandler) {
+      if (childPropValue && parentPropValue) {
+        overrideProps[propName] = (...args: unknown[]) => {
+          childPropValue?.(...args);
+          parentPropValue?.(...args);
+        };
+      } else if (parentPropValue) {
+        overrideProps[propName] = parentPropValue;
+      }
+    } else if (propName === "style") {
+      overrideProps[propName] = { ...parentPropValue, ...childPropValue };
+    } else if (propName === "className") {
+      overrideProps[propName] = twMerge(parentPropValue, childPropValue);
+    }
+  }
+
+  return { ...parentProps, ...overrideProps };
+}
+
+function combinedRef<I>(refs: React.Ref<I | null>[]) {
+  return (instance: I | null) =>
+    refs.forEach((ref) => {
+      if (ref instanceof Function) {
+        ref(instance);
+      } else if (!!ref) {
+        (ref as React.MutableRefObject<I | null>).current = instance;
+      }
+    });
+}
+
+interface SlotProps {
+  children?: Exclude<React.ReactNode, Iterable<React.ReactNode>> | string;
+}
+export const Slot = React.forwardRef<any, SlotProps>((props, ref) => {
+  const { children, ...slotProps } = props;
+  if (!React.isValidElement(children)) {
+    return null;
+  }
+  return React.cloneElement(children, {
+    ...mergeReactProps(slotProps, children.props),
+    ref: combinedRef([ref, (children as any).ref]),
+  } as any);
+});
+
+export interface MustAsChild {
+  children: React.ReactElement<
+    unknown,
+    string | React.JSXElementConstructor<any>
+  >;
+}
+
+export interface OptionalAsChild<T extends boolean> {
+  children?: T extends true
+    ? React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
+    : React.ReactNode;
+  asChild?: T;
+}
