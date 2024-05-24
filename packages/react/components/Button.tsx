@@ -1,5 +1,5 @@
 import React from "react";
-import { vcn, VariantProps } from "../shared";
+import { vcn, VariantProps, Slot, AsChild } from "../shared";
 
 const [buttonVariants, resolveVariants] = vcn({
   base: "flex flex-row items-center justify-between rounded-md outline outline-1 outline-transparent outline-offset-2 focus-visible:outline-black/50 dark:focus-visible:outline-white/50 transition-all",
@@ -56,18 +56,20 @@ const [buttonVariants, resolveVariants] = vcn({
 
 export interface ButtonProps
   extends Omit<React.ComponentPropsWithoutRef<"button">, "className">,
-    VariantProps<typeof buttonVariants> {}
+    VariantProps<typeof buttonVariants>,
+    AsChild {}
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
     const [variantProps, otherProps] = resolveVariants(props);
-    return (
-      <button
-        ref={ref}
-        {...otherProps}
-        className={buttonVariants(variantProps)}
-      />
-    );
+
+    const Comp = otherProps.asChild ? Slot : "button";
+    const compProps = {
+      ...otherProps,
+      className: buttonVariants(variantProps),
+    };
+
+    return <Comp ref={ref} {...compProps} />;
   }
 );
 
