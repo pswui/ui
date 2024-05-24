@@ -10,7 +10,16 @@ const Tooltip$Context$InitialState: TooltipContextBody = {
 };
 const Tooltip$Context = React.createContext<
   [TooltipContextBody, React.Dispatch<React.SetStateAction<TooltipContextBody>>]
->([Tooltip$Context$InitialState, () => {}]);
+>([
+  Tooltip$Context$InitialState,
+  () => {
+    if (process.env.NODE_ENV && process.env.NODE_ENV === "development") {
+      console.warn(
+        "It seems like you're using TooltipContext outside of a provider."
+      );
+    }
+  },
+]);
 
 const [Tooltip$Variant, Tooltip$resolveVariantProps] = vcn({
   base: "w-fit h-fit relative group/tooltip",
