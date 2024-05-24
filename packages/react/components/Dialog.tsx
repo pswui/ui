@@ -1,10 +1,5 @@
-import React, {
-  Dispatch,
-  MouseEventHandler,
-  SetStateAction,
-  useState,
-} from "react";
-import { VariantProps, vcn } from "..//shared";
+import React, { Dispatch, SetStateAction, useState } from "react";
+import { MustAsChild, Slot, VariantProps, vcn } from "../shared";
 import ReactDOM from "react-dom";
 
 /**
@@ -56,20 +51,18 @@ const DialogRoot = ({ children }: DialogRootProps) => {
  * =========================
  */
 
-interface DialogTriggerProps {
-  children: Exclude<React.ReactNode, Iterable<React.ReactNode>>;
-}
+interface DialogTriggerProps extends MustAsChild {}
 
 const DialogTrigger = ({ children }: DialogTriggerProps) => {
   const [_, setState] = useDialogContext();
-  // const onClick = () => setState((p) => ({ ...p, opened: true }));
+  const onClick = () => setState((p) => ({ ...p, opened: true }));
 
-  const child = React.Children.only(children) as React.ReactElement;
-  const onClick: MouseEventHandler<HTMLButtonElement> = (e) => {
-    child.props.onClick?.(e);
-    setState((p) => ({ ...p, opened: true }));
+  const slotProps = {
+    onClick,
+    children,
   };
-  return <>{React.cloneElement(child, { onClick })}</>;
+
+  return <Slot {...slotProps} />;
 };
 
 /**
@@ -217,22 +210,18 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContent>(
  * =========================
  */
 
-interface DialogCloseProps {
-  children: Exclude<React.ReactNode, Iterable<React.ReactNode>>;
-}
+interface DialogCloseProps extends MustAsChild {}
 
 const DialogClose = ({ children }: DialogCloseProps) => {
   const [_, setState] = useDialogContext();
-  // const onClick = () => setState((p) => ({ ...p, opened: false }));
+  const onClick = () => setState((p) => ({ ...p, opened: false }));
 
-  const child = React.Children.only(children) as React.ReactElement;
-
-  const onClick: MouseEventHandler<HTMLButtonElement> = (e) => {
-    child.props.onClick?.(e);
-    setState((p) => ({ ...p, opened: false }));
+  const slotProps = {
+    onClick,
+    children,
   };
 
-  return <>{React.cloneElement(child, { onClick })}</>;
+  return <Slot {...slotProps} />;
 };
 
 /**
