@@ -56,13 +56,11 @@ const DialogRoot = ({ children }: DialogRootProps) => {
  * =========================
  */
 
-interface DialogTriggerProps<T extends React.ReactNode> {
-  children: T extends any[] ? never : T;
+interface DialogTriggerProps {
+  children: Exclude<React.ReactNode, Iterable<React.ReactNode>>;
 }
 
-const DialogTrigger = <T extends React.ReactNode>({
-  children,
-}: DialogTriggerProps<T>) => {
+const DialogTrigger = ({ children }: DialogTriggerProps) => {
   const [_, setState] = useDialogContext();
   // const onClick = () => setState((p) => ({ ...p, opened: true }));
 
