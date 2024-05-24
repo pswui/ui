@@ -2,7 +2,7 @@ import React from "react";
 import { vcn, VariantProps, Slot, AsChild } from "../shared";
 
 const [buttonVariants, resolveVariants] = vcn({
-  base: "flex flex-row items-center justify-between rounded-md outline outline-1 outline-transparent outline-offset-2 focus-visible:outline-black/50 dark:focus-visible:outline-white/50 transition-all",
+  base: "w-fit flex flex-row items-center justify-between rounded-md outline outline-1 outline-transparent outline-offset-2 focus-visible:outline-black/50 dark:focus-visible:outline-white/50 transition-all",
   variants: {
     size: {
       sm: "px-2 py-1 text-sm",
