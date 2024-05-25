@@ -78,8 +78,8 @@ type VariantKV<V extends VariantType> = {
  * }
  * ```
  */
-type PresetType<V extends VariantType, N extends string> = {
-  [PresetName in N]: Partial<VariantKV<V>> & { className?: string };
+type PresetType<V extends VariantType> = {
+  [PresetName: string]: Partial<VariantKV<V>> & { className?: string };
 };
 
 /**
@@ -89,24 +89,15 @@ type PresetType<V extends VariantType, N extends string> = {
  * @returns function (variantProps) -> class name,
  * @returns function (anyProps) -> [variantProps, otherProps]
  */
-export function vcn<
-  V extends VariantType,
-  N extends string /* Preset names */,
->({
-  base,
-  variants,
-  defaults,
-  presets,
-}: {
+export function vcn<V extends VariantType>(param: {
   base?: string | undefined;
-  variants: V /* VariantType */;
+  variants: V;
   defaults: VariantKV<V>;
-  presets?: PresetType<V, N>;
+  presets?: undefined;
 }): [
   (
     variantProps: Partial<VariantKV<V>> & {
       className?: string;
-      preset?: N;
     }
   ) => string,
   <AnyPropBeforeResolve extends Record<string, any>>(
@@ -114,14 +105,49 @@ export function vcn<
   ) => [
     Partial<VariantKV<V>> & {
       className?: string;
-      preset?: N;
+    },
+    Omit<AnyPropBeforeResolve, keyof Partial<VariantKV<V>> | "className">,
+  ],
+];
+export function vcn<V extends VariantType, P extends PresetType<V>>(param: {
+  base?: string | undefined;
+  variants: V /* VariantType */;
+  defaults: VariantKV<V>;
+  presets: P;
+}): [
+  (
+    variantProps: Partial<VariantKV<V>> & {
+      className?: string;
+      preset?: keyof P;
+    }
+  ) => string,
+  <AnyPropBeforeResolve extends Record<string, any>>(
+    anyProps: AnyPropBeforeResolve
+  ) => [
+    Partial<VariantKV<V>> & {
+      className?: string;
+      preset?: keyof P;
     },
     Omit<
       AnyPropBeforeResolve,
       keyof Partial<VariantKV<V>> | "preset" | "className"
     >,
   ],
-] {
+];
+export function vcn<
+  V extends VariantType,
+  P extends PresetType<V> | undefined,
+>({
+  base,
+  variants,
+  defaults,
+  presets,
+}: {
+  base?: string | undefined;
+  variants: V;
+  defaults: VariantKV<V>;
+  presets?: P;
+}) {
   return [
     /**
      * Takes any props (including className), and returns the class name.
@@ -130,9 +156,13 @@ export function vcn<
      * @param variantProps - The variant props including className.
      * @returns The class name.
      */
-    ({ className, preset, ...variantProps }) => {
-      const currentPreset: PresetType<V, N>[N] | null =
-        presets && preset ? presets[preset] ?? null : null;
+    ({
+      className,
+      preset,
+      ...variantProps
+    }: { className?: string; preset?: keyof P } & Partial<VariantKV<V>>) => {
+      const currentPreset: P[keyof P] | null =
+        presets && preset ? (presets as NonNullable<P>)[preset] ?? null : null;
       const presetVariantKeys: (keyof V)[] = Object.keys(currentPreset ?? {});
       return twMerge(
         base,
@@ -142,13 +172,13 @@ export function vcn<
           ([variantKey, defaultValue]) =>
             variants[variantKey][
               (variantProps as unknown as Partial<VariantKV<V>>)[variantKey] ??
-                (currentPreset !== null &&
-                presetVariantKeys.includes(variantKey)
-                  ? currentPreset[variantKey] ?? defaultValue
+                (!!currentPreset && presetVariantKeys.includes(variantKey)
+                  ? (currentPreset as Partial<VariantKV<V>>)[variantKey] ??
+                    defaultValue
                   : defaultValue)
             ]
         ),
-        currentPreset?.className, // preset's classname comes after user's variant props? huh..
+        (currentPreset as Partial<VariantKV<V>> | null)?.className, // preset's classname comes after user's variant props? huh..
         className
       );
     },
@@ -160,7 +190,9 @@ export function vcn<
      * @param anyProps - Any props that have passed to the component.
      * @returns [variantProps, otherProps]
      */
-    (anyProps) => {
+    <AnyPropBeforeResolve extends Record<string, any>>(
+      anyProps: AnyPropBeforeResolve
+    ) => {
       const variantKeys = Object.keys(variants) as (keyof V)[];
 
       return Object.entries(anyProps).reduce(
@@ -178,7 +210,7 @@ export function vcn<
       ) as [
         Partial<VariantKV<V>> & {
           className?: string;
-          preset?: N;
+          preset?: keyof P;
         },
         Omit<
           typeof anyProps,
