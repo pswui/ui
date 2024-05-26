@@ -12,15 +12,26 @@ const defaultToastOption: ToastOption = {
   closeTimeout: 3000,
 };
 
+const toastColors = {
+  background: "bg-white dark:bg-black",
+  borders: {
+    default: "border-black/10 dark:border-white/20",
+    error: "border-red-500/50",
+    success: "border-green-500/50",
+    warning: "border-yellow-500/50",
+    loading: "border-black/50 dark:border-white/50 animate-pulse",
+  },
+};
+
 const [toastVariant] = vcn({
-  base: "flex flex-col gap-2 border p-4 rounded-lg pr-8 pointer-events-auto bg-white dark:bg-black relative transition-all duration-150",
+  base: `flex flex-col gap-2 border p-4 rounded-lg pr-8 pointer-events-auto ${toastColors.background} relative transition-all duration-150`,
   variants: {
     status: {
-      default: "border-black/10 dark:border-white/20",
-      error: "border-red-500/50",
-      success: "border-green-500/50",
-      warning: "border-yellow-500/50",
-      loading: "border-black/50 dark:border-white/50 animate-pulse",
+      default: toastColors.borders.default,
+      error: toastColors.borders.error,
+      success: toastColors.borders.success,
+      warning: toastColors.borders.warning,
+      loading: toastColors.borders.loading,
     },
     life: {
       born: "translate-y-1/2 scale-90 ease-out",
