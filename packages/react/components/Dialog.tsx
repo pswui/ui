@@ -145,7 +145,7 @@ const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlay>(
  */
 
 const [dialogContentVariant, resolveDialogContentVariant] = vcn({
-  base: "transition-transform duration-300 bg-white dark:bg-black border border-black/10 dark:border-white/10",
+  base: "transition-transform duration-300 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800",
   variants: {
     opened: {
       true: "scale-100",
