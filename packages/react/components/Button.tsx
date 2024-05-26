@@ -2,10 +2,9 @@ import React from "react";
 import { vcn, VariantProps, Slot, AsChild } from "../shared";
 
 const colors = {
-  outlineFocus:
-    "focus-visible:outline-black/50 dark:focus-visible:outline-white/50",
-  outline: "outline-black/20 dark:outline-white/20",
-  border: "border-black/20 dark:border-white/20",
+  outlineFocus: "focus-visible:outline-neutral-500",
+  outline: "outline-neutral-300 dark:outline-neutral-700",
+  border: "border-neutral-300 dark:border-neutral-700",
   background: {
     default:
       "bg-white dark:bg-black hover:bg-neutral-100 dark:hover:bg-neutral-800",
