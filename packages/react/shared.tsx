@@ -321,11 +321,13 @@ interface SlotProps {
 export const Slot = React.forwardRef<any, SlotProps & Record<string, any>>(
   (props, ref) => {
     const { children, ...slotProps } = props;
+    const { asChild: _1, ...safeSlotProps } = slotProps;
     if (!React.isValidElement(children)) {
+      console.warn(`given children "${children}" is not valid for asChild`);
       return null;
     }
     return React.cloneElement(children, {
-      ...mergeReactProps(slotProps, children.props),
+      ...mergeReactProps(safeSlotProps, children.props),
       ref: combinedRef([ref, (children as any).ref]),
     } as any);
   }
