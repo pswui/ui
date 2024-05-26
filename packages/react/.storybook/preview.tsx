@@ -145,7 +145,7 @@ const preview: Preview = {
           type: "desktop",
         },
       },
-      defaultViewport: "2xl",
+      defaultViewport: "md",
     },
     docs: {
       page: autoDocsTemplate,
