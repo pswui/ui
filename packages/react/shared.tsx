@@ -285,7 +285,8 @@ function combinedRef<I>(refs: React.Ref<I | null>[]) {
 interface SlotProps {
   children?: React.ReactNode;
 }
-export const Slot = React.forwardRef<any, SlotProps>((props, ref) => {
+export const Slot = React.forwardRef<any, SlotProps & Record<string, any>>(
+  (props, ref) => {
   const { children, ...slotProps } = props;
   if (!React.isValidElement(children)) {
     return null;
@@ -294,7 +295,8 @@ export const Slot = React.forwardRef<any, SlotProps>((props, ref) => {
     ...mergeReactProps(slotProps, children.props),
     ref: combinedRef([ref, (children as any).ref]),
   } as any);
-});
+  }
+);
 
 export interface AsChild {
   asChild?: boolean;
