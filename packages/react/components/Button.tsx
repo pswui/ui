@@ -7,7 +7,8 @@ const colors = {
   outline: "outline-black/20 dark:outline-white/20",
   border: "border-black/20 dark:border-white/20",
   background: {
-    default: "bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-800",
+    default:
+      "bg-white dark:bg-black hover:bg-neutral-100 dark:hover:bg-neutral-800",
     ghost:
       "bg-black/0 dark:bg-white/0 hover:bg-black/20 dark:hover:bg-white/20",
   },
