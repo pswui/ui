@@ -88,12 +88,65 @@ const autoDocsTemplate = () => (
 
 const preview: Preview = {
   parameters: {
-    /*controls: {
+    controls: {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
-    },*/
+    },
+    viewport: {
+      viewports: {
+        min: {
+          name: "min",
+          styles: {
+            width: "320px",
+            height: "100%",
+          },
+          type: "mobile",
+        },
+        sm: {
+          name: "sm",
+          styles: {
+            width: "640px",
+            height: "100%",
+          },
+          type: "mobile",
+        },
+        md: {
+          name: "md",
+          styles: {
+            width: "768px",
+            height: "100%",
+          },
+          type: "tablet",
+        },
+        lg: {
+          name: "lg",
+          styles: {
+            width: "1024px",
+            height: "100%",
+          },
+          type: "tablet",
+        },
+        xl: {
+          name: "xl",
+          styles: {
+            width: "1280px",
+            height: "100%",
+          },
+          type: "desktop",
+        },
+        "2xl": {
+          name: "2xl",
+          styles: {
+            width: "1536px",
+            height: "100%",
+          },
+          type: "desktop",
+        },
+      },
+      defaultViewport: "2xl",
+    },
     docs: {
       page: autoDocsTemplate,
     },
