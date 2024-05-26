@@ -56,7 +56,7 @@ const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
 
 const tooltipContentColors = {
   background: "bg-white dark:bg-black",
-  border: "border-black/10 dark:border-white/20",
+  border: "border-neutral-200 dark:border-neutral-700",
 };
 
 const [tooltipContentVariant, resolveTooltipContentVariantProps] = vcn({
