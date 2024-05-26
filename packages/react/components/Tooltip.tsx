@@ -54,8 +54,13 @@ const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
   );
 });
 
+const tooltipContentColors = {
+  background: "bg-white dark:bg-black",
+  border: "border-black/10 dark:border-white/20",
+};
+
 const [tooltipContentVariant, resolveTooltipContentVariantProps] = vcn({
-  base: "absolute py-1 px-3 bg-white dark:bg-black border border-black/10 dark:border-white/20 [--tooltip-offset:2px] opacity-0 group-hover/tooltip:opacity-100 pointer-events-none group-hover/tooltip:pointer-events-auto transition-all rounded-md",
+  base: `absolute py-1 px-3 ${tooltipContentColors.background} border ${tooltipContentColors.border} [--tooltip-offset:2px] opacity-0 group-hover/tooltip:opacity-100 pointer-events-none group-hover/tooltip:pointer-events-auto transition-all rounded-md`,
   variants: {
     position: {
       top: "bottom-[calc(100%+var(--tooltip-offset))] left-1/2 -translate-x-1/2 group-hover/tooltip:translate-y-0 translate-y-[10px]",
