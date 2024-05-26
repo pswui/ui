@@ -90,16 +90,25 @@ type PresetType<V extends VariantType> = {
  * @returns function (anyProps) -> [variantProps, otherProps]
  */
 export function vcn<V extends VariantType>(param: {
+  /**
+   * First definition: without presets
+   */
   base?: string | undefined;
   variants: V;
   defaults: VariantKV<V>;
   presets?: undefined;
 }): [
+  /**
+   * Variant Props -> Class Name
+   */
   (
     variantProps: Partial<VariantKV<V>> & {
       className?: string;
     }
   ) => string,
+  /**
+   * Any Props -> Variant Props, Other Props
+   */
   <AnyPropBeforeResolve extends Record<string, any>>(
     anyProps: AnyPropBeforeResolve
   ) => [
@@ -110,17 +119,26 @@ export function vcn<V extends VariantType>(param: {
   ],
 ];
 export function vcn<V extends VariantType, P extends PresetType<V>>(param: {
+  /**
+   * Second definition: with presets
+   */
   base?: string | undefined;
   variants: V /* VariantType */;
   defaults: VariantKV<V>;
   presets: P;
 }): [
+  /**
+   * Variant Props -> Class Name
+   */
   (
     variantProps: Partial<VariantKV<V>> & {
       className?: string;
       preset?: keyof P;
     }
   ) => string,
+  /**
+   * Any Props -> Variant Props, Other Props
+   */
   <AnyPropBeforeResolve extends Record<string, any>>(
     anyProps: AnyPropBeforeResolve
   ) => [
@@ -241,6 +259,15 @@ export type VariantProps<F extends (props: any) => string> = F extends (
   ? P
   : never;
 
+/**
+ * Merges the react props.
+ * Basically childProps will override parentProps.
+ * But if it is a event handler, style, or className, it will be merged.
+ *
+ * @param parentProps - The parent props.
+ * @param childProps - The child props.
+ * @returns The merged props.
+ */
 function mergeReactProps(
   parentProps: Record<string, any>,
   childProps: Record<string, any>
@@ -271,6 +298,12 @@ function mergeReactProps(
   return { ...parentProps, ...overrideProps };
 }
 
+/**
+ * Takes an array of refs, and returns a single ref.
+ *
+ * @param refs - The array of refs.
+ * @returns The single ref.
+ */
 function combinedRef<I>(refs: React.Ref<I | null>[]) {
   return (instance: I | null) =>
     refs.forEach((ref) => {
@@ -287,14 +320,14 @@ interface SlotProps {
 }
 export const Slot = React.forwardRef<any, SlotProps & Record<string, any>>(
   (props, ref) => {
-  const { children, ...slotProps } = props;
-  if (!React.isValidElement(children)) {
-    return null;
-  }
-  return React.cloneElement(children, {
-    ...mergeReactProps(slotProps, children.props),
-    ref: combinedRef([ref, (children as any).ref]),
-  } as any);
+    const { children, ...slotProps } = props;
+    if (!React.isValidElement(children)) {
+      return null;
+    }
+    return React.cloneElement(children, {
+      ...mergeReactProps(slotProps, children.props),
+      ref: combinedRef([ref, (children as any).ref]),
+    } as any);
   }
 );
 
