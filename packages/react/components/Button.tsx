@@ -1,8 +1,21 @@
 import React from "react";
 import { vcn, VariantProps, Slot, AsChild } from "../shared";
 
+const colors = {
+  outlineFocus:
+    "focus-visible:outline-black/50 dark:focus-visible:outline-white/50",
+  outline: "outline-black/20 dark:outline-white/20",
+  border: "border-black/20 dark:border-white/20",
+  background: {
+    default: "bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-800",
+    ghost:
+      "bg-black/0 dark:bg-white/0 hover:bg-black/20 dark:hover:bg-white/20",
+  },
+  underline: "decoration-black dark:decoration-white",
+};
+
 const [buttonVariants, resolveVariants] = vcn({
-  base: "w-fit flex flex-row items-center justify-between rounded-md outline outline-1 outline-transparent outline-offset-2 focus-visible:outline-black/50 dark:focus-visible:outline-white/50 transition-all",
+  base: `w-fit flex flex-row items-center justify-between rounded-md outline outline-1 outline-transparent outline-offset-2 ${colors.outlineFocus} transition-all`,
   variants: {
     size: {
       sm: "px-2 py-1 text-sm",
@@ -11,19 +24,17 @@ const [buttonVariants, resolveVariants] = vcn({
     },
     border: {
       none: "outline-none",
-      solid: "border border-black/20 dark:border-white/20",
-      outline: "outline outline-1 outline-black/20 dark:outline-white/20",
+      solid: `border ${colors.border}`,
+      outline: `outline outline-1 ${colors.outline}`,
     },
     background: {
-      default:
-        "bg-white dark:bg-black hover:bg-gray-100 dark:hover:bg-gray-800",
-      ghost:
-        "bg-black/0 dark:bg-white/0 hover:bg-black/20 dark:hover:bg-white/20",
-      link: "bg-transparent hover:bg-transparent",
+      default: colors.background.default,
+      ghost: colors.background.ghost,
+      transparent: "bg-transparent hover:bg-transparent",
     },
     decoration: {
       none: "no-underline",
-      link: "underline decoration-1 underline-offset-2 hover:underline-offset-4 decoration-black/100 dark:decoration-white/100",
+      link: `underline decoration-1 underline-offset-2 hover:underline-offset-4 ${colors.underline}`,
     },
   },
   defaults: {
@@ -47,7 +58,7 @@ const [buttonVariants, resolveVariants] = vcn({
     },
     link: {
       border: "none",
-      background: "link",
+      background: "transparent",
       decoration: "link",
       size: "md",
     },
