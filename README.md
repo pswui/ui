@@ -49,7 +49,7 @@ My goal is to create **fully typesafe**, **highly customizable** component with 
   - [ ] Slider
   - [ ] Switch
   - [ ] Table
-  - [ ] Tabs
+  - [x] Tabs
   - [x] Toast
   - [ ] Toggle
   - [ ] Toggle Group
