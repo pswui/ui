@@ -5,13 +5,13 @@ interface TooltipContextBody {
   position: "top" | "bottom" | "left" | "right";
 }
 
-const Tooltip$Context$InitialState: TooltipContextBody = {
+const tooltipContextInitial: TooltipContextBody = {
   position: "top",
 };
-const Tooltip$Context = React.createContext<
+const TooltipContext = React.createContext<
   [TooltipContextBody, React.Dispatch<React.SetStateAction<TooltipContextBody>>]
 >([
-  Tooltip$Context$InitialState,
+  tooltipContextInitial,
   () => {
     if (process.env.NODE_ENV && process.env.NODE_ENV === "development") {
       console.warn(
@@ -21,7 +21,7 @@ const Tooltip$Context = React.createContext<
   },
 ]);
 
-const [Tooltip$Variant, Tooltip$resolveVariantProps] = vcn({
+const [tooltipVariant, resolveTooltipVariantProps] = vcn({
   base: "w-fit h-fit relative group/tooltip",
   variants: {
     position: {
@@ -38,23 +38,23 @@ const [Tooltip$Variant, Tooltip$resolveVariantProps] = vcn({
 
 interface TooltipProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof Tooltip$Variant> {}
+    VariantProps<typeof tooltipVariant> {}
 
 const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
-  const [variantProps, rest] = Tooltip$resolveVariantProps(props);
+  const [variantProps, rest] = resolveTooltipVariantProps(props);
   const contextState = useState<TooltipContextBody>({
-    ...Tooltip$Context$InitialState,
+    ...tooltipContextInitial,
     ...variantProps,
   });
 
   return (
-    <Tooltip$Context.Provider value={contextState}>
-      <div ref={ref} className={Tooltip$Variant(variantProps)} {...rest} />
-    </Tooltip$Context.Provider>
+    <TooltipContext.Provider value={contextState}>
+      <div ref={ref} className={tooltipVariant(variantProps)} {...rest} />
+    </TooltipContext.Provider>
   );
 });
 
-const [TooltipContent$Variant, TooltipContent$resolveVariantProps] = vcn({
+const [tooltipContentVariant, resolveTooltipContentVariantProps] = vcn({
   base: "absolute py-1 px-3 bg-white dark:bg-black border border-black/10 dark:border-white/20 [--tooltip-offset:2px] opacity-0 group-hover/tooltip:opacity-100 pointer-events-none group-hover/tooltip:pointer-events-auto transition-all rounded-md",
   variants: {
     position: {
@@ -79,17 +79,17 @@ const [TooltipContent$Variant, TooltipContent$resolveVariantProps] = vcn({
 
 interface TooltipContentProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    Omit<VariantProps<typeof TooltipContent$Variant>, "position"> {}
+    Omit<VariantProps<typeof tooltipContentVariant>, "position"> {}
 
 const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
   (props, ref) => {
-    const [variantProps, rest] = TooltipContent$resolveVariantProps(props);
-    const [contextState] = React.useContext(Tooltip$Context);
+    const [variantProps, rest] = resolveTooltipContentVariantProps(props);
+    const [contextState] = React.useContext(TooltipContext);
 
     return (
       <div
         ref={ref}
-        className={TooltipContent$Variant({
+        className={tooltipContentVariant({
           ...variantProps,
           position: contextState.position,
         })}
