@@ -60,7 +60,7 @@ const tooltipContentColors = {
 };
 
 const [tooltipContentVariant, resolveTooltipContentVariantProps] = vcn({
-  base: `absolute py-1 px-3 ${tooltipContentColors.background} border ${tooltipContentColors.border} [--tooltip-offset:2px] opacity-0 group-hover/tooltip:opacity-100 pointer-events-none group-hover/tooltip:pointer-events-auto transition-all rounded-md`,
+  base: `absolute py-1 px-3 ${tooltipContentColors.background} border ${tooltipContentColors.border} [--tooltip-offset:2px] opacity-0 group-hover/tooltip:opacity-100 select-none pointer-events-none group-hover/tooltip:select-auto group-hover/tooltip:pointer-events-auto transition-all rounded-md`,
   variants: {
     position: {
       top: "bottom-[calc(100%+var(--tooltip-offset))] left-1/2 -translate-x-1/2 group-hover/tooltip:translate-y-0 translate-y-[10px]",
