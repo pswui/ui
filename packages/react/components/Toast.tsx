@@ -188,12 +188,34 @@ const ToastTemplate = ({
       return () => clearTimeout(timeout);
     }
     if (toastData.life === "dead") {
-      const transitionDuration = ref.current
-        ?.computedStyleMap()
-        ?.get("transition-duration") as {
+      let transitionDuration: {
         value: number;
         unit: string;
-      };
+      } | null;
+      if (!ref.current) {
+        transitionDuration = null;
+        console.log("not found current");
+      } else if (ref.current.computedStyleMap !== undefined) {
+        transitionDuration = ref.current
+          .computedStyleMap()
+          .get("transition-duration") as { value: number; unit: string };
+        console.log(
+          `calculated transition duration via computedStyleMap ${transitionDuration}`
+        );
+      } else {
+        const style = /(\d+(\.\d+)?)(.+)/.exec(
+          window.getComputedStyle(ref.current).transitionDuration
+        );
+        transitionDuration = style
+          ? {
+              value: parseFloat(style[1] ?? "0"),
+              unit: style[3] ?? style[2] ?? "s",
+            }
+          : null;
+        console.log(
+          `calculated transition duration via getComputedStyle ${JSON.stringify(transitionDuration)}`
+        );
+      }
       if (!transitionDuration) {
         delete toasts[id];
         notify();
