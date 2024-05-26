@@ -34,9 +34,9 @@ const [toastVariant] = vcn({
       loading: toastColors.borders.loading,
     },
     life: {
-      born: "translate-y-1/2 scale-90 ease-out",
-      normal: "translate-y-0 scale-100 ease-out",
-      dead: "translate-y-1/2 scale-90 ease-in",
+      born: "translate-y-1/2 scale-90 ease-[cubic-bezier(0,.6,.7,1)]",
+      normal: "translate-y-0 scale-100 ease-[cubic-bezier(0,.6,.7,1)]",
+      dead: "translate-y-1/2 scale-90 ease-[cubic-bezier(.6,0,1,.7)]",
     },
   },
   defaults: {
