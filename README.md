@@ -16,10 +16,15 @@ My goal is to create **fully typesafe**, **highly customizable** component with 
 
 - Component Implementation
   - [ ] DateTimeInput
-  - [ ] TextInput
-  - [ ] PasswordInput
-  - [ ] NumberInput
+  - [ ] Input
   - [ ] FileInput
+  - [ ] ImageInput
+  - [ ] Form
+    - [ ] FormItem
+    - [ ] FormLabel
+    - [ ] FormControl
+    - [ ] FormDescription
+    - [ ] FormMessage
   - [ ] Textarea
   - [ ] Accordion
   - [ ] Alert
