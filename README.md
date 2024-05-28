@@ -16,7 +16,7 @@ My goal is to create **fully typesafe**, **highly customizable** component with 
 
 - Component Implementation
   - [ ] DateTimeInput
-  - [ ] Input
+  - [x] Input
   - [ ] FileInput
   - [ ] ImageInput
   - [ ] Form
