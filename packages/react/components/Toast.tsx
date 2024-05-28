@@ -194,9 +194,6 @@ const ToastTemplate = ({
         transitionDuration = ref.current
           .computedStyleMap()
           .get("transition-duration") as { value: number; unit: string };
-        console.log(
-          `calculated transition duration via computedStyleMap ${transitionDuration}`
-        );
       } else {
         const style = /(\d+(\.\d+)?)(.+)/.exec(
           window.getComputedStyle(ref.current).transitionDuration
@@ -207,9 +204,6 @@ const ToastTemplate = ({
               unit: style[3] ?? style[2] ?? "s",
             }
           : null;
-        console.log(
-          `calculated transition duration via getComputedStyle ${JSON.stringify(transitionDuration)}`
-        );
       }
       if (!transitionDuration) {
         delete toasts[id];
