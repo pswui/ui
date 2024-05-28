@@ -29,9 +29,14 @@ const [inputVariant, resolveInputVariantProps] = vcn({
       true: "bg-transparent border-none p-0 ring-0 hover:bg-transparent invalid:hover:bg-transparent invalid:focus-within:bg-transparent invalid:focus-within:ring-0",
       false: "",
     },
+    full: {
+      true: "w-full",
+      false: "w-fit",
+    },
   },
   defaults: {
     unstyled: false,
+    full: false,
   },
 });
 
