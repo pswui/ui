@@ -189,7 +189,6 @@ const ToastTemplate = ({
       } | null;
       if (!ref.current) {
         transitionDuration = null;
-        console.log("not found current");
       } else if (ref.current.computedStyleMap !== undefined) {
         transitionDuration = ref.current
           .computedStyleMap()
