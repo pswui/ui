@@ -2,34 +2,51 @@ import React from "react";
 import { vcn, VariantProps, Slot, AsChild } from "../shared";
 
 const colors = {
-  outlineFocus: "focus-visible:outline-neutral-500",
-  outline: "outline-neutral-300 dark:outline-neutral-700",
-  border: "border-neutral-300 dark:border-neutral-700",
+  outline: {
+    focus: "dark:focus-visible:outline-white/20 focus-visible:outline-black/10",
+  },
+  border: {
+    default: "border-neutral-300 dark:border-neutral-700",
+    success: "border-green-400 dark:border-green-600",
+    warning: "border-yellow-400 dark:border-yellow-600",
+    error: "border-red-400 dark:border-red-600",
+  },
   background: {
     default:
       "bg-white dark:bg-black hover:bg-neutral-100 dark:hover:bg-neutral-800",
     ghost:
       "bg-black/0 dark:bg-white/0 hover:bg-black/20 dark:hover:bg-white/20",
+    success:
+      "bg-green-100 dark:bg-green-900 hover:bg-green-200 dark:hover:bg-green-800",
+    warning:
+      "bg-yellow-100 dark:bg-yellow-900 hover:bg-yellow-200 dark:hover:bg-yellow-800",
+    error: "bg-red-100 dark:bg-red-900 hover:bg-red-200 dark:hover:bg-red-800",
   },
   underline: "decoration-black dark:decoration-white",
 };
 
 const [buttonVariants, resolveVariants] = vcn({
-  base: `w-fit flex flex-row items-center justify-between rounded-md outline outline-1 outline-transparent outline-offset-2 ${colors.outlineFocus} transition-all`,
+  base: `w-fit flex flex-row items-center justify-between rounded-md outline outline-1 outline-transparent outline-offset-2 ${colors.outline.focus} transition-all`,
   variants: {
     size: {
       sm: "px-2 py-1 text-sm",
       md: "px-4 py-2 text-base",
       lg: "px-5 py-3 text-lg",
+      icon: "p-2 text-base",
     },
     border: {
-      none: "outline-none",
-      solid: `border ${colors.border}`,
-      outline: `outline outline-1 ${colors.outline}`,
+      none: "border-0",
+      solid: `border ${colors.border.default}`,
+      success: `border ${colors.border.success}`,
+      warning: `border ${colors.border.warning}`,
+      error: `border ${colors.border.error}`,
     },
     background: {
       default: colors.background.default,
       ghost: colors.background.ghost,
+      success: colors.background.success,
+      warning: colors.background.warning,
+      error: colors.background.error,
       transparent: "bg-transparent hover:bg-transparent",
     },
     decoration: {

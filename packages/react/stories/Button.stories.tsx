@@ -11,14 +11,6 @@ export const Ghost = () => {
   return <Button preset="ghost">Ghost Button</Button>;
 };
 
-export const Outline = () => {
-  return (
-    <Button border="outline" background="ghost" decoration="none" size="md">
-      Outline Button
-    </Button>
-  );
-};
-
 export const Link = () => {
   return <Button preset="link">Link Button</Button>;
 };
