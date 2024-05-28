@@ -15,6 +15,30 @@ export const Link = () => {
   return <Button preset="link">Link Button</Button>;
 };
 
+export const Success = () => {
+  return (
+    <Button preset="default" background="success" border="success">
+      Success Button
+    </Button>
+  );
+};
+
+export const Warning = () => {
+  return (
+    <Button preset="default" background="warning" border="warning">
+      Warning Button
+    </Button>
+  );
+};
+
+export const Danger = () => {
+  return (
+    <Button preset="default" background="danger" border="danger">
+      Danger Button
+    </Button>
+  );
+};
+
 export const AsChild = () => {
   return (
     <Button asChild preset="default">
