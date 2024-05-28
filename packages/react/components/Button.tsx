@@ -79,6 +79,24 @@ const [buttonVariants, resolveVariants] = vcn({
       decoration: "link",
       size: "md",
     },
+    success: {
+      border: "success",
+      background: "success",
+      decoration: "none",
+      size: "md",
+    },
+    warning: {
+      border: "warning",
+      background: "warning",
+      decoration: "none",
+      size: "md",
+    },
+    danger: {
+      border: "danger",
+      background: "danger",
+      decoration: "none",
+      size: "md",
+    },
   },
 });
 

@@ -16,27 +16,15 @@ export const Link = () => {
 };
 
 export const Success = () => {
-  return (
-    <Button preset="default" background="success" border="success">
-      Success Button
-    </Button>
-  );
+  return <Button preset="success">Success Button</Button>;
 };
 
 export const Warning = () => {
-  return (
-    <Button preset="default" background="warning" border="warning">
-      Warning Button
-    </Button>
-  );
+  return <Button preset="warning">Warning Button</Button>;
 };
 
 export const Danger = () => {
-  return (
-    <Button preset="default" background="danger" border="danger">
-      Danger Button
-    </Button>
-  );
+  return <Button preset="danger">Danger Button</Button>;
 };
 
 export const AsChild = () => {
