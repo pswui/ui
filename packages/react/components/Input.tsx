@@ -48,14 +48,15 @@ interface InputFrameProps
 
 const InputFrame = React.forwardRef<HTMLLabelElement, InputFrameProps>(
   (props, ref) => {
-    const [variantProps, otherPropsUnsafe] = resolveInputVariantProps(props);
-    const { children, ...otherPropsSafe } = otherPropsUnsafe;
+    const [variantProps, otherPropsCompressed] =
+      resolveInputVariantProps(props);
+    const { children, ...otherPropsExtracted } = otherPropsCompressed;
 
     return (
       <label
         ref={ref}
         className={`group/input-frame ${inputVariant(variantProps)}`}
-        {...otherPropsSafe}
+        {...otherPropsExtracted}
       >
         {children}
       </label>
@@ -85,8 +86,8 @@ interface InputProps
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-  const [variantProps, otherPropsUnsafe] = resolveInputVariantProps(props);
-  const { type, invalid, ...otherPropsSafe } = otherPropsUnsafe;
+  const [variantProps, otherPropsCompressed] = resolveInputVariantProps(props);
+  const { type, invalid, ...otherPropsExtracted } = otherPropsCompressed;
 
   const innerRef = React.useRef<HTMLInputElement | null>(null);
 
@@ -108,7 +109,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         }
       }}
       className={inputVariant(variantProps)}
-      {...otherPropsSafe}
+      {...otherPropsExtracted}
     />
   );
 });
