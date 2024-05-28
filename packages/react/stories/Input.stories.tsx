@@ -81,8 +81,8 @@ export const InputWithFrameInvalid = () => {
         onClick={() =>
           setPasswordState((prev) => ({ ...prev, visible: !prev.visible }))
         }
-        background="error"
-        border="error"
+        background="danger"
+        border="danger"
       >
         {passwordState.visible ? (
           <svg
