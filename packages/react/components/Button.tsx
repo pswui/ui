@@ -9,7 +9,7 @@ const colors = {
     default: "border-neutral-300 dark:border-neutral-700",
     success: "border-green-400 dark:border-green-600",
     warning: "border-yellow-400 dark:border-yellow-600",
-    error: "border-red-400 dark:border-red-600",
+    danger: "border-red-400 dark:border-red-600",
   },
   background: {
     default:
@@ -20,7 +20,7 @@ const colors = {
       "bg-green-100 dark:bg-green-900 hover:bg-green-200 dark:hover:bg-green-800",
     warning:
       "bg-yellow-100 dark:bg-yellow-900 hover:bg-yellow-200 dark:hover:bg-yellow-800",
-    error: "bg-red-100 dark:bg-red-900 hover:bg-red-200 dark:hover:bg-red-800",
+    danger: "bg-red-100 dark:bg-red-900 hover:bg-red-200 dark:hover:bg-red-800",
   },
   underline: "decoration-black dark:decoration-white",
 };
@@ -39,14 +39,14 @@ const [buttonVariants, resolveVariants] = vcn({
       solid: `border ${colors.border.default}`,
       success: `border ${colors.border.success}`,
       warning: `border ${colors.border.warning}`,
-      error: `border ${colors.border.error}`,
+      danger: `border ${colors.border.danger}`,
     },
     background: {
       default: colors.background.default,
       ghost: colors.background.ghost,
       success: colors.background.success,
       warning: colors.background.warning,
-      error: colors.background.error,
+      danger: colors.background.danger,
       transparent: "bg-transparent hover:bg-transparent",
     },
     decoration: {
