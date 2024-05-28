@@ -53,8 +53,7 @@ interface ToastBody extends Omit<VariantProps<typeof toastVariant>, "preset"> {
 let index = 0;
 let toasts: Record<
   `${number}`,
-  ToastBody &
-    Partial<ToastOption> & { subscribers: (() => void)[]; version: number }
+  ToastBody & Partial<ToastOption> & { subscribers: (() => void)[] }
 > = {};
 let subscribers: (() => void)[] = [];
 
@@ -106,7 +105,6 @@ function close(id: `${number}`) {
   toasts[id] = {
     ...toasts[id],
     life: "dead",
-    version: toasts[id].version + 1,
   };
   notifySingle(id);
 }
@@ -118,7 +116,6 @@ function update(
   toasts[id] = {
     ...toasts[id],
     ...toast,
-    version: toasts[id].version + 1,
   };
   notifySingle(id);
 }
@@ -129,7 +126,6 @@ function addToast(toast: Omit<ToastBody, "life"> & Partial<ToastOption>) {
     ...toast,
     subscribers: [],
     life: "born",
-    version: 0,
   };
   index += 1;
   notify();
@@ -177,7 +173,6 @@ const ToastTemplate = ({
       toasts[id] = {
         ...toasts[id],
         life: "normal",
-        version: toasts[id].version + 1,
       };
       notifySingle(id);
     }
@@ -227,12 +222,13 @@ const ToastTemplate = ({
           s: 1000,
           ms: 1,
         }[transitionDuration.unit] ?? 1);
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         delete toasts[id];
         notify();
       }, calculatedTransitionDuration);
+      return () => clearTimeout(timeout);
     }
-  }, [toastData.version]);
+  }, [toastData.life, toastData.closeTimeout, toastData.closeButton]);
 
   return (
     <div
