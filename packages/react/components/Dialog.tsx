@@ -113,13 +113,17 @@ interface DialogOverlay
 const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlay>(
   (props, ref) => {
     const [{ opened }, setContext] = useDialogContext();
-    const [variantProps, { children, closeOnClick, onClick, ...otherProps }] =
-      resolveDialogOverlayVariant({ ...props, opened });
+    const [variantProps, otherPropsCompressed] = resolveDialogOverlayVariant({
+      ...props,
+      opened,
+    });
+    const { children, closeOnClick, onClick, ...otherPropsExtracted } =
+      otherPropsCompressed;
     return (
       <>
         {ReactDOM.createPortal(
           <div
-            {...otherProps}
+            {...otherPropsExtracted}
             ref={ref}
             className={dialogOverlayVariant(variantProps)}
             onClick={(e) => {
@@ -192,11 +196,14 @@ interface DialogContent
 const DialogContent = React.forwardRef<HTMLDivElement, DialogContent>(
   (props, ref) => {
     const [{ opened }] = useDialogContext();
-    const [variantProps, { children, ...otherProps }] =
-      resolveDialogContentVariant({ ...props, opened });
+    const [variantProps, otherPropsCompressed] = resolveDialogContentVariant({
+      ...props,
+      opened,
+    });
+    const { children, ...otherPropsExtracted } = otherPropsCompressed;
     return (
       <div
-        {...otherProps}
+        {...otherPropsExtracted}
         ref={ref}
         className={dialogContentVariant(variantProps)}
       >
@@ -254,11 +261,12 @@ interface DialogHeaderProps
 
 const DialogHeader = React.forwardRef<HTMLElement, DialogHeaderProps>(
   (props, ref) => {
-    const [variantProps, { children, ...otherProps }] =
+    const [variantProps, otherPropsCompressed] =
       resolveDialogHeaderVariant(props);
+    const { children, ...otherPropsExtracted } = otherPropsCompressed;
     return (
       <header
-        {...otherProps}
+        {...otherPropsExtracted}
         ref={ref}
         className={dialogHeaderVariant(variantProps)}
       >
@@ -328,11 +336,12 @@ interface DialogSubtitleProps
 
 const DialogTitle = React.forwardRef<HTMLHeadingElement, DialogTitleProps>(
   (props, ref) => {
-    const [variantProps, { children, ...otherProps }] =
+    const [variantProps, otherPropsCompressed] =
       resolveDialogTitleVariant(props);
+    const { children, ...otherPropsExtracted } = otherPropsCompressed;
     return (
       <h1
-        {...otherProps}
+        {...otherPropsExtracted}
         ref={ref}
         className={dialogTitleVariant(variantProps)}
       >
@@ -346,11 +355,12 @@ const DialogSubtitle = React.forwardRef<
   HTMLHeadingElement,
   DialogSubtitleProps
 >((props, ref) => {
-  const [variantProps, { children, ...otherProps }] =
+  const [variantProps, otherPropsCompressed] =
     resolveDialogSubtitleVariant(props);
+  const { children, ...otherPropsExtracted } = otherPropsCompressed;
   return (
     <h2
-      {...otherProps}
+      {...otherPropsExtracted}
       ref={ref}
       className={dialogSubtitleVariant(variantProps)}
     >
@@ -385,11 +395,12 @@ interface DialogFooterProps
 
 const DialogFooter = React.forwardRef<HTMLDivElement, DialogFooterProps>(
   (props, ref) => {
-    const [variantProps, { children, ...otherProps }] =
+    const [variantProps, otherPropsCompressed] =
       resolveDialogFooterVariant(props);
+    const { children, ...otherPropsExtracted } = otherPropsCompressed;
     return (
       <div
-        {...otherProps}
+        {...otherPropsExtracted}
         ref={ref}
         className={dialogFooterVariant(variantProps)}
       >
