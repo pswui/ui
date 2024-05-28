@@ -107,11 +107,12 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
-    const [variantProps, otherProps] = resolveVariants(props);
+    const [variantProps, otherPropsCompressed] = resolveVariants(props);
+    const { asChild, ...otherPropsExtracted } = otherPropsCompressed;
 
-    const Comp = otherProps.asChild ? Slot : "button";
+    const Comp = asChild ? Slot : "button";
     const compProps = {
-      ...otherProps,
+      ...otherPropsExtracted,
       className: buttonVariants(variantProps),
     };
 
