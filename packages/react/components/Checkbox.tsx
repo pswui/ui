@@ -76,7 +76,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               }
             }}
             type="checkbox"
-            className="hidden peer/checkbox"
+            className="hidden"
             ref={(el) => {
               internalRef.current = el;
               if (typeof ref === "function") {
