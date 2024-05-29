@@ -5,8 +5,10 @@ const checkboxColors = {
   background: {
     default: "bg-neutral-200 dark:bg-neutral-700",
     hover: "hover:bg-neutral-300 dark:hover:bg-neutral-600",
-    checked: "bg-neutral-300 dark:bg-neutral-400",
-    checkedHover: "hover:bg-neutral-400 dark:hover:bg-neutral-300",
+    checked:
+      "has-[input[type=checkbox]:checked]:bg-neutral-300 dark:has-[input[type=checkbox]:checked]:bg-neutral-400",
+    checkedHover:
+      "has-[input[type=checkbox]:checked]:hover:bg-neutral-400 dark:has-[input[type=checkbox]:checked]:hover:bg-neutral-300",
     disabled:
       'has-[input[type="checkbox"]:disabled]:bg-neutral-100 dark:has-[input[type="checkbox"]:disabled]:bg-neutral-800',
     disabledHover:
@@ -16,12 +18,8 @@ const checkboxColors = {
 };
 
 const [checkboxVariant, resolveCheckboxVariantProps] = vcn({
-  base: `inline-block rounded-md ${checkboxColors.checkmark} ${checkboxColors.background.disabled} ${checkboxColors.background.default} ${checkboxColors.background.hover} has-[input[type="checkbox"]:disabled]:cursor-not-allowed transition-colors duration-75 ease-in-out`,
+  base: `inline-block rounded-md ${checkboxColors.checkmark} ${checkboxColors.background.disabled} ${checkboxColors.background.default} ${checkboxColors.background.hover} ${checkboxColors.background.checked} ${checkboxColors.background.checkedHover} has-[input[type="checkbox"]:disabled]:cursor-not-allowed transition-colors duration-75 ease-in-out`,
   variants: {
-    checked: {
-      true: `${checkboxColors.background.checked} ${checkboxColors.background.checkedHover}`,
-      false: ``,
-    },
     size: {
       base: "size-[1em] p-0 [&>svg]:size-[1em]",
       md: "size-[1.5em] p-0.5 [&>svg]:size-[1.25em]",
@@ -29,7 +27,6 @@ const [checkboxVariant, resolveCheckboxVariantProps] = vcn({
     },
   },
   defaults: {
-    checked: false,
     size: "md",
   },
 });
@@ -45,22 +42,26 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   (props, ref) => {
     const [variantProps, otherPropsCompressed] =
       resolveCheckboxVariantProps(props);
-    const { defaultChecked, onChange, ...otherPropsExtracted } =
-      otherPropsCompressed;
+    const {
+      defaultChecked,
+      checked: propChecked,
+      onChange,
+      ...otherPropsExtracted
+    } = otherPropsCompressed;
 
     // internally handles checked, so we can use checked value without prop
     const [checked, setChecked] = React.useState(defaultChecked ?? false);
     React.useEffect(() => {
-      if (typeof variantProps.checked === "boolean") {
-        setChecked(variantProps.checked);
+      if (typeof propChecked === "boolean") {
+        setChecked(propChecked);
       }
-    }, [variantProps.checked]);
+    }, [propChecked]);
 
     const internalRef = React.useRef<HTMLInputElement | null>(null);
 
     return (
       <>
-        <label className={checkboxVariant({ ...variantProps, checked })}>
+        <label className={checkboxVariant(variantProps)}>
           <input
             {...otherPropsExtracted}
             defaultChecked={defaultChecked}
