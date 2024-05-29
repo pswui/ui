@@ -170,13 +170,15 @@ const ToastTemplate = ({
 
   React.useEffect(() => {
     if (toastData.life === "born") {
-      setTimeout(() => {
+      requestAnimationFrame(() => {
+        // To make sure that the toast is rendered as "born" state
+        // and then change to "normal" state
         toasts[id] = {
           ...toasts[id],
           life: "normal",
         };
         notifySingle(id);
-      }, 5 /* transition not working on fast toast creation with small timeout value */);
+      });
     }
     if (toastData.life === "normal" && toastData.closeTimeout !== null) {
       const timeout = setTimeout(() => {
