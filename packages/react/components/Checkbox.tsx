@@ -13,12 +13,17 @@ const checkboxColors = {
       'has-[input[type="checkbox"]:disabled]:bg-neutral-100 dark:has-[input[type="checkbox"]:disabled]:bg-neutral-800',
     disabledHover:
       "has-[input[type='checkbox']:disabled]:hover:bg-neutral-100 dark:has-[input[type='checkbox']:disabled]:hover:bg-neutral-800",
+    disabledChecked:
+      "has-[input[type='checkbox']:disabled:checked]:bg-neutral-300 dark:has-[input[type='checkbox']:disabled:checked]:bg-neutral-700",
+    disabledCheckedHover:
+      "has-[input[type='checkbox']:disabled:checked]:hover:bg-neutral-300 dark:has-[input[type='checkbox']:disabled:checked]:hover:bg-neutral-700",
   },
-  checkmark: "text-black dark:text-white",
+  checkmark:
+    "text-black dark:text-white has-[input[type=checkbox]:disabled]:text-neutral-400 dark:has-[input[type=checkbox]:disabled]:text-neutral-500",
 };
 
 const [checkboxVariant, resolveCheckboxVariantProps] = vcn({
-  base: `inline-block rounded-md ${checkboxColors.checkmark} ${checkboxColors.background.disabled} ${checkboxColors.background.default} ${checkboxColors.background.hover} ${checkboxColors.background.checked} ${checkboxColors.background.checkedHover} has-[input[type="checkbox"]:disabled]:cursor-not-allowed transition-colors duration-75 ease-in-out`,
+  base: `inline-block rounded-md ${checkboxColors.checkmark} ${checkboxColors.background.disabled} ${checkboxColors.background.default} ${checkboxColors.background.hover} ${checkboxColors.background.checked} ${checkboxColors.background.checkedHover} ${checkboxColors.background.disabledChecked} ${checkboxColors.background.disabledCheckedHover} has-[input[type="checkbox"]:disabled]:cursor-not-allowed transition-colors duration-75 ease-in-out`,
   variants: {
     size: {
       base: "size-[1em] p-0 [&>svg]:size-[1em]",

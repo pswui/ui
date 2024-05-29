@@ -58,6 +58,15 @@ export const Disabled = () => {
   );
 };
 
+export const DisabledChecked = () => {
+  return (
+    <Label direction="horizontal">
+      <Checkbox disabled checked />
+      <span>Disabled checkbox</span>
+    </Label>
+  );
+};
+
 export const BaseSize = () => {
   return (
     <Label direction="horizontal">
