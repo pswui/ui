@@ -25,7 +25,7 @@ My goal is to create **fully typesafe**, **highly customizable** component with 
   - [ ] Breadcrumb
   - [x] Button
   - [ ] Card
-  - [ ] Checkbox
+  - [x] Checkbox
   - [ ] Context Menu
   - [ ] Data Table
   - [x] Dialog
@@ -44,7 +44,7 @@ My goal is to create **fully typesafe**, **highly customizable** component with 
   - [ ] Separator
   - [ ] Skeleton
   - [ ] Slider
-  - [ ] Switch
+  - [x] Switch
   - [ ] Table
   - [x] Tabs
   - [x] Toast
