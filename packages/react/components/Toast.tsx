@@ -16,15 +16,15 @@ const toastColors = {
   background: "bg-white dark:bg-black",
   borders: {
     default: "border-black/10 dark:border-white/20",
-    error: "border-red-500/50",
-    success: "border-green-500/50",
-    warning: "border-yellow-500/50",
+    error: "border-red-500/80",
+    success: "border-green-500/80",
+    warning: "border-yellow-500/80",
     loading: "border-black/50 dark:border-white/50 animate-pulse",
   },
 };
 
 const [toastVariant] = vcn({
-  base: `flex flex-col gap-2 border p-4 rounded-lg pr-8 pointer-events-auto ${toastColors.background} relative transition-all duration-150`,
+  base: `flex flex-col gap-2 border-2 p-4 rounded-lg pr-8 pointer-events-auto ${toastColors.background} relative transition-all duration-150`,
   variants: {
     status: {
       default: toastColors.borders.default,
