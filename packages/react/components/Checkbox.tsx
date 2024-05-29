@@ -12,21 +12,30 @@ const checkboxColors = {
 };
 
 const [checkboxVariant, resolveCheckboxVariantProps] = vcn({
-  base: `inline-block rounded-md p-1 size-6 ${checkboxColors.checkmark} ${checkboxColors.background.disabled} has-[input[type="checkbox"]:disabled]:cursor-not-allowed transition-colors duration-75 ease-in-out`,
+  base: `inline-block rounded-md ${checkboxColors.checkmark} ${checkboxColors.background.disabled} has-[input[type="checkbox"]:disabled]:cursor-not-allowed transition-colors duration-75 ease-in-out`,
   variants: {
     checked: {
       true: `${checkboxColors.background.checked}`,
       false: `${checkboxColors.background.default}`,
     },
+    size: {
+      base: "size-[1em] p-0 [&>svg]:size-[1em]",
+      md: "size-[1.5em] p-0.5 [&>svg]:size-[1.25em]",
+      lg: "size-[1.75em] p-1 [&>svg]:size-[1.25em]",
+    },
   },
   defaults: {
     checked: false,
+    size: "md",
   },
 });
 
 interface CheckboxProps
   extends VariantProps<typeof checkboxVariant>,
-    Omit<React.ComponentPropsWithoutRef<"input">, "type" | "className"> {}
+    Omit<
+      React.ComponentPropsWithoutRef<"input">,
+      "type" | "className" | "size"
+    > {}
 
 const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   (props, ref) => {

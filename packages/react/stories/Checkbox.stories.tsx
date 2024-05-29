@@ -57,3 +57,30 @@ export const Disabled = () => {
     </Label>
   );
 };
+
+export const BaseSize = () => {
+  return (
+    <Label direction="horizontal">
+      <Checkbox size="base" />
+      <span>Base</span>
+    </Label>
+  );
+};
+
+export const MediumSize = () => {
+  return (
+    <Label direction="horizontal">
+      <Checkbox size="md" />
+      <span>Medium</span>
+    </Label>
+  );
+};
+
+export const LargeSize = () => {
+  return (
+    <Label direction="horizontal">
+      <Checkbox size="lg" />
+      <span>Large</span>
+    </Label>
+  );
+};
