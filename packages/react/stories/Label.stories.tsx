@@ -16,7 +16,7 @@ export const WithInput = () => {
 
 export const HorizontalWithInput = () => {
   return (
-    <Label horizontal>
+    <Label direction="horizontal">
       <p>Email</p>
       <Input type="text" />
     </Label>

@@ -4,18 +4,13 @@ import { VariantProps, vcn } from "../shared";
 const [labelVariant, resolveLabelVariantProps] = vcn({
   base: "",
   variants: {
-    vertical: {
-      true: "flex flex-col gap-2 justify-center items-start",
-      false: "",
-    },
-    horizontal: {
-      true: "flex flex-row gap-2 justify-start items-center",
-      false: "",
+    direction: {
+      vertical: "flex flex-col gap-2 justify-center items-start",
+      horizontal: "flex flex-row gap-2 justify-start items-center",
     },
   },
   defaults: {
-    vertical: false,
-    horizontal: false,
+    direction: "vertical",
   },
 });
 
