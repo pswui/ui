@@ -948,6 +948,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^20.12.13":
+  version: 20.12.13
+  resolution: "@types/node@npm:20.12.13"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 10c0/2ac92bb631dbddfb560eb3ba4eedbb1c688044a0130bc1ef032f5c0f20148ac7c9aa3c5aaa5a9787b6c4c6299847d754b96ee8c9def951481ba6628c46b683f5
+  languageName: node
+  linkType: hard
+
 "@types/prop-types@npm:*":
   version: 15.7.12
   resolution: "@types/prop-types@npm:15.7.12"
@@ -3969,6 +3978,7 @@ __metadata:
     "@mdx-js/react": "npm:^3.0.1"
     "@mdx-js/rollup": "npm:^3.0.1"
     "@types/mdx": "npm:^2.0.13"
+    "@types/node": "npm:^20.12.13"
     "@types/react": "npm:^18.2.66"
     "@types/react-dom": "npm:^18.2.22"
     "@types/react-router-dom": "npm:^5.3.3"
@@ -4628,6 +4638,13 @@ __metadata:
   resolution: "ui@workspace:."
   languageName: unknown
   linkType: soft
+
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: 10c0/bb673d7876c2d411b6eb6c560e0c571eef4a01c1c19925175d16e3a30c4c428181fb8d7ae802a261f283e4166a0ac435e2f505743aa9e45d893f9a3df017b501
+  languageName: node
+  linkType: hard
 
 "unified@npm:^11.0.0":
   version: 11.0.4
