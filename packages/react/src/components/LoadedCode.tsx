@@ -23,14 +23,14 @@ export function LoadedCode({ from }: { from: string }) {
 
   return (
     <pre
-      className={`relative hljs w-full h-auto max-h-64 rounded-lg ${
+      className={`relative hljs w-full h-64 rounded-lg ${
         !state ? "animate-pulse" : ""
       }`}
     >
       <Button
         preset="default"
         size="icon"
-        className="absolute top-4 right-4 text-black dark:text-white"
+        className="sticky float-right top-0 text-black dark:text-white"
         onClick={() => {
           navigator.clipboard.writeText(state ?? "");
           toast({
