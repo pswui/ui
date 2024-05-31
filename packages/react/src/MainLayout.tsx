@@ -81,7 +81,7 @@ function TopNav() {
 
   return (
     <>
-      <nav className="bg-transparent backdrop-blur-lg border-b border-neutral-200 dark:border-neutral-800 w-full max-w-screen px-2 flex flex-row justify-center items-center h-16">
+      <nav className="bg-transparent backdrop-blur-lg border-b border-neutral-200 dark:border-neutral-800 w-full max-w-screen px-8 flex flex-row justify-center items-center h-16">
         <div
           data-role="wrapper"
           className="flex flex-row items-center justify-between w-full max-w-6xl text-lg"
