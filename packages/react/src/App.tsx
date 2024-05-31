@@ -10,6 +10,7 @@ import DocsLayout from "./DocsLayout";
 import ErrorBoundary from "./ErrorHandler";
 
 import Introduction from "./docs/getting-started/introduction.mdx";
+import Installation from "./docs/getting-started/installation.mdx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -17,6 +18,7 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="/docs" element={<DocsLayout />}>
         <Route index element={<Introduction />} />
+        <Route path="installation" element={<Installation />} />
       </Route>
     </Route>
   )
