@@ -15,5 +15,27 @@ export default {
       name: "Github",
       eq: () => false
     }
-  ]
+  ],
+  sideNav: {
+    "Documents": [
+      {
+        path: "/docs",
+        name: "Introduction",
+        eq: (pathname: string) => pathname === "/docs"
+      },
+      {
+        path: "/docs/installation",
+        name: "Installation",
+        eq: (pathname: string) => pathname === "/docs/installation"
+      }
+    ],
+    "Components": [
+      {
+        path: "/docs/components/button",
+        name: "Button",
+        eq: (pathname: string) => pathname === "/docs/components/button"
+      }
+    ]
+  }
 }
+
