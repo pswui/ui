@@ -9,16 +9,16 @@ import Home from "./Home";
 import DocsLayout from "./DocsLayout";
 import ErrorBoundary from "./ErrorHandler";
 
-import Introduction from "./docs/getting-started/introduction.mdx";
-import Installation from "./docs/getting-started/installation.mdx";
+import DocsIntroduction from "./docs/docs/introduction.mdx";
+import DocsInstallation from "./docs/docs/installation.mdx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />} errorElement={<ErrorBoundary />}>
       <Route index element={<Home />} />
       <Route path="/docs" element={<DocsLayout />}>
-        <Route index element={<Introduction />} />
-        <Route path="installation" element={<Installation />} />
+        <Route index element={<DocsIntroduction />} />
+        <Route path="installation" element={<DocsInstallation />} />
       </Route>
     </Route>
   )
