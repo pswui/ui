@@ -35,7 +35,7 @@ function DocsLayout() {
   return (
     <div className="flex-grow grid grid-cols-[16rem_1fr] w-full max-w-5xl mx-auto">
       <SideNav />
-      <main className="prose prose-lg p-8">
+      <main className="prose prose-lg p-8 dark:prose-invert">
         <Outlet />
       </main>
     </div>
