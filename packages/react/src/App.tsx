@@ -4,13 +4,20 @@ import {
   createRoutesFromElements,
   RouterProvider,
 } from "react-router-dom";
-import SideNav from "./SideNav";
+import MainLayout from "./MainLayout";
 import Home from "./Home";
+import DocsLayout from "./DocsLayout";
+import ErrorBoundary from "./ErrorHandler";
+
+import Introduction from "./docs/getting-started/introduction.mdx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<SideNav />}>
+    <Route path="/" element={<MainLayout />} errorElement={<ErrorBoundary />}>
       <Route index element={<Home />} />
+      <Route path="/docs" element={<DocsLayout />}>
+        <Route index element={<Introduction />} />
+      </Route>
     </Route>
   )
 );
