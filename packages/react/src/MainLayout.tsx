@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { Button } from "../components/Button";
 import RouteObject from "./RouteObject";
+import { Toaster } from "@components/Toast";
 
 type Theme = "light" | "dark";
 
@@ -87,6 +88,7 @@ function TopNav() {
 function MainLayout() {
   return (
     <>
+      <Toaster />
       <TopNav />
       <Outlet />
     </>
