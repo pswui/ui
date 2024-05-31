@@ -1,3 +1,4 @@
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,29 +10,28 @@
     --dark-btn-bg-color: #2f2f2f;
     --dark-btn-text-color: #fff;
     --dark-code-bg-color: #1f1f1f;
+    --font-wanted: "Wanted Sans Variable", "Wanted Sans", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  }
+
+  html {
+    font-family: var(--font-wanted);
   }
 
   body {
     @apply bg-white dark:bg-[var(--dark-bg-color)] text-black dark:text-[var(--dark-text-color)] transition-colors duration-300;
   }
-  .sbdocs.sbdocs-preview.dark {
-    @apply dark:bg-[var(--dark-bg-color)] dark:text-[var(--dark-text-color)] transition-colors duration-300;
 
-    & .sb-bar {
-      @apply dark:bg-[var(--dark-bg-color)] dark:text-[var(--dark-text-color)];
-    }
+  html,body,div#root {
+    height: auto;
+    min-height: 100vh;
+  }
+  div#root {
+    display: flex;
+    flex-direction: column;
+  }
 
-    & .sb-bar button, .docs-story > div:nth-child(2) > button, .docs-story + div > div:nth-child(2) > button {
-      @apply dark:bg-[var(--dark-btn-bg-color)] dark:text-[var(--dark-btn-text-color)];
-    }
-    
-    & .prismjs {
-      @apply pb-8;
-      
-      & > div {
-        @apply dark:bg-[var(--dark-code-bg-color)] rounded-md p-4;
-      }
-    }
+  * {
+    @apply transition-colors;
   }
 }
 
