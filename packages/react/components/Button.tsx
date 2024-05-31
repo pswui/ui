@@ -13,7 +13,7 @@ const colors = {
   },
   background: {
     default:
-      "bg-white dark:bg-black hover:bg-neutral-100 dark:hover:bg-neutral-800",
+      "bg-white dark:bg-black hover:bg-neutral-200 dark:hover:bg-neutral-800",
     ghost:
       "bg-black/0 dark:bg-white/0 hover:bg-black/20 dark:hover:bg-white/20",
     success:
