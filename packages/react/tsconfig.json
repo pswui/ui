@@ -18,8 +18,14 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Path */
+    "baseUrl": "./",
+    "paths": {
+      "@components/*": ["components/*"],
+    }
   },
-  "include": ["components", "stories", "./stories.ts", "src"],
+  "include": ["components", "src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
