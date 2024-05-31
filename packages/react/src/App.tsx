@@ -3,6 +3,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
+  redirect,
 } from "react-router-dom";
 import MainLayout from "./MainLayout";
 import Home from "./Home";
@@ -19,6 +20,9 @@ const router = createBrowserRouter(
       <Route path="/docs" element={<DocsLayout />}>
         <Route index element={<DocsIntroduction />} />
         <Route path="installation" element={<DocsInstallation />} />
+        <Route path="components">
+          <Route index loader={() => redirect("/docs/components/button")} />
+        </Route>
       </Route>
     </Route>
   )
