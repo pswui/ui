@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { Button } from "../components/Button";
+import RouteObject from "./RouteObject";
 
 type Theme = "light" | "dark";
 
@@ -61,30 +62,18 @@ function TopNav() {
             <Link to="/" className="font-bold">
               PSW/UI
             </Link>
-            <Link
-              to="/docs"
-              data-active={
-                location.pathname.startsWith("/docs") &&
-                !location.pathname.startsWith("/docs/components")
-              }
-              className="font-light text-base data-[active=true]:text-current text-neutral-500 hover:text-neutral-700"
-            >
-              Docs
-            </Link>
-            <Link
-              to="/docs/components"
-              data-active={location.pathname.startsWith("/docs/components")}
-              className="font-light text-base data-[active=true]:text-current text-neutral-500 hover:text-neutral-700"
-            >
-              Components
-            </Link>
-            <Link
-              data-comment="external"
-              to="/github"
-              className="font-light text-base text-neutral-500 hover:text-neutral-700"
-            >
-              Github
-            </Link>
+            {RouteObject.mainNav.map((link) => {
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  data-active={link.eq(location.pathname)}
+                  className="font-light text-base data-[active=true]:text-current text-neutral-500 hover:text-neutral-700"
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
           </div>
           <div data-role="controls" className="flex flex-row items-center">
             <ThemeButton />
