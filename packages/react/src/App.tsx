@@ -9,12 +9,21 @@ import MainLayout from "./MainLayout";
 import Home from "./Home";
 import DocsLayout from "./DocsLayout";
 import ErrorBoundary from "./ErrorHandler";
+import DynamicLayout from "./DynamicLayout";
 
-import DocsIntroduction from "./docs/docs/introduction.mdx";
-import DocsInstallation from "./docs/docs/installation.mdx";
+import DocsIntroduction, {
+  tableOfContents as docsIntroductionToc,
+} from "./docs/docs/introduction.mdx";
+import DocsInstallation, {
+  tableOfContents as docsInstallationToc,
+} from "./docs/docs/installation.mdx";
 
-import ComponentsButton from "./docs/components/Button.mdx";
-import ComponentsCheckbox from "./docs/components/Checkbox.mdx";
+import ComponentsButton, {
+  tableOfContents as componentsButtonToc,
+} from "./docs/components/Button.mdx";
+import ComponentsCheckbox, {
+  tableOfContents as componentsCheckboxToc,
+} from "./docs/components/Checkbox.mdx";
 
 const overrideComponents = {
   pre: (props: any) => <pre {...props} className={`${props.className} hljs`} />,
@@ -36,17 +45,40 @@ const router = createBrowserRouter(
     <Route path="/" element={<MainLayout />} errorElement={<ErrorBoundary />}>
       <Route index element={<Home />} />
       <Route path="docs" element={<DocsLayout />}>
-        <Route index element={<DocsIntroduction />} />
-        <Route path="installation" element={<DocsInstallation />} />
+        <Route
+          index
+          element={
+            <DynamicLayout toc={docsIntroductionToc}>
+              <DocsIntroduction />
+            </DynamicLayout>
+          }
+        />
+        <Route
+          path="installation"
+          element={
+            <DynamicLayout toc={docsInstallationToc}>
+              <DocsInstallation />
+            </DynamicLayout>
+          }
+        />
         <Route path="components">
           <Route index loader={() => redirect("/docs/components/button")} />
           <Route
             path="button"
-            element={<ComponentsButton components={overrideComponents} />}
+            element={
+              <DynamicLayout toc={componentsButtonToc}>
+                <ComponentsButton components={overrideComponents} />
+              </DynamicLayout>
+            }
           />
           <Route
             path="checkbox"
-            element={<ComponentsCheckbox components={overrideComponents} />}
+            element={
+              <DynamicLayout toc={componentsCheckboxToc}>
+                <ComponentsCheckbox components={overrideComponents} />
+              </DynamicLayout>
+            }
+          />
           />
         </Route>
       </Route>
