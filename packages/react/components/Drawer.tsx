@@ -304,9 +304,11 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
           }}
           onMouseDown={onMouseDown}
           onMouseLeave={() =>
+            dragState.isDragging &&
             setState((prev) => ({ ...prev, leaveWhileDragging: true }))
           }
           onMouseEnter={() =>
+            dragState.isDragging &&
             setState((prev) => ({ ...prev, leaveWhileDragging: false }))
           }
         />
