@@ -14,6 +14,7 @@ import DocsIntroduction from "./docs/docs/introduction.mdx";
 import DocsInstallation from "./docs/docs/installation.mdx";
 
 import ComponentsButton from "./docs/components/Button.mdx";
+import ComponentsCheckbox from "./docs/components/Checkbox.mdx";
 
 const overrideComponents = {
   pre: (props: any) => <pre {...props} className={`${props.className} hljs`} />,
@@ -34,7 +35,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />} errorElement={<ErrorBoundary />}>
       <Route index element={<Home />} />
-      <Route path="/docs" element={<DocsLayout />}>
+      <Route path="docs" element={<DocsLayout />}>
         <Route index element={<DocsIntroduction />} />
         <Route path="installation" element={<DocsInstallation />} />
         <Route path="components">
@@ -42,6 +43,10 @@ const router = createBrowserRouter(
           <Route
             path="button"
             element={<ComponentsButton components={overrideComponents} />}
+          />
+          <Route
+            path="checkbox"
+            element={<ComponentsCheckbox components={overrideComponents} />}
           />
         </Route>
       </Route>
