@@ -16,6 +16,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1",
     "rehype-highlight": "^7.0.0",
+    "remark-gfm": "^4.0.0",
     "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
