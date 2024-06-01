@@ -151,14 +151,16 @@ function TopNav() {
                   </DrawerClose>
                   <div className="flex flex-col justify-start items-start gap-6 text-lg">
                     <div className="flex flex-col justify-start items-start gap-3">
-                      <Link to="/" className="font-extrabold">
-                        PSW/UI
-                      </Link>
+                      <DrawerClose>
+                        <Link to="/" className="font-extrabold">
+                          PSW/UI
+                        </Link>
+                      </DrawerClose>
                       {RouteObject.mainNav.map((link) => {
                         return (
-                          <Link to={link.path} key={link.path}>
-                            {link.name}
-                          </Link>
+                          <DrawerClose key={link.path}>
+                            <Link to={link.path}>{link.name}</Link>
+                          </DrawerClose>
                         );
                       })}
                     </div>
@@ -172,13 +174,14 @@ function TopNav() {
                             <h2 className="font-bold">{categoryName}</h2>
                             {links.map((link) => {
                               return (
-                                <Link
-                                  key={link.path}
-                                  to={link.path}
-                                  className="text-base opacity-75"
-                                >
-                                  {link.name}
-                                </Link>
+                                <DrawerClose key={link.path}>
+                                  <Link
+                                    to={link.path}
+                                    className="text-base opacity-75"
+                                  >
+                                    {link.name}
+                                  </Link>
+                                </DrawerClose>
                               );
                             })}
                           </div>
