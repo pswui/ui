@@ -73,7 +73,7 @@ const DrawerTrigger = ({ children }: { children: React.ReactNode }) => {
 };
 
 const [drawerOverlayVariant, resolveDrawerOverlayVariantProps] = vcn({
-  base: "fixed inset-0",
+  base: "fixed inset-0 transition-[backdrop-filter] duration-75",
   variants: {
     opened: {
       true: "pointer-events-auto select-auto",
@@ -84,6 +84,8 @@ const [drawerOverlayVariant, resolveDrawerOverlayVariantProps] = vcn({
     opened: false,
   },
 });
+
+const DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS = 0.3;
 
 interface DrawerOverlayProps
   extends VariantProps<typeof drawerOverlayVariant>,
@@ -116,7 +118,16 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
           opened: state.isDragging ? true : state.opened,
         })}
         onClick={onOutsideClick}
-        style={/*{ backdropFilter: "brightness(0.5)" }*/ undefined}
+        style={{
+          backdropFilter: `brightness(${
+            state.isDragging
+              ? state.movePercentage + DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS
+              : state.opened
+              ? DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS
+              : 1
+          })`,
+          transitionDuration: state.isDragging ? "0s" : undefined,
+        }}
         ref={ref}
       />,
       document.body
@@ -197,11 +208,13 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
               Math.abs(dragState.delta) > state.closeThreshold * size
                 ? false
                 : prev.opened,
+            movePercentage: 0,
           }));
         } else {
           setState((prev) => ({
             ...prev,
             isDragging: false,
+            movePercentage: 0,
           }));
         }
         setDragState({
@@ -232,6 +245,24 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
               delta: prev.delta + movement,
             };
           });
+
+          if (
+            e.target instanceof Element &&
+            internalRef.current &&
+            internalRef.current.contains(e.target)
+          ) {
+            const size = ["top", "bottom"].includes(position)
+              ? e.target.getBoundingClientRect().height
+              : e.target.getBoundingClientRect().width;
+            const movePercentage = dragState.delta / size;
+
+            setState((prev) => ({
+              ...prev,
+              movePercentage: ["top", "left"].includes(position)
+                ? -movePercentage
+                : movePercentage,
+            }));
+          }
         }
       }
 
