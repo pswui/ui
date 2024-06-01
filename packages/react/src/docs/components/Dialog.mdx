@@ -1,0 +1,454 @@
+import { TabProvider, TabTrigger, TabContent, TabList } from "@components/Tabs";
+import { Button } from "@components/Button";
+import { Story } from "@/components/Story";
+import { LoadedCode } from "@/components/LoadedCode";
+import { 
+    DialogClose,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogOverlay,
+    DialogRoot,
+    DialogSubtitle,
+    DialogTitle,
+    DialogTrigger,
+} from "@components/Dialog";
+import {
+    Input
+} from "@components/Input";
+import {
+    useToast,
+} from "@components/Toast";
+
+
+# Dialog
+A modal window that prompts the user to take an action or provides critical information.
+
+<TabProvider defaultName="preview">
+    <TabList>
+        <TabTrigger name="preview">Preview</TabTrigger>
+        <TabTrigger name="code">Code</TabTrigger>
+    </TabList>
+    <TabContent name="preview">
+        <Story layout="centered">
+            <DialogRoot>
+                <DialogTrigger>
+                    <Button preset="default">Open Dialog</Button>
+                </DialogTrigger>
+                <DialogOverlay>
+                    <DialogContent size={"fullMd"}>
+                        <DialogHeader>
+                            <DialogTitle>Dialog Title</DialogTitle>
+                            <DialogSubtitle>Dialog Subtitle</DialogSubtitle>
+                        </DialogHeader>
+                        Laborum non adipisicing enim enim culpa esse anim esse consequat Lorem incididunt.
+                        Enim mollit laborum sunt cillum voluptate est officia nostrud non consequat adipisicing 
+                        cupidatat aliquip magna. Voluptate nisi cupidatat qui nisi in pariatur. Sint consequat 
+                        labore pariatur mollit sint nostrud tempor commodo pariatur ea laboris.
+                        <DialogFooter>
+                            <DialogClose>
+                                <Button preset="default">Close</Button>
+                            </DialogClose>
+                        </DialogFooter>
+                    </DialogContent>
+                </DialogOverlay>
+            </DialogRoot>
+        </Story>
+    </TabContent>
+    <TabContent name="code">
+        ```tsx
+        import {
+            DialogRoot,
+            DialogTrigger,
+            DialogOverlay,
+            DialogContent,
+            DialogHeader,
+            DialogTitle,
+            DialogSubtitle,
+            DialogFooter,
+            DialogClose,
+        } from "@components/Dialog";
+        import { Button } from "@components/Button";
+
+        export function DialogDemo() {
+            return (
+                <DialogRoot>
+                    <DialogTrigger>
+                        <Button preset="default">Open Dialog</Button>
+                    </DialogTrigger>
+                    <DialogOverlay>
+                        <DialogContent size={"fullMd"}>
+                            <DialogHeader>
+                                <DialogTitle>Dialog Title</DialogTitle>
+                                <DialogSubtitle>Dialog Subtitle</DialogSubtitle>
+                            </DialogHeader>
+                            <p>
+                                Laborum non adipisicing enim enim culpa esse anim esse consequat Lorem incididunt.
+                                Enim mollit laborum sunt cillum voluptate est officia nostrud non consequat adipisicing 
+                                cupidatat aliquip magna. Voluptate nisi cupidatat qui nisi in pariatur. Sint consequat 
+                                labore pariatur mollit sint nostrud tempor commodo pariatur ea laboris.
+                            </p>
+                            <DialogFooter>
+                                <DialogClose>
+                                    <Button preset="default">Close</Button>
+                                </DialogClose>
+                            </DialogFooter>
+                        </DialogContent>
+                    </DialogOverlay>
+                </DialogRoot>
+            )
+        }
+        ```
+    </TabContent>
+</TabProvider>
+
+## Installation
+
+1. Create a new file `Dialog.tsx` in your component folder.
+2. Copy and paste the following code into the file.
+
+<LoadedCode from="https://raw.githubusercontent.com/p-sw/ui/main/packages/react/components/Dialog.tsx" />
+
+## Usage
+
+```tsx
+import {
+    DialogRoot,
+    DialogTrigger,
+    DialogOverlay,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogSubtitle,
+    DialogFooter,
+    DialogClose,
+} from "@components/Dialog";
+```
+
+```html
+<DialogRoot>
+    <DialogTrigger>
+        <Button>Open Dialog</Button>
+    </DialogTrigger>
+    <DialogOverlay>
+        <DialogContent>
+            <DialogHeader>
+                <DialogTitle>Dialog Title</DialogTitle>
+                <DialogSubtitle>Dialog Subtitle</DialogSubtitle>
+            </DialogHeader>
+            {/* Main Contents */}
+            <DialogFooter>
+                <DialogClose>
+                    <Button>Close</Button>
+                </DialogClose>
+            </DialogFooter>
+        </DialogContent>
+    </DialogOverlay>
+</DialogRoot>
+```
+
+> Note:
+>   
+> DialogTrigger and DialogClose will merge its onClick event handler to its children.
+> Also, there is no default element for those.
+> So you always have to provide the clickable children for DialogTrigger and DialogClose.
+>
+> It is easier to understand if you think of this component as always having the `asChild` prop applied to it.
+
+## Props
+
+### DialogOverlay
+
+#### Variants
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `blur` | `"sm" \| "md" \| "lg"` | `md` | Whether the background of dialog is blurred |
+| `darken` | `"sm" \| "md" \| "lg"` | `md` | Whether the background of dialog is darkened |
+| `padding` | `"sm" \| "md" \| "lg"` | `md` | Minimum margin of the dialog |
+
+#### Special
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `closeOnClick` | `boolean` | `false` | Whether the dialog will be closed when clicked |
+
+### DialogContent
+
+#### Variants
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `size` | `"fit" \| "fullSm" \| "fullMd" \| "fullLg" \| "fullXl" \| "full2xl"` | `fit` | Size of the dialog - width and max width |
+| `rounded` | `"sm" \| "md" \| "lg" \| "xl"` | `md` | Roundness of the dialog |
+| `padding` | `"sm" \| "md" \| "lg"` | `md` | Padding of the dialog |
+| `gap` | `"sm" \| "md" \| "lg"` | `md` | Works like flex's gap - space between children |
+
+### DialogHeader
+
+#### Variants
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `gap` | `"sm" \| "md" \| "lg"` | `sm` | Gap between the children - title and subtitle |
+
+### DialogTitle
+
+#### Variants
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Size of the title |
+| `weight` | `"sm" \| "md" \| "lg"` | `lg` | Weight of the title |
+
+### DialogSubtitle
+
+#### Variants
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `size` | `"sm" \| "md" \| "lg"` | `sm` | Size of the subtitle |
+| `weight` | `"sm" \| "md" \| "lg"` | `md` | Weight of the subtitle |
+| `opacity` | `"sm" \| "md" \| "lg"` | `sm` | Opacity of the subtitle |
+
+### DialogFooter
+
+#### Variants
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `gap` | `"sm" \| "md" \| "lg"` | `sm` | Gap between the children |
+
+## Examples
+
+### Basic Informational Dialog
+
+<TabProvider defaultName="preview">
+    <TabList>
+        <TabTrigger name="preview">Preview</TabTrigger>
+        <TabTrigger name="code">Code</TabTrigger>
+    </TabList>
+    <TabContent name="preview">
+        <Story layout="centered">
+            <DialogRoot>
+                <DialogTrigger>
+                    <Button preset="default">What is this?</Button>
+                </DialogTrigger>
+                <DialogOverlay>
+                    <DialogContent size={"fullMd"}>
+                        <DialogHeader>
+                            <DialogTitle>Dialog Title</DialogTitle>
+                            <DialogSubtitle>Dialog Subtitle</DialogSubtitle>
+                        </DialogHeader>
+                        This is a dialog. You can put the information you want to show.
+                        <DialogFooter>
+                            <DialogClose>
+                                <Button preset="default">Ok!</Button>
+                            </DialogClose>
+                        </DialogFooter>
+                    </DialogContent>
+                </DialogOverlay>
+            </DialogRoot>
+        </Story>
+    </TabContent>
+    <TabContent name="code">
+        ```tsx
+        import {
+            DialogRoot,
+            DialogTrigger,
+            DialogOverlay,
+            DialogContent,
+            DialogHeader,
+            DialogTitle,
+            DialogSubtitle,
+            DialogFooter,
+            DialogClose,
+        } from "@components/Dialog";
+
+        export function DialogDemo() {
+            return (
+                <DialogRoot>
+                    <DialogTrigger>
+                        <Button preset="default">What is this?</Button>
+                    </DialogTrigger>
+                    <DialogOverlay>
+                        <DialogContent size={"fullMd"}>
+                            <DialogHeader>
+                                <DialogTitle>Dialog Title</DialogTitle>
+                                <DialogSubtitle>Dialog Subtitle</DialogSubtitle>
+                            </DialogHeader>
+                            <p>
+                                This is a dialog. You can put the information you want to show.
+                            </p>
+                            <DialogFooter>
+                                <DialogClose>
+                                    <Button preset="default">Ok!</Button>
+                                </DialogClose>
+                            </DialogFooter>
+                        </DialogContent>
+                    </DialogOverlay>
+                </DialogRoot>
+            );
+        }
+        ```
+    </TabContent>
+</TabProvider>
+
+### Deleting Item
+
+<TabProvider defaultName="preview">
+    <TabList>
+        <TabTrigger name="preview">Preview</TabTrigger>
+        <TabTrigger name="code">Code</TabTrigger>
+    </TabList>
+    <TabContent name="preview">
+        <Story layout="centered">
+            <DialogRoot>
+                <DialogTrigger>
+                    <Button preset="danger">Delete Item</Button>
+                </DialogTrigger>
+                <DialogOverlay>
+                    <DialogContent size={"fullMd"}>
+                        <DialogHeader>
+                            <DialogTitle>Delete Item</DialogTitle>
+                            <DialogSubtitle>Are you sure you want to delete this item?</DialogSubtitle>
+                        </DialogHeader>
+                            <div className="flex flex-col gap-3">
+                            <ul className="list-disc list-inside">
+                                <li>This action will delete the item, and related data</li>
+                                <li>This action cannot be undone</li>
+                            </ul>
+                        </div>
+                        <DialogFooter>
+                            {(() => {
+                                const {toast} = useToast();
+                                return (
+                                    <>
+                                        <DialogClose>
+                                            <Button
+                                                preset="danger"
+                                                onClick={async () => {
+                                                    const toasted = toast({
+                                                        title: "Deleting Item",
+                                                        description: "Item deletion is requested",
+                                                        status: "loading",
+                                                    })
+
+                                                    await new Promise((r) => setTimeout(r, 1000));
+
+                                                    toasted.update({
+                                                        title: "Item Deleted",
+                                                        description: "The item has been deleted",
+                                                        status: "success",
+                                                    })
+                                                }}
+                                            >
+                                                Delete
+                                            </Button>
+                                        </DialogClose>
+                                        <DialogClose>
+                                            <Button
+                                                preset="default"
+                                                onClick={() => {
+                                                    toast({
+                                                        title: "Action Canceled",
+                                                        description: "The delete action has been canceled",
+                                                        status: "error",
+                                                    })                                                    
+                                                }}
+                                            >
+                                                Cancel
+                                            </Button>
+                                        </DialogClose>
+                                    </>
+                                )
+                            })()}
+                        </DialogFooter>
+                    </DialogContent>
+                </DialogOverlay>
+            </DialogRoot>
+        </Story>
+    </TabContent>
+    <TabContent name="code">
+        ```tsx
+        import {
+            DialogRoot,
+            DialogTrigger,
+            DialogOverlay,
+            DialogContent,
+            DialogHeader,
+            DialogTitle,
+            DialogSubtitle,
+            DialogFooter,
+            DialogClose,
+        } from "@components/Dialog";
+        import { Button } from "@components/Button";
+        import { useToast } from "@components/Toast";
+
+        function DialogDemo() {
+            const { toast } = useToast();
+
+            return (
+                <DialogRoot>
+                    <DialogTrigger>
+                        <Button preset="danger">Delete Item</Button>
+                    </DialogTrigger>
+                    <DialogOverlay>
+                        <DialogContent size={"fullMd"}>
+                            <DialogHeader>
+                                <DialogTitle>Delete Item</DialogTitle>
+                                <DialogSubtitle>Are you sure you want to delete this item?</DialogSubtitle>
+                            </DialogHeader>
+                                <div className="flex flex-col gap-3">
+                                <ul className="list-disc list-inside">
+                                    <li>This action will delete the item, and related data</li>
+                                    <li>This action cannot be undone</li>
+                                </ul>
+                            </div>
+                            <DialogFooter>
+                                <DialogClose>
+                                    <Button
+                                        preset="danger"
+                                        onClick={async () => {
+                                            const toasted = toast({
+                                                title: "Deleting Item",
+                                                description: "Item deletion is requested",
+                                                status: "loading",
+                                            })
+
+                                            await new Promise((r) => setTimeout(r, 1000));
+
+                                            toasted.update({
+                                                title: "Item Deleted",
+                                                description: "The item has been deleted",
+                                                status: "success",
+                                            })
+                                        }}
+                                    >
+                                        Delete
+                                    </Button>
+                                </DialogClose>
+                                <DialogClose>
+                                    <Button
+                                        preset="default"
+                                        onClick={() => {
+                                            toast({
+                                                title: "Action Canceled",
+                                                description: "The delete action has been canceled",
+                                                status: "error",
+                                            })                                                    
+                                        }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </DialogClose>
+                            </DialogFooter>
+                        </DialogContent>
+                    </DialogOverlay>
+                </DialogRoot>
+            )
+        }
+        ```
+    </TabContent>
+</TabProvider>
+

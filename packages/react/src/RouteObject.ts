@@ -39,6 +39,11 @@ export default {
         path: "/docs/components/checkbox",
         name: "Checkbox",
         eq: (pathname: string) => pathname === "/docs/components/checkbox"
+      },
+      {
+        path: "/docs/components/dialog",
+        name: "Dialog",
+        eq: (pathname: string) => pathname === "/docs/components/dialog"
       }
     ]
   }

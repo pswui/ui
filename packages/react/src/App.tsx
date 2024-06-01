@@ -24,6 +24,9 @@ import ComponentsButton, {
 import ComponentsCheckbox, {
   tableOfContents as componentsCheckboxToc,
 } from "./docs/components/Checkbox.mdx";
+import ComponentsDialog, {
+  tableOfContents as componentsDialogToc,
+} from "./docs/components/Dialog.mdx";
 
 const overrideComponents = {
   pre: (props: any) => <pre {...props} className={`${props.className} hljs`} />,
@@ -79,6 +82,13 @@ const router = createBrowserRouter(
               </DynamicLayout>
             }
           />
+          <Route
+            path="dialog"
+            element={
+              <DynamicLayout toc={componentsDialogToc}>
+                <ComponentsDialog components={overrideComponents} />
+              </DynamicLayout>
+            }
           />
         </Route>
       </Route>
