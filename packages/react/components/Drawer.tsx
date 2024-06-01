@@ -165,6 +165,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
 
     const [variantProps, restPropsCompressed] =
       resolveDrawerContentVariantProps(props);
+    const { position = "left" } = variantProps;
     const { asChild, onClick, ...restPropsExtracted } = restPropsCompressed;
 
     const Comp = asChild ? Slot : "div";
@@ -186,11 +187,9 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
           internalRef.current &&
           internalRef.current.contains(e.target)
         ) {
-          const size =
-            variantProps.position === "top" ||
-            variantProps.position === "bottom"
-              ? e.target.getBoundingClientRect().height
-              : e.target.getBoundingClientRect().width;
+          const size = ["top", "bottom"].includes(position)
+            ? e.target.getBoundingClientRect().height
+            : e.target.getBoundingClientRect().width;
           setState((prev) => ({
             ...prev,
             isDragging: false,
@@ -214,16 +213,14 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
       function onMouseMove(e: MouseEvent) {
         if (dragState.isDragging) {
           setDragState((prev) => {
-            let movement = ["top", "bottom"].includes(
-              variantProps.position ?? "left"
-            )
+            let movement = ["top", "bottom"].includes(position)
               ? e.movementY
               : e.movementX;
             if (
-              (["top", "left"].includes(variantProps.position ?? "left") &&
+              (["top", "left"].includes(position) &&
                 dragState.delta >= 0 &&
                 movement > 0) ||
-              (["bottom", "right"].includes(variantProps.position ?? "left") &&
+              (["bottom", "right"].includes(position) &&
                 dragState.delta <= 0 &&
                 movement < 0)
             ) {
@@ -257,7 +254,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
         })}
         style={
           state.opened
-            ? ["top", "bottom"].includes(variantProps.position ?? "left")
+            ? ["top", "bottom"].includes(position)
               ? {
                   height:
                     (internalRef.current?.getBoundingClientRect?.()?.height ??
@@ -281,11 +278,9 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
           })}
           style={{
             transform: dragState.isDragging
-              ? `translate${
-                  ["top", "bottom"].includes(variantProps.position ?? "left")
-                    ? "Y"
-                    : "X"
-                }(${dragState.delta}px)`
+              ? `translate${["top", "bottom"].includes(position) ? "Y" : "X"}(${
+                  dragState.delta
+                }px)`
               : undefined,
             transitionDuration: dragState.isDragging ? "0s" : undefined,
             userSelect: dragState.isDragging ? "none" : undefined,
