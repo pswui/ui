@@ -34,6 +34,35 @@ export function ButtonDemo() {
 
 <LoadedCode from="https://raw.githubusercontent.com/p-sw/ui/main/packages/react/components/Button.tsx" />
 
+## Usage
+
+```tsx
+import { Button } from "@components/Button";
+
+function ButtonDemo() {
+    return <Button>Button</Button>
+}
+```
+
+### Props
+
+* `<Button />`
+    - `size`: `"sm" | "md" | "lg" | "icon"` 
+        * defaults to `"md"`
+        * padding & text size
+    - `border`: `"none" | "solid" | "success" | "warning" | "danger"` 
+        * defaults to `"solid"`
+        * border colors
+    - `background`: `"default" | "ghost" | "success" | "warning" | "danger" | "transparent"` 
+        * defaults to `"default"`
+        * background colors
+    - `decoration`: `"none" | "link"` 
+        * defaults to `"none"`
+        * inner text decorations
+    - `presets`: `"default" | "ghost" | "link" | "success" | "warning" | "danger"` 
+        * defaults to `"default"`
+        * preset of variant props
+
 ## Examples
 
 ### Default
