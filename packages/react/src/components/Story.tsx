@@ -17,7 +17,7 @@ const Story = React.forwardRef<
   return (
     <div
       className={twMerge(
-        `bg-white dark:bg-black border border-neutral-300 dark:border-neutral-700 rounded-lg w-full p-4 min-h-48 h-auto mt-8 ${layoutClasses[layout]}`,
+        `bg-white dark:bg-black border border-neutral-300 dark:border-neutral-700 rounded-lg w-full p-4 min-h-48 h-auto mt-8 not-prose ${layoutClasses[layout]}`,
         className
       )}
       ref={ref}
