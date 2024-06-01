@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, Fragment } from "react";
 import { type Toc } from "@stefanprobst/rehype-extract-toc";
 import { useLocation } from "react-router-dom";
 
@@ -9,9 +9,10 @@ function RecursivelyToc({ toc }: { toc: Toc }) {
     <ul>
       {toc.map((tocEntry) => {
         return (
-          <>
+          <Fragment key={tocEntry.id}>
             <li
               key={tocEntry.id}
+              data-id={tocEntry.id}
               className="text-neutral-500 data-[active='true']:text-black dark:data-[active='true']:text-white text-sm font-medium"
               style={{ paddingLeft: `${tocEntry.depth - 1}rem` }}
               data-active={
@@ -25,7 +26,7 @@ function RecursivelyToc({ toc }: { toc: Toc }) {
             {Array.isArray(tocEntry.children) && (
               <RecursivelyToc toc={tocEntry.children} />
             )}
-          </>
+          </Fragment>
         );
       })}
     </ul>
