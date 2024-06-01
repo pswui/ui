@@ -17,6 +17,12 @@ import ComponentsButton from "./docs/components/Button.mdx";
 
 const overrideComponents = {
   pre: (props: any) => <pre {...props} className={`${props.className} hljs`} />,
+  code: (props: any) => (
+    <code
+      {...props}
+      className={`${props.className} rounded-md bg-neutral-800 text-orange-500 font-light p-1`}
+    />
+  ),
 };
 
 const router = createBrowserRouter(
