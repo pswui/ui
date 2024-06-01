@@ -317,4 +317,18 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
   }
 );
 
-export { DrawerRoot, DrawerTrigger, DrawerOverlay, DrawerContent };
+const DrawerClose = forwardRef<
+  HTMLButtonElement,
+  ComponentPropsWithoutRef<"button">
+>((props, ref) => {
+  const [_, setState] = useContext(DrawerContext);
+  return (
+    <Slot
+      ref={ref}
+      {...props}
+      onClick={() => setState((prev) => ({ ...prev, opened: false }))}
+    />
+  );
+});
+
+export { DrawerRoot, DrawerTrigger, DrawerOverlay, DrawerContent, DrawerClose };
