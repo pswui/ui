@@ -22,7 +22,7 @@ const colors = {
       "bg-yellow-100 dark:bg-yellow-900 hover:bg-yellow-200 dark:hover:bg-yellow-800",
     danger: "bg-red-100 dark:bg-red-900 hover:bg-red-200 dark:hover:bg-red-800",
   },
-  underline: "decoration-black dark:decoration-white",
+  underline: "decoration-current",
 };
 
 const [buttonVariants, resolveVariants] = vcn({
