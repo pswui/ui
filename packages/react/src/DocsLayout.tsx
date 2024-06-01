@@ -6,7 +6,7 @@ function SideNav() {
   const location = useLocation();
 
   return (
-    <nav className="flex flex-col justify-start items-start gap-8 p-8">
+    <nav className="md:flex flex-col justify-start items-start gap-8 p-8 hidden">
       {Object.entries(RouteObject.sideNav).map(([categoryName, links]) => {
         return (
           <section
@@ -33,11 +33,13 @@ function SideNav() {
 
 function DocsLayout() {
   return (
-    <div className="flex-grow grid grid-cols-[16rem_1fr] w-full max-w-5xl mx-auto">
+    <div className="flex-grow grid grid-cols-1 md:grid-cols-[12rem_1fr] w-full max-w-5xl mx-auto">
       <SideNav />
-      <main className="prose prose-lg p-8 dark:prose-invert">
-        <Outlet />
-      </main>
+      <div className="w-full flex flex-col items-center">
+        <main className="w-full prose-sm prose p-8 dark:prose-invert">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }
