@@ -1,5 +1,6 @@
 import React, {
   ComponentPropsWithoutRef,
+  TouchEvent as ReactTouchEvent,
   forwardRef,
   useContext,
   useEffect,
@@ -171,6 +172,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
     const [state, setState] = useContext(DrawerContext);
     const [dragState, setDragState] = useState({
       isDragging: false,
+      prevTouch: { x: 0, y: 0 },
       delta: 0,
     });
 
@@ -188,11 +190,23 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
       setDragState({
         isDragging: true,
         delta: 0,
+        prevTouch: { x: 0, y: 0 },
+      });
+    }
+
+    function onTouchStart(e: ReactTouchEvent<HTMLDivElement>) {
+      setState((prev) => ({ ...prev, isDragging: true }));
+      setDragState({
+        isDragging: true,
+        delta: 0,
+        prevTouch: { x: e.touches[0].pageX, y: e.touches[0].pageY },
       });
     }
 
     useEffect(() => {
-      function onMouseUp(e: MouseEvent) {
+      function onMouseUp(e: TouchEvent): void;
+      function onMouseUp(e: MouseEvent): void;
+      function onMouseUp(e: TouchEvent | MouseEvent) {
         if (
           e.target instanceof Element &&
           internalRef.current &&
@@ -220,15 +234,22 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
         setDragState({
           isDragging: false,
           delta: 0,
+          prevTouch: { x: 0, y: 0 },
         });
       }
 
-      function onMouseMove(e: MouseEvent) {
+      function onMouseMove(e: TouchEvent): void;
+      function onMouseMove(e: MouseEvent): void;
+      function onMouseMove(e: MouseEvent | TouchEvent) {
         if (dragState.isDragging) {
           setDragState((prev) => {
             let movement = ["top", "bottom"].includes(position)
-              ? e.movementY
-              : e.movementX;
+              ? "movementY" in e
+                ? e.movementY
+                : e.touches[0].pageY - prev.prevTouch.y
+              : "movementX" in e
+              ? e.movementX
+              : e.touches[0].pageX - prev.prevTouch.x;
             if (
               (["top", "left"].includes(position) &&
                 dragState.delta >= 0 &&
@@ -243,6 +264,11 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
             return {
               ...prev,
               delta: prev.delta + movement,
+              ...("touches" in e
+                ? {
+                    prevTouch: { x: e.touches[0].pageX, y: e.touches[0].pageY },
+                  }
+                : {}),
             };
           });
 
@@ -268,9 +294,13 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
 
       window.addEventListener("mousemove", onMouseMove);
       window.addEventListener("mouseup", onMouseUp);
+      window.addEventListener("touchmove", onMouseMove);
+      window.addEventListener("touchend", onMouseUp);
       return () => {
         window.removeEventListener("mousemove", onMouseMove);
         window.removeEventListener("mouseup", onMouseUp);
+        window.removeEventListener("touchmove", onMouseMove);
+        window.removeEventListener("touchend", onMouseUp);
       };
     }, [state, dragState]);
 
@@ -337,6 +367,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
             dragState.isDragging &&
             setState((prev) => ({ ...prev, leaveWhileDragging: false }))
           }
+          onTouchStart={onTouchStart}
         />
       </div>
     );
