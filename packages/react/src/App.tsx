@@ -20,7 +20,7 @@ const overrideComponents = {
   code: (props: any) => (
     <code
       {...props}
-      className={`${props.className} rounded-md bg-neutral-800 text-orange-500 font-light p-1`}
+      className={`${props.className} rounded-md bg-neutral-800 text-orange-500 font-light p-1 before:content-none after:content-none`}
     />
   ),
 };
