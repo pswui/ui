@@ -155,17 +155,25 @@ function TopNav() {
                         PSW/UI
                       </Link>
                       {RouteObject.mainNav.map((link) => {
-                        return <Link to={link.path}>{link.name}</Link>;
+                        return (
+                          <Link to={link.path} key={link.path}>
+                            {link.name}
+                          </Link>
+                        );
                       })}
                     </div>
                     {Object.entries(RouteObject.sideNav).map(
                       ([categoryName, links]) => {
                         return (
-                          <div className="flex flex-col justify-start items-start gap-3">
+                          <div
+                            className="flex flex-col justify-start items-start gap-3"
+                            key={categoryName}
+                          >
                             <h2 className="font-bold">{categoryName}</h2>
                             {links.map((link) => {
                               return (
                                 <Link
+                                  key={link.path}
                                   to={link.path}
                                   className="text-base opacity-75"
                                 >
