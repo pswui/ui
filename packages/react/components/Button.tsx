@@ -29,6 +29,7 @@ const [buttonVariants, resolveVariants] = vcn({
   base: `w-fit flex flex-row items-center justify-between rounded-md outline outline-1 outline-transparent outline-offset-2 ${colors.outline.focus} transition-all`,
   variants: {
     size: {
+      link: "p-0 text-base",
       sm: "px-2 py-1 text-sm",
       md: "px-4 py-2 text-base",
       lg: "px-5 py-3 text-lg",
@@ -77,7 +78,7 @@ const [buttonVariants, resolveVariants] = vcn({
       border: "none",
       background: "transparent",
       decoration: "link",
-      size: "md",
+      size: "link",
     },
     success: {
       border: "success",
