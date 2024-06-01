@@ -34,6 +34,11 @@ export default {
         path: "/docs/components/button",
         name: "Button",
         eq: (pathname: string) => pathname === "/docs/components/button"
+      },
+      {
+        path: "/docs/components/checkbox",
+        name: "Checkbox",
+        eq: (pathname: string) => pathname === "/docs/components/checkbox"
       }
     ]
   }
