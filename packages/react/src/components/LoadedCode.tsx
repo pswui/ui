@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import hljs from "highlight.js";
 import { Button } from "@components/Button";
 import { useToast } from "@components/Toast";
+import { escapeHtml } from "@/utils/escapeHtml";
 
 export function LoadedCode({ from }: { from: string }) {
   const [state, setState] = useState<string | undefined | null>();
@@ -11,7 +12,7 @@ export function LoadedCode({ from }: { from: string }) {
     (async () => {
       const res = await fetch(from);
       const text = await res.text();
-      setState(text);
+      setState(escapeHtml(text));
     })();
   }, [from]);
 
