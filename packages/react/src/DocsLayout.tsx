@@ -36,7 +36,7 @@ function DocsLayout() {
     <div className="flex-grow grid grid-cols-1 md:grid-cols-[12rem_1fr] w-full max-w-5xl mx-auto">
       <SideNav />
       <div className="w-full flex flex-col items-center">
-        <main className="w-full prose-sm prose lg:prose-lg p-8 dark:prose-invert">
+        <main className="w-full [:not(:where([class~='not-prose'],[class~='not-prose']_*))]:prose-sm prose lg:[:not(:where([class~='not-prose'],_[class~='not-prose']_*))]:prose-lg p-8 dark:prose-invert">
           <Outlet />
         </main>
       </div>
