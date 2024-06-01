@@ -27,20 +27,24 @@ import ComponentsCheckbox, {
 import ComponentsDialog, {
   tableOfContents as componentsDialogToc,
 } from "./docs/components/Dialog.mdx";
+import { forwardRef } from "react";
 
 const overrideComponents = {
-  pre: (props: any) => <pre {...props} className={`${props.className} hljs`} />,
-  code: (props: any) => (
+  pre: forwardRef<HTMLPreElement, any>((props: any, ref) => (
+    <pre ref={ref} {...props} className={`${props.className} hljs`} />
+  )),
+  code: forwardRef<HTMLElement, any>((props: any, ref) => (
     <code
+      ref={ref}
       {...props}
       className={`${props.className} rounded-md bg-neutral-800 text-orange-500 font-light p-1 before:content-none after:content-none`}
     />
-  ),
-  table: (props: any) => (
+  )),
+  table: forwardRef<HTMLTableElement, any>((props: any, ref) => (
     <div className="overflow-auto">
-      <table {...props} className={`${props.className}`} />
+      <table ref={ref} {...props} className={`${props.className}`} />
     </div>
-  ),
+  )),
 };
 
 const router = createBrowserRouter(
