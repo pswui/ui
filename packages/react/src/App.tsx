@@ -23,6 +23,11 @@ const overrideComponents = {
       className={`${props.className} rounded-md bg-neutral-800 text-orange-500 font-light p-1 before:content-none after:content-none`}
     />
   ),
+  table: (props: any) => (
+    <div className="overflow-auto">
+      <table {...props} className={`${props.className}`} />
+    </div>
+  ),
 };
 
 const router = createBrowserRouter(
