@@ -18,10 +18,10 @@ export const LoadedCode = forwardRef<HTMLPreElement, { from: string }>(
       })();
     }, [from]);
 
-    const ref = useRef<HTMLElement | null>(null);
+    const ref = useRef<HTMLPreElement | null>(null);
 
     useEffect(() => {
-      if (ref.current && !ref.current.dataset.highlighted) {
+      if (state && ref.current && !ref.current.dataset.highlighted) {
         hljs.highlightElement(ref.current);
       }
     }, [state]);
@@ -31,7 +31,7 @@ export const LoadedCode = forwardRef<HTMLPreElement, { from: string }>(
         className={`relative hljs w-full h-64 rounded-lg ${
           !state ? "animate-pulse" : ""
         }`}
-        ref={outRef}
+        ref={ref}
       >
         <Button
           preset="default"
@@ -58,7 +58,7 @@ export const LoadedCode = forwardRef<HTMLPreElement, { from: string }>(
             />
           </svg>
         </Button>
-        <code className="language-tsx" ref={ref}>
+        <code className="language-tsx" ref={outRef}>
           {state ?? null}
         </code>
       </pre>
