@@ -22,6 +22,7 @@ export const LoadedCode = forwardRef<HTMLPreElement, { from: string }>(
 
     useEffect(() => {
       if (state && ref.current && !ref.current.dataset.highlighted) {
+        hljs.configure({ ignoreUnescapedHTML: true });
         hljs.highlightElement(ref.current);
       }
     }, [state]);
