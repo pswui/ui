@@ -5,10 +5,13 @@ import mdx from '@mdx-js/rollup';
 import { resolve } from 'node:path';
 import rehypeHighlight from "rehype-highlight";
 import remarkGfm from "remark-gfm";
+import withSlug from "rehype-slug"
+import withToc from "@stefanprobst/rehype-extract-toc";
+import withTocExport from "@stefanprobst/rehype-extract-toc/mdx";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), mdx({ rehypePlugins: [rehypeHighlight], remarkPlugins: [remarkGfm] })],
+  plugins: [react(), mdx({ rehypePlugins: [rehypeHighlight, withSlug, withToc, withTocExport], remarkPlugins: [remarkGfm] })],
   css: {
     postcss: {
       plugins: [tailwindcss()],
