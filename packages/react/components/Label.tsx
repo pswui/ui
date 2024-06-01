@@ -2,7 +2,7 @@ import React from "react";
 import { VariantProps, vcn } from "../shared";
 
 const [labelVariant, resolveLabelVariantProps] = vcn({
-  base: "",
+  base: "has-[input[disabled]]:brightness-50 has-[input[disabled]]:cursor-not-allowed",
   variants: {
     direction: {
       vertical: "flex flex-col gap-2 justify-center items-start",
