@@ -2,7 +2,6 @@ import { useRef, useEffect, useState, forwardRef } from "react";
 import hljs from "highlight.js";
 import { Button } from "@components/Button";
 import { useToast } from "@components/Toast";
-import { escapeHtml } from "@/utils/escapeHtml";
 
 export const GITHUB = "https://raw.githubusercontent.com/p-sw/ui/main";
 
@@ -15,7 +14,7 @@ export const LoadedCode = forwardRef<HTMLPreElement, { from: string }>(
       (async () => {
         const res = await fetch(from);
         const text = await res.text();
-        setState(escapeHtml(text));
+        setState(text);
       })();
     }, [from]);
 
