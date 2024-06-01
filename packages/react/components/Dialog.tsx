@@ -376,7 +376,7 @@ const DialogSubtitle = React.forwardRef<
  */
 
 const [dialogFooterVariant, resolveDialogFooterVariant] = vcn({
-  base: "flex flex-col-reverse sm:flex-row sm:justify-end",
+  base: "flex flex-col items-end sm:flex-row sm:items-center sm:justify-end",
   variants: {
     gap: {
       sm: "gap-2",
