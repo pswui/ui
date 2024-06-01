@@ -4,6 +4,13 @@ import { Button } from "../components/Button";
 import RouteObject from "./RouteObject";
 import { Toaster } from "@components/Toast";
 import { Popover, PopoverContent, PopoverTrigger } from "@components/Popover";
+import {
+  DrawerClose,
+  DrawerContent,
+  DrawerOverlay,
+  DrawerRoot,
+  DrawerTrigger,
+} from "@components/Drawer";
 
 type Theme = "light" | "dark" | "system";
 
@@ -86,7 +93,10 @@ function TopNav() {
           data-role="wrapper"
           className="flex flex-row items-center justify-between w-full max-w-6xl text-lg"
         >
-          <div data-role="links" className="flex flex-row items-center gap-3">
+          <div
+            data-role="links"
+            className="hidden md:flex flex-row items-center gap-3"
+          >
             <Link to="/" className="font-bold">
               PSW/UI
             </Link>
@@ -102,6 +112,75 @@ function TopNav() {
                 </Link>
               );
             })}
+          </div>
+          <div data-role="mobile-links" className="flex md:hidden">
+            <DrawerRoot>
+              <DrawerTrigger>
+                <Button preset="ghost" size="icon">
+                  {/* mdi:menu */}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1.2em"
+                    height="1.2em"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"
+                    />
+                  </svg>
+                </Button>
+              </DrawerTrigger>
+              <DrawerOverlay>
+                <DrawerContent className="w-[300px]">
+                  <DrawerClose className="absolute top-2 right-2">
+                    <Button preset="default" size="icon">
+                      {/* mdi:close */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1.2em"
+                        height="1.2em"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M19 6.41L17.59 5 12 9.27 6.41 5 5 6.41 9.27 11 5 17.59 6.41 19 12 14.73 17.59 19 19 17.59 13.41 12 19 6.41"
+                        />
+                      </svg>
+                    </Button>
+                  </DrawerClose>
+                  <div className="flex flex-col justify-start items-start gap-6 text-lg">
+                    <div className="flex flex-col justify-start items-start gap-3">
+                      <Link to="/" className="font-extrabold">
+                        PSW/UI
+                      </Link>
+                      {RouteObject.mainNav.map((link) => {
+                        return <Link to={link.path}>{link.name}</Link>;
+                      })}
+                    </div>
+                    {Object.entries(RouteObject.sideNav).map(
+                      ([categoryName, links]) => {
+                        return (
+                          <div className="flex flex-col justify-start items-start gap-3">
+                            <h2 className="font-bold">{categoryName}</h2>
+                            {links.map((link) => {
+                              return (
+                                <Link
+                                  to={link.path}
+                                  className="text-base opacity-75"
+                                >
+                                  {link.name}
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        );
+                      }
+                    )}
+                  </div>
+                </DrawerContent>
+              </DrawerOverlay>
+            </DrawerRoot>
           </div>
           <div data-role="controls" className="flex flex-row items-center">
             <ThemeButton />
