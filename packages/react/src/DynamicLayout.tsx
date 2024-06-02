@@ -47,7 +47,7 @@ export default function DynamicLayout({
           {children}
         </main>
       </div>
-      <nav className="hidden lg:flex flex-col gap-2 py-8 px-4">
+      <nav className="hidden lg:flex flex-col gap-2 py-8 px-4 sticky top-16 overflow-auto max-h-[calc(100vh-4rem)]">
         <span className="font-bold text-sm">On This Page</span>
 
         <RecursivelyToc toc={toc} />

@@ -6,7 +6,7 @@ function SideNav() {
   const location = useLocation();
 
   return (
-    <nav className="md:flex flex-col justify-start items-start gap-8 p-8 hidden">
+    <nav className="sticky top-16 overflow-auto max-h-[calc(100vh-4rem)] md:flex flex-col justify-start items-start gap-8 p-8 hidden">
       {Object.entries(RouteObject.sideNav).map(([categoryName, links]) => {
         return (
           <section
