@@ -3,7 +3,7 @@ import { Label } from "@components/Label";
 import { Checkbox } from "@components/Checkbox";
 import { TabProvider, TabTrigger, TabContent, TabList } from "@components/Tabs";
 import { Story } from "@/components/Story";
-import { LoadedCode } from "@/components/LoadedCode";
+import { LoadedCode, GITHUB } from "@/components/LoadedCode";
 import { CheckboxDemo } from "./CheckboxBlocks/Preview";
 import Examples from "./CheckboxBlocks/Examples";
 
@@ -21,7 +21,7 @@ A control that allows the user to toggle between checked and not checked.
         </Story>
     </TabContent>
     <TabContent name="code">
-        <LoadedCode from={`${GITHUB}/packages/react/components/Checkbox.tsx`} />
+        <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/CheckboxBlocks/Preview.tsx`} />
     </TabContent>
 </TabProvider>
 
@@ -65,7 +65,7 @@ import { Checkbox } from "@components/Checkbox";
         </Story>
     </TabContent>
     <TabContent name="code">
-        <LoadedCode from={`${GITHUB}/packages/react/components/CheckboxBlocks/Examples/Text.tsx`} />
+        <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/CheckboxBlocks/Examples/Text.tsx`} />
     </TabContent>
 </TabProvider>
 
@@ -82,6 +82,6 @@ import { Checkbox } from "@components/Checkbox";
         </Story>
     </TabContent>
     <TabContent name="code">
-        <LoadedCode from={`${GITHUB}/packages/react/components/CheckboxBlocks/Examples/Disabled.tsx`} />
+        <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/CheckboxBlocks/Examples/Disabled.tsx`} />
     </TabContent>
 </TabProvider>
