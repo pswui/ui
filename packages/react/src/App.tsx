@@ -27,7 +27,66 @@ import ComponentsCheckbox, {
 import ComponentsDialog, {
   tableOfContents as componentsDialogToc,
 } from "./docs/components/Dialog.mdx";
-import { forwardRef } from "react";
+import { ForwardedRef, forwardRef, useContext, useEffect, useRef } from "react";
+import { HeadingContext } from "./HeadingContext";
+
+function buildThresholdList() {
+  let thresholds = [];
+  let numSteps = 20;
+
+  for (let i = 1.0; i <= numSteps; i++) {
+    let ratio = i / numSteps;
+    thresholds.push(ratio);
+  }
+
+  thresholds.push(0);
+  return thresholds;
+}
+
+function HashedHeaders(Level: `h${1 | 2 | 3 | 4 | 5 | 6}`) {
+  return (prop: any, ref: ForwardedRef<HTMLHeadingElement>) => {
+    const internalRef = useRef<HTMLHeadingElement | null>(null);
+    const [_, setActiveHeadings] = useContext(HeadingContext);
+
+    useEffect(() => {
+      const observer = new IntersectionObserver(
+        ([{ target, intersectionRatio }]) => {
+          if (intersectionRatio > 0.5) {
+            setActiveHeadings((prev) => [...prev, target.id]);
+          } else {
+            setActiveHeadings((prev) => prev.filter((id) => id !== target.id));
+          }
+        },
+        {
+          root: null,
+          rootMargin: "0px",
+          threshold: buildThresholdList(),
+        }
+      );
+      if (internalRef.current) {
+        observer.observe(internalRef.current);
+      }
+      return () => {
+        observer.disconnect();
+      };
+    }, [internalRef.current]);
+
+    return (
+      <Level
+        {...prop}
+        className={`${prop.className}`}
+        ref={(el) => {
+          internalRef.current = el;
+          if (typeof ref === "function") {
+            ref(el);
+          } else if (el && ref) {
+            ref.current = el;
+          }
+        }}
+      />
+    );
+  };
+}
 
 const overrideComponents = {
   pre: forwardRef<HTMLPreElement, any>((props: any, ref) => (
@@ -45,6 +104,12 @@ const overrideComponents = {
       <table ref={ref} {...props} className={`${props.className}`} />
     </div>
   )),
+  h1: forwardRef<HTMLHeadingElement, any>(HashedHeaders("h1")),
+  h2: forwardRef<HTMLHeadingElement, any>(HashedHeaders("h2")),
+  h3: forwardRef<HTMLHeadingElement, any>(HashedHeaders("h3")),
+  h4: forwardRef<HTMLHeadingElement, any>(HashedHeaders("h4")),
+  h5: forwardRef<HTMLHeadingElement, any>(HashedHeaders("h5")),
+  h6: forwardRef<HTMLHeadingElement, any>(HashedHeaders("h6")),
 };
 
 const router = createBrowserRouter(
