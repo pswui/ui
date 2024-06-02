@@ -131,9 +131,9 @@ function TopNav() {
                   </svg>
                 </Button>
               </DrawerTrigger>
-              <DrawerOverlay>
-                <DrawerContent className="w-[300px]">
-                  <DrawerClose className="absolute top-2 right-2">
+              <DrawerOverlay className="z-[99]">
+                <DrawerContent className="w-[300px] overflow-auto">
+                  <DrawerClose className="float-right sticky top-0 right-0">
                     <Button preset="default" size="icon">
                       {/* mdi:close */}
                       <svg
