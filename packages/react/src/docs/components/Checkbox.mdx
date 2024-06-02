@@ -4,6 +4,8 @@ import { Checkbox } from "@components/Checkbox";
 import { TabProvider, TabTrigger, TabContent, TabList } from "@components/Tabs";
 import { Story } from "@/components/Story";
 import { LoadedCode } from "@/components/LoadedCode";
+import { CheckboxDemo } from "./CheckboxBlocks/Preview";
+import Examples from "./CheckboxBlocks/Examples";
 
 # Checkbox
 A control that allows the user to toggle between checked and not checked.
@@ -15,26 +17,11 @@ A control that allows the user to toggle between checked and not checked.
     </TabList>
     <TabContent name="preview">
         <Story layout="centered">
-            <Label direction="horizontal">
-                <Checkbox />
-                <span>Checkbox</span>
-            </Label>
+            <CheckboxDemo />
         </Story>
     </TabContent>
     <TabContent name="code">
-        ```tsx
-        import { Label } from "@components/Label";
-        import { Checkbox } from "@components/Checkbox";
-
-        export function CheckboxExample() {
-            return (
-                <Label direction="horizontal">
-                    <Checkbox />
-                    <span>Checkbox</span>
-                </Label>
-            );
-        }
-        ```
+        <LoadedCode from={`${GITHUB}/packages/react/components/Checkbox.tsx`} />
     </TabContent>
 </TabProvider>
 
@@ -43,7 +30,7 @@ A control that allows the user to toggle between checked and not checked.
 1. Create a new file `Checkbox.mdx` in your component folder.
 2. Copy and paste the following code into the file.
 
-<LoadedCode from="https://raw.githubusercontent.com/p-sw/ui/main/packages/react/components/Checkbox.tsx" />
+<LoadedCode from={`${GITHUB}/packages/react/components/Checkbox.tsx`} />
 
 ## Usage
 
@@ -74,26 +61,11 @@ import { Checkbox } from "@components/Checkbox";
     </TabList>
     <TabContent name="preview">
         <Story layout="centered">
-            <Label direction="horizontal">
-                <Checkbox size="base" />
-                <p>Agree terms and conditions</p>
-            </Label>
+            <Examples.Text />
         </Story>
     </TabContent>
     <TabContent name="code">
-        ```tsx
-        import { Label } from "@components/Label";
-        import { Checkbox } from "@components/Checkbox";
-
-        export function CheckboxExample() {
-            return (
-                <Label direction="horizontal">
-                    <Checkbox size="base" />
-                    <span>Agree terms and conditions</span>
-                </Label>
-            );
-        }
-        ```
+        <LoadedCode from={`${GITHUB}/packages/react/components/CheckboxBlocks/Examples/Text.tsx`} />
     </TabContent>
 </TabProvider>
 
@@ -106,26 +78,10 @@ import { Checkbox } from "@components/Checkbox";
     </TabList>
     <TabContent name="preview">
         <Story layout="centered">
-            <Label direction="horizontal">
-                <Checkbox size="base" disabled />
-                <span>Agree terms and conditions</span>
-            </Label>
+            <Examples.Disabled />
         </Story>
     </TabContent>
     <TabContent name="code">
-        ```tsx
-        import { Label } from "@components/Label";
-        import { Checkbox } from "@components/Checkbox";
-
-        export function CheckboxExample() {
-            return (
-                <Label direction="horizontal">
-                    <Checkbox size="base" disabled />
-                    <span>Agree terms and conditions</span>
-                </Label>
-            );
-        }
-        ```
+        <LoadedCode from={`${GITHUB}/packages/react/components/CheckboxBlocks/Examples/Disabled.tsx`} />
     </TabContent>
 </TabProvider>
-
