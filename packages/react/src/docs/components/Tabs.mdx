@@ -28,3 +28,54 @@ Organizes content into multiple sections with tabbed navigation.
 2. Copy and paste the following code into the file.
 
 <LoadedCode from={`${GITHUB}/packages/react/components/Tabs.tsx`} />
+
+## Usage
+
+```tsx
+import { TabProvider, TabTrigger, TabContent, TabList } from "@components/Tabs";
+```
+
+```html
+<TabProvider defaultName="tab1">
+    <TabList>
+        <TabTrigger name="tab1">Tab 1</TabTrigger>
+        <TabTrigger name="tab2">Tab 2</TabTrigger>
+    </TabList>
+    <TabContent name="tab1">
+        <div>Tab 1 Content</div>
+    </TabContent>
+    <TabContent name="tab2">
+        <div>Tab 2 Content</div>
+    </TabContent>
+</TabProvider>
+```
+
+> Note:
+> 
+> TabContent requires a element as children, with className prop.
+> It will add `hidden` tailwind classname if the tab is not active.
+> There is no default element in the tab, so you have to provide it.
+
+## Props
+
+### TabProvider
+
+#### Special
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `defaultName` | `string` | - (**required**) | The name of the tab to be active by default. |
+
+### TabTrigger
+
+#### Special
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | - (**required**) | The name of the tab. |
+| `asChild` | `boolean` | `false` | Whether the element is rendered as a child of a component |
+
+### TabContent
+
+#### Special
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | - (**required**) | The name of the tab. |
