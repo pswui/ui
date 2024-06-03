@@ -11,46 +11,8 @@ import DocsLayout from "./DocsLayout";
 import ErrorBoundary from "./ErrorHandler";
 import DynamicLayout from "./DynamicLayout";
 
-import DocsIntroduction, {
-  tableOfContents as docsIntroductionToc,
-} from "./docs/docs/introduction.mdx";
-import DocsInstallation, {
-  tableOfContents as docsInstallationToc,
-} from "./docs/docs/installation.mdx";
-
-import ComponentsButton, {
-  tableOfContents as componentsButtonToc,
-} from "./docs/components/Button.mdx";
-import ComponentsCheckbox, {
-  tableOfContents as componentsCheckboxToc,
-} from "./docs/components/Checkbox.mdx";
-import ComponentsDialog, {
-  tableOfContents as componentsDialogToc,
-} from "./docs/components/Dialog.mdx";
-import ComponentsDrawer, {
-  tableOfContents as componentsDrawerToc,
-} from "./docs/components/Drawer.mdx";
-import ComponentsInput, {
-  tableOfContents as componentsInputToc,
-} from "./docs/components/Input.mdx";
-import ComponentsLabel, {
-  tableOfContents as componentsLabelToc,
-} from "./docs/components/Label.mdx";
-import ComponentsSwitch, {
-  tableOfContents as componentsSwitchToc,
-} from "./docs/components/Switch.mdx";
-import ComponentsTabs, {
-  tableOfContents as componentsTabsToc,
-} from "./docs/components/Tabs.mdx";
-import ComponentsToast, {
-  tableOfContents as componentsToastToc,
-} from "./docs/components/Toast.mdx";
-import ComponentsTooltip, {
-  tableOfContents as componentsTooltipToc,
-} from "./docs/components/Tooltip.mdx";
-
-import { ForwardedRef, forwardRef, useContext, useEffect, useRef } from "react";
 import { HeadingContext } from "./HeadingContext";
+import { ForwardedRef, forwardRef, useContext, useEffect, useRef } from "react";
 
 function buildThresholdList() {
   let thresholds = [];
@@ -134,121 +96,48 @@ const overrideComponents = {
   h6: forwardRef<HTMLHeadingElement, any>(HashedHeaders("h6")),
 };
 
+const docsModules = import.meta.glob("./docs/**/*.mdx");
+
+const routes = Object.keys(docsModules).map((path) => {
+  const sfPath = path.replace("./docs", "").replace(".mdx", "");
+
+  return (
+    <Route
+      key={path}
+      path={path.replace("./docs", "/docs").replace(".mdx", "")}
+      lazy={async () => {
+        const { default: C, tableOfContents } = await import(
+          `./docs${sfPath}.mdx`
+        );
+        return {
+          Component: () => (
+            <DynamicLayout toc={tableOfContents}>
+              <C components={overrideComponents} />
+            </DynamicLayout>
+          ),
+        };
+      }}
+    />
+  );
+});
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />} errorElement={<ErrorBoundary />}>
       <Route index element={<Home />} />
       <Route path="docs" element={<DocsLayout />}>
         <Route
-          index
-          element={
-            <DynamicLayout toc={docsIntroductionToc}>
-              <DocsIntroduction />
-            </DynamicLayout>
-          }
+          path="components"
+          loader={() => redirect("/docs/components/button")}
         />
-        <Route
-          path="installation"
-          element={
-            <DynamicLayout toc={docsInstallationToc}>
-              <DocsInstallation />
-            </DynamicLayout>
-          }
-        />
-        <Route path="components">
-          <Route index loader={() => redirect("/docs/components/button")} />
-          <Route
-            path="button"
-            element={
-              <DynamicLayout toc={componentsButtonToc}>
-                <ComponentsButton components={overrideComponents} />
-              </DynamicLayout>
-            }
-          />
-          <Route
-            path="checkbox"
-            element={
-              <DynamicLayout toc={componentsCheckboxToc}>
-                <ComponentsCheckbox components={overrideComponents} />
-              </DynamicLayout>
-            }
-          />
-          <Route
-            path="dialog"
-            element={
-              <DynamicLayout toc={componentsDialogToc}>
-                <ComponentsDialog components={overrideComponents} />
-              </DynamicLayout>
-            }
-          />
-          <Route
-            path="drawer"
-            element={
-              <DynamicLayout toc={componentsDrawerToc}>
-                <ComponentsDrawer components={overrideComponents} />
-              </DynamicLayout>
-            }
-          />
-          <Route
-            path="input"
-            element={
-              <DynamicLayout toc={componentsInputToc}>
-                <ComponentsInput components={overrideComponents} />
-              </DynamicLayout>
-            }
-          />
-          <Route
-            path="label"
-            element={
-              <DynamicLayout toc={componentsLabelToc}>
-                <ComponentsLabel components={overrideComponents} />
-              </DynamicLayout>
-            }
-          />
-          <Route
-            path="switch"
-            element={
-              <DynamicLayout toc={componentsSwitchToc}>
-                <ComponentsSwitch components={overrideComponents} />
-              </DynamicLayout>
-            }
-          />
-          <Route
-            path="tabs"
-            element={
-              <DynamicLayout toc={componentsTabsToc}>
-                <ComponentsTabs components={overrideComponents} />
-              </DynamicLayout>
-            }
-          />
-          <Route
-            path="toast"
-            element={
-              <DynamicLayout toc={componentsToastToc}>
-                <ComponentsToast components={overrideComponents} />
-              </DynamicLayout>
-            }
-          />
-          <Route
-            path="tooltip"
-            element={
-              <DynamicLayout toc={componentsTooltipToc}>
-                <ComponentsTooltip components={overrideComponents} />
-              </DynamicLayout>
-            }
-          />
-        </Route>
+        {routes}
       </Route>
     </Route>
   )
 );
 
 function App() {
-  return (
-    <>
-      <RouterProvider router={router} />
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
