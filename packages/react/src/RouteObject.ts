@@ -49,6 +49,11 @@ export default {
         path: "/docs/components/drawer",
         name: "Drawer",
         eq: (pathname: string) => pathname === "/docs/components/drawer"
+      },
+      {
+        path: "/docs/components/tabs",
+        name: "Tabs",
+        eq: (pathname: string) => pathname === "/docs/components/tabs"
       }
     ]
   }

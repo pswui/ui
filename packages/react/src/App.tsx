@@ -30,6 +30,9 @@ import ComponentsDialog, {
 import ComponentsDrawer, {
   tableOfContents as componentsDrawerToc,
 } from "./docs/components/Drawer.mdx";
+import ComponentsTabs, {
+  tableOfContents as componentsTabsToc,
+} from "./docs/components/Tabs.mdx";
 
 import { ForwardedRef, forwardRef, useContext, useEffect, useRef } from "react";
 import { HeadingContext } from "./HeadingContext";
@@ -168,6 +171,14 @@ const router = createBrowserRouter(
             element={
               <DynamicLayout toc={componentsDrawerToc}>
                 <ComponentsDrawer components={overrideComponents} />
+              </DynamicLayout>
+            }
+          />
+          <Route
+            path="tabs"
+            element={
+              <DynamicLayout toc={componentsTabsToc}>
+                <ComponentsTabs components={overrideComponents} />
               </DynamicLayout>
             }
           />
