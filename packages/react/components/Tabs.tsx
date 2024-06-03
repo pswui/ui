@@ -194,19 +194,11 @@ const TabTrigger = (props: TabTriggerProps) => {
 
 const [tabContentVariant, resolveTabContentVariantProps] = vcn({
   base: "",
-  variants: {
-    active: {
-      true: "",
-      false: "hidden",
-    },
-  },
-  defaults: {
-    active: false,
-  },
+  variants: {},
+  defaults: {},
 });
 
-interface TabContentProps
-  extends Omit<VariantProps<typeof tabContentVariant>, "active"> {
+interface TabContentProps extends VariantProps<typeof tabContentVariant> {
   name: string;
   children: Exclude<
     React.ReactNode,
@@ -220,15 +212,18 @@ const TabContent = (props: TabContentProps) => {
   const { name, ...restProps } = restPropsBeforeParse;
   const [context] = React.useContext(TabContext);
 
-  return (
-    <Slot
-      className={tabContentVariant({
-        ...variantProps,
-        active: context.active[1] === name,
-      })}
-      {...restProps}
-    />
-  );
+  if (context.active[1] === name) {
+    return (
+      <Slot
+        className={tabContentVariant({
+          ...variantProps,
+        })}
+        {...restProps}
+      />
+    );
+  } else {
+    return null;
+  }
 };
 
 export { TabProvider, useTabState, TabList, TabTrigger, TabContent };
