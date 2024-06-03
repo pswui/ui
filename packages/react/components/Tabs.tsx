@@ -58,7 +58,9 @@ const useTabState = () => {
       if (param < 0 || param >= state.tabs.length) {
         if (process.env.NODE_ENV && process.env.NODE_ENV === "development") {
           console.error(
-            `Invalid index passed to setActiveTab: ${param}, valid indices are 0 to ${state.tabs.length - 1}`
+            `Invalid index passed to setActiveTab: ${param}, valid indices are 0 to ${
+              state.tabs.length - 1
+            }`
           );
         }
         return;
@@ -75,7 +77,9 @@ const useTabState = () => {
       if (index === -1) {
         if (process.env.NODE_ENV && process.env.NODE_ENV === "development") {
           console.error(
-            `Invalid name passed to setActiveTab: ${param}, valid names are ${state.tabs.map((tab) => tab.name).join(", ")}`
+            `Invalid name passed to setActiveTab: ${param}, valid names are ${state.tabs
+              .map((tab) => tab.name)
+              .join(", ")}`
           );
         }
         return;
@@ -138,7 +142,7 @@ const [TabTriggerVariant, resolveTabTriggerVariantProps] = vcn({
 });
 
 interface TabTriggerProps
-  extends VariantProps<typeof TabTriggerVariant>,
+  extends Omit<VariantProps<typeof TabTriggerVariant>, "active">,
     React.HTMLAttributes<HTMLButtonElement>,
     Tab,
     AsChild {}
