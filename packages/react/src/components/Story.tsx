@@ -12,8 +12,9 @@ const Story = React.forwardRef<
     layout?: keyof typeof layoutClasses;
     children: React.ReactNode;
     className?: string;
+    id?: string;
   }
->(({ layout = "default", children, className }, ref) => {
+>(({ layout = "default", children, className, id }, ref) => {
   return (
     <div
       className={twMerge(
@@ -21,6 +22,7 @@ const Story = React.forwardRef<
         className
       )}
       ref={ref}
+      id={id}
     >
       {children}
     </div>
