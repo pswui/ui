@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import { VariantProps, vcn } from "../shared";
 
@@ -266,14 +266,17 @@ interface ToasterProps
   extends React.ComponentPropsWithoutRef<"div">,
     VariantProps<typeof toasterVariant> {
   defaultOption?: Partial<ToastOption>;
+  muteDuplicationWarning?: boolean;
 }
 
 const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>((props, ref) => {
   const [variantProps, otherPropsCompressed] =
     resolveToasterVariantProps(props);
-  const { defaultOption, ...otherPropsExtracted } = otherPropsCompressed;
+  const { defaultOption, muteDuplicationWarning, ...otherPropsExtracted } =
+    otherPropsCompressed;
 
   const [toastList, setToastList] = React.useState<typeof toasts>(toasts);
+  const internalRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const unsubscribe = subscribe(() => {
@@ -281,6 +284,20 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>((props, ref) => {
     });
     return unsubscribe;
   }, []);
+
+  const toasterInstance = document.querySelector("#toaster");
+  if (
+    toasterInstance &&
+    (internalRef.current === null ||
+      !internalRef.current.isEqualNode(toasterInstance))
+  ) {
+    if (process.env.NODE_ENV === "development" && !muteDuplicationWarning) {
+      console.warn(
+        `Multiple Toaster instances detected. Only one Toaster is allowed.`
+      );
+    }
+    return null;
+  }
 
   const option = React.useMemo(() => {
     return {
@@ -295,7 +312,15 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>((props, ref) => {
         <div
           {...otherPropsExtracted}
           className={toasterVariant(variantProps)}
-          ref={ref}
+          ref={(el) => {
+            internalRef.current = el;
+            if (typeof ref === "function") {
+              ref(el);
+            } else if (ref) {
+              ref.current = el;
+            }
+          }}
+          id="toaster"
         >
           {Object.entries(toastList).map(([id]) => (
             <ToastTemplate
