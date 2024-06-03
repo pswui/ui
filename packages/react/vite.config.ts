@@ -8,10 +8,11 @@ import remarkGfm from "remark-gfm";
 import withSlug from "rehype-slug"
 import withToc from "@stefanprobst/rehype-extract-toc";
 import withTocExport from "@stefanprobst/rehype-extract-toc/mdx";
+import dynamicImport from 'vite-plugin-dynamic-import'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), mdx({ rehypePlugins: [rehypeHighlight, withSlug, withToc, withTocExport], remarkPlugins: [remarkGfm] })],
+  plugins: [react(), mdx({ rehypePlugins: [rehypeHighlight, withSlug, withToc, withTocExport], remarkPlugins: [remarkGfm] }), dynamicImport()],
   css: {
     postcss: {
       plugins: [tailwindcss()],
