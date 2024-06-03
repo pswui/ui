@@ -205,7 +205,7 @@ function TopNav() {
 function MainLayout() {
   return (
     <>
-      <Toaster />
+      <Toaster className="top-16" />
       <TopNav />
       <Outlet />
     </>
