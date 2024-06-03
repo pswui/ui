@@ -66,7 +66,7 @@ export const LoadedCode = forwardRef<
         </svg>
       </Button>
       <pre
-        className={`relative hljs w-full h-64 rounded-lg ${
+        className={`relative hljs w-full h-64 rounded-lg language-tsx ${
           !state ? "animate-pulse" : ""
         }`}
         ref={ref}
