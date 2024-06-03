@@ -31,17 +31,11 @@ export const LoadedCode = forwardRef<
   }, [state]);
 
   return (
-    <pre
-      className={twMerge(
-        `relative hljs w-full h-64 rounded-lg ${!state ? "animate-pulse" : ""}`,
-        className
-      )}
-      ref={ref}
-    >
+    <div className={twMerge("relative", className)}>
       <Button
         preset="default"
         size="icon"
-        className="sticky float-right top-0 text-black dark:text-white"
+        className="absolute top-4 right-4 text-black dark:text-white z-10"
         onClick={() => {
           navigator.clipboard.writeText(state ?? "");
           toast({
@@ -63,9 +57,16 @@ export const LoadedCode = forwardRef<
           />
         </svg>
       </Button>
-      <code className="language-tsx" ref={outRef}>
-        {state ?? null}
-      </code>
-    </pre>
+      <pre
+        className={`relative hljs w-full h-64 rounded-lg ${
+          !state ? "animate-pulse" : ""
+        }`}
+        ref={ref}
+      >
+        <code className="language-tsx" ref={outRef}>
+          {state ?? null}
+        </code>
+      </pre>
+    </div>
   );
 });
