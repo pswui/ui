@@ -153,7 +153,7 @@ const [drawerContentVariant, resolveDrawerContentVariantProps] = vcn({
     opened: {
       true: "touch-none",
       false:
-        "-[&.top-0]:translate-y-full [&.bottom-0]:translate-y-full [&.left-0]:-translate-x-full [&.right-0]:translate-x-full",
+        "[&.top-0]:-translate-y-full [&.bottom-0]:translate-y-full [&.left-0]:-translate-x-full [&.right-0]:translate-x-full",
     },
   },
   defaults: {
