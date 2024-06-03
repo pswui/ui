@@ -272,16 +272,11 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
             };
           });
 
-          if (
-            e.target instanceof Element &&
-            internalRef.current &&
-            internalRef.current.contains(e.target)
-          ) {
+          if (internalRef.current) {
             const size = ["top", "bottom"].includes(position)
-              ? e.target.getBoundingClientRect().height
-              : e.target.getBoundingClientRect().width;
+              ? internalRef.current.getBoundingClientRect().height
+              : internalRef.current.getBoundingClientRect().width;
             const movePercentage = dragState.delta / size;
-
             setState((prev) => ({
               ...prev,
               movePercentage: ["top", "left"].includes(position)
