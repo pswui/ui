@@ -64,6 +64,11 @@ export default {
         path: "/docs/components/toast",
         name: "Toast",
         eq: (pathname: string) => pathname === "/docs/components/toast"
+      },
+      {
+        path: "/docs/components/tooltip",
+        name: "Tooltip",
+        eq: (pathname: string) => pathname === "/docs/components/tooltip"
       }
     ]
   }
