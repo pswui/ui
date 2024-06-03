@@ -22,7 +22,7 @@ function RecursivelyToc({ toc }: { toc: Toc }) {
                   ? true
                   : location.hash.length > 0
                   ? location.hash === `#${tocEntry.id}`
-                  : true
+                  : false
               }
             >
               <a href={`#${tocEntry.id}`}>{tocEntry.value}</a>
