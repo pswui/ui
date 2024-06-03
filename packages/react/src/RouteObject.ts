@@ -44,6 +44,11 @@ export default {
         path: "/docs/components/dialog",
         name: "Dialog",
         eq: (pathname: string) => pathname === "/docs/components/dialog"
+      },
+      {
+        path: "/docs/components/drawer",
+        name: "Drawer",
+        eq: (pathname: string) => pathname === "/docs/components/drawer"
       }
     ]
   }
