@@ -142,13 +142,13 @@ const drawerContentColors = {
 };
 
 const [drawerContentVariant, resolveDrawerContentVariantProps] = vcn({
-  base: `fixed ${drawerContentColors.background} ${drawerContentColors.border} transition-all p-4`,
+  base: `fixed ${drawerContentColors.background} ${drawerContentColors.border} transition-all p-4 flex flex-col justify-between gap-8`,
   variants: {
     position: {
-      top: "top-0 inset-x-0 rounded-t-lg border-b-2",
-      bottom: "bottom-0 inset-x-0 rounded-b-lg border-t-2",
-      left: "left-0 inset-y-0 rounded-l-lg border-r-2",
-      right: "right-0 inset-y-0 rounded-r-lg border-l-2",
+      top: "top-0 inset-x-0 w-full max-w-screen rounded-t-lg border-b-2",
+      bottom: "bottom-0 inset-x-0 w-full max-w-screen rounded-b-lg border-t-2",
+      left: "left-0 inset-y-0 h-screen rounded-l-lg border-r-2",
+      right: "right-0 inset-y-0 h-screen rounded-r-lg border-l-2",
     },
     opened: {
       true: "touch-none",
@@ -388,4 +388,89 @@ const DrawerClose = forwardRef<
   );
 });
 
-export { DrawerRoot, DrawerTrigger, DrawerOverlay, DrawerContent, DrawerClose };
+const [drawerHeaderVariant, resolveDrawerHeaderVariantProps] = vcn({
+  base: "flex flex-col gap-2",
+  variants: {},
+  defaults: {},
+});
+
+interface DrawerHeaderProps
+  extends ComponentPropsWithoutRef<"div">,
+    VariantProps<typeof drawerHeaderVariant>,
+    AsChild {}
+
+const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
+  (props, ref) => {
+    const [variantProps, restPropsCompressed] =
+      resolveDrawerHeaderVariantProps(props);
+    const { asChild, ...restPropsExtracted } = restPropsCompressed;
+    return (
+      <div
+        {...restPropsExtracted}
+        className={drawerHeaderVariant(variantProps)}
+        ref={ref}
+      />
+    );
+  }
+);
+
+const [drawerBodyVariant, resolveDrawerBodyVariantProps] = vcn({
+  base: "flex-grow",
+  variants: {},
+  defaults: {},
+});
+
+interface DrawerBodyProps
+  extends ComponentPropsWithoutRef<"div">,
+    VariantProps<typeof drawerBodyVariant>,
+    AsChild {}
+
+const DrawerBody = forwardRef<HTMLDivElement, DrawerBodyProps>((props, ref) => {
+  const [variantProps, restPropsCompressed] =
+    resolveDrawerBodyVariantProps(props);
+  const { asChild, ...restPropsExtracted } = restPropsCompressed;
+  return (
+    <div
+      {...restPropsExtracted}
+      className={drawerBodyVariant(variantProps)}
+      ref={ref}
+    />
+  );
+});
+
+const [drawerFooterVariant, resolveDrawerFooterVariantProps] = vcn({
+  base: "flex flex-row justify-end gap-2",
+  variants: {},
+  defaults: {},
+});
+
+interface DrawerFooterProps
+  extends ComponentPropsWithoutRef<"div">,
+    VariantProps<typeof drawerFooterVariant>,
+    AsChild {}
+
+const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
+  (props, ref) => {
+    const [variantProps, restPropsCompressed] =
+      resolveDrawerFooterVariantProps(props);
+    const { asChild, ...restPropsExtracted } = restPropsCompressed;
+    return (
+      <div
+        {...restPropsExtracted}
+        className={drawerFooterVariant(variantProps)}
+        ref={ref}
+      />
+    );
+  }
+);
+
+export {
+  DrawerRoot,
+  DrawerTrigger,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerClose,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
+};
