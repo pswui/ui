@@ -1,15 +1,18 @@
-import { useRef, useEffect, useState, forwardRef } from "react";
-import hljs from "highlight.js";
+import { useEffect, useState } from "react";
+import Highlight from "react-highlight";
 import { Button } from "@components/Button";
 import { useToast } from "@components/Toast";
 import { twMerge } from "tailwind-merge";
 
 export const GITHUB = "https://raw.githubusercontent.com/p-sw/ui/main";
 
-export const LoadedCode = forwardRef<
-  HTMLPreElement,
-  { from: string; className?: string }
->(({ from, className }, outRef) => {
+export const LoadedCode = ({
+  from,
+  className,
+}: {
+  from: string;
+  className?: string;
+}) => {
   const [state, setState] = useState<string | undefined | null>();
   const { toast } = useToast();
 
@@ -20,15 +23,6 @@ export const LoadedCode = forwardRef<
       setState(text);
     })();
   }, [from]);
-
-  const ref = useRef<HTMLPreElement | null>(null);
-
-  useEffect(() => {
-    if (state && ref.current && !ref.current.dataset.highlighted) {
-      hljs.configure({ ignoreUnescapedHTML: true });
-      hljs.highlightElement(ref.current);
-    }
-  }, [state]);
 
   return (
     <div className={twMerge("relative", className)}>
@@ -65,16 +59,13 @@ export const LoadedCode = forwardRef<
           />
         </svg>
       </Button>
-      <pre
-        className={`relative hljs w-full h-64 rounded-lg language-tsx ${
+      <Highlight
+        className={`w-full h-64 rounded-lg language-tsx ${
           !state ? "animate-pulse" : ""
         }`}
-        ref={ref}
       >
-        <code className="language-tsx" ref={outRef}>
-          {state ?? null}
-        </code>
-      </pre>
+        {state ?? ""}
+      </Highlight>
     </div>
   );
-});
+};
