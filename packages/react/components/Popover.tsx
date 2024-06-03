@@ -57,16 +57,28 @@ const [popoverContentVariant, resolvePopoverContentVariantProps] = vcn({
   base: `absolute transition-all duration-150 border rounded-lg p-0.5 [&>*]:w-full ${popoverColors.background} ${popoverColors.border}`,
   variants: {
     anchor: {
-      topLeft: "bottom-full right-full origin-bottom-right",
-      topCenter: "bottom-full left-1/2 -translate-x-1/2 origin-bottom-center",
-      topRight: "bottom-full left-full origin-bottom-left",
+      topLeft:
+        "bottom-[calc(100%+var(--popover-offset))] right-[calc(100%+var(--popover-offset))] origin-bottom-right",
+      topCenter:
+        "bottom-[calc(100%+var(--popover-offset))] left-1/2 -translate-x-1/2 origin-bottom-center",
+      topRight:
+        "bottom-[calc(100%+var(--popover-offset))] left-[calc(100%+var(--popover-offset))] origin-bottom-left",
       middleLeft: "top-1/2 translate-y-1/2 right-full origin-right",
       middleCenter:
         "top-1/2 translate-y-1/2 left-1/2 -translate-x-1/2 origin-center",
-      middleRight: "top-1/2 translate-y-1/2 left-full origin-left",
-      bottomLeft: "top-full right-full origin-top-right",
-      bottomCenter: "top-full left-1/2 -translate-x-1/2 origin-top-center",
-      bottomRight: "top-full left-full origin-top-left",
+      middleRight:
+        "top-1/2 translate-y-1/2 left-[calc(100%+var(--popover-offset))] origin-left",
+      bottomLeft:
+        "top-[calc(100%+var(--popover-offset))] right-[calc(100%+var(--popover-offset))] origin-top-right",
+      bottomCenter:
+        "top-[calc(100%+var(--popover-offset))] left-1/2 -translate-x-1/2 origin-top-center",
+      bottomRight:
+        "top-[calc(100%+var(--popover-offset))] left-[calc(100%+var(--popover-offset))] origin-top-left",
+    },
+    offset: {
+      sm: "[--popover-offset:2px]",
+      md: "[--popover-offset:4px]",
+      lg: "[--popover-offset:8px]",
     },
     opened: {
       true: "opacity-1 scale-100",
@@ -76,6 +88,7 @@ const [popoverContentVariant, resolvePopoverContentVariantProps] = vcn({
   defaults: {
     anchor: "bottomCenter",
     opened: false,
+    offset: "md",
   },
 });
 
