@@ -24,7 +24,7 @@ const toastColors = {
 };
 
 const [toastVariant] = vcn({
-  base: `flex flex-col gap-2 border-2 p-4 rounded-lg pr-8 pointer-events-auto ${toastColors.background} relative transition-all duration-150`,
+  base: `flex flex-col gap-2 border p-4 rounded-lg pr-8 pointer-events-auto ${toastColors.background} relative transition-all duration-150`,
   variants: {
     status: {
       default: toastColors.borders.default,
