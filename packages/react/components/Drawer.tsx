@@ -89,7 +89,7 @@ const [drawerOverlayVariant, resolveDrawerOverlayVariantProps] = vcn({
 const DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS = 0.3;
 
 interface DrawerOverlayProps
-  extends VariantProps<typeof drawerOverlayVariant>,
+  extends Omit<VariantProps<typeof drawerOverlayVariant>, "opened">,
     AsChild,
     ComponentPropsWithoutRef<"div"> {}
 
