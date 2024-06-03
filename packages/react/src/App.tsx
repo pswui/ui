@@ -30,6 +30,9 @@ import ComponentsDialog, {
 import ComponentsDrawer, {
   tableOfContents as componentsDrawerToc,
 } from "./docs/components/Drawer.mdx";
+import ComponentsInput, {
+  tableOfContents as componentsInputToc,
+} from "./docs/components/Input.mdx";
 import ComponentsLabel, {
   tableOfContents as componentsLabelToc,
 } from "./docs/components/Label.mdx";
@@ -183,6 +186,14 @@ const router = createBrowserRouter(
             element={
               <DynamicLayout toc={componentsDrawerToc}>
                 <ComponentsDrawer components={overrideComponents} />
+              </DynamicLayout>
+            }
+          />
+          <Route
+            path="input"
+            element={
+              <DynamicLayout toc={componentsInputToc}>
+                <ComponentsInput components={overrideComponents} />
               </DynamicLayout>
             }
           />
