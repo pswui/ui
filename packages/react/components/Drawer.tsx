@@ -319,13 +319,15 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
               ? {
                   height:
                     (internalRef.current?.getBoundingClientRect?.()?.height ??
-                      0) + dragState.delta,
+                      0) +
+                    (position === "top" ? dragState.delta : -dragState.delta),
                   padding: 0,
                 }
               : {
                   width:
                     (internalRef.current?.getBoundingClientRect?.()?.width ??
-                      0) + dragState.delta,
+                      0) +
+                    (position === "left" ? dragState.delta : -dragState.delta),
                   padding: 0,
                 }
             : { width: 0, height: 0, padding: 0 }
