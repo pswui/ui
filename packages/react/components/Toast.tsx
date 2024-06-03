@@ -256,11 +256,23 @@ const ToastTemplate = ({
   );
 };
 
-const Toaster = ({
-  defaultOption,
-}: {
+const [toasterVariant, resolveToasterVariantProps] = vcn({
+  base: "fixed p-4 flex flex-col gap-4 top-0 right-0 w-full md:max-w-md md:bottom-0 md:top-auto pointer-events-none z-40",
+  variants: {},
+  defaults: {},
+});
+
+interface ToasterProps
+  extends React.ComponentPropsWithoutRef<"div">,
+    VariantProps<typeof toasterVariant> {
   defaultOption?: Partial<ToastOption>;
-}) => {
+}
+
+const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>((props, ref) => {
+  const [variantProps, otherPropsCompressed] =
+    resolveToasterVariantProps(props);
+  const { defaultOption, ...otherPropsExtracted } = otherPropsCompressed;
+
   const [toastList, setToastList] = React.useState<typeof toasts>(toasts);
 
   useEffect(() => {
@@ -280,7 +292,11 @@ const Toaster = ({
   return (
     <>
       {ReactDOM.createPortal(
-        <div className="fixed p-4 flex flex-col gap-4 top-0 right-0 w-full md:max-w-md md:bottom-0 md:top-auto pointer-events-none z-40">
+        <div
+          {...otherPropsExtracted}
+          className={toasterVariant(variantProps)}
+          ref={ref}
+        >
           {Object.entries(toastList).map(([id]) => (
             <ToastTemplate
               key={id}
@@ -293,6 +309,6 @@ const Toaster = ({
       )}
     </>
   );
-};
+});
 
 export { Toaster, useToast };
