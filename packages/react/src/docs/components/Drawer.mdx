@@ -1,0 +1,204 @@
+import { Button } from "@components/Button";
+import { TabProvider, TabTrigger, TabContent, TabList } from "@components/Tabs";
+import { Story } from "@/components/Story";
+import { LoadedCode, GITHUB } from '@/components/LoadedCode';
+import { DrawerDemo } from "./DrawerBlocks/Preview";
+import Examples from "./DrawerBlocks/Examples";
+
+# Drawer
+Displays a panel that slides out from the edge of the screen, typically used for navigation or additional content.
+
+<TabProvider defaultName="preview">
+    <TabList>
+        <TabTrigger name="preview">Preview</TabTrigger>
+        <TabTrigger name="code">Code</TabTrigger>
+    </TabList>
+  <TabContent name="preview">
+    <Story layout="centered">
+        <DrawerDemo />
+    </Story>
+  </TabContent>
+  <TabContent name="code">
+    <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/DrawerBlocks/Preview.tsx`} />
+  </TabContent>
+</TabProvider>
+
+## Installation
+
+1. Create a new file `Drawer.tsx` in your component folder.
+2. Copy and paste the following code into the file.
+
+<LoadedCode from={`${GITHUB}/packages/react/components/Drawer.tsx`} />
+
+## Usage
+
+```tsx
+import {
+    DrawerRoot,
+    DrawerTrigger,
+    DrawerOverlay,
+    DrawerContent,
+    DrawerClose,
+    DrawerHeader,
+    DrawerBody,
+    DrawerFooter,
+} from "@components/Drawer"; 
+```
+
+```html
+<DrawerRoot>
+    <DrawerTrigger>
+        <Button>Open Drawer</Button>
+    </DrawerTrigger>
+    <DrawerOverlay>
+        <DrawerContent>
+            <DrawerHeader>
+                <h1 className="text-2xl font-bold">Drawer</h1>
+            </DrawerHeader>
+            <DrawerBody>
+                {/* Main Contents */}
+            </DrawerBody>
+            <DrawerFooter>
+                <DrawerClose>
+                    <Button>Close Drawer</Button>
+                </DrawerClose>
+            </DrawerFooter>
+        </DrawerContent>
+    </DrawerOverlay>
+</DrawerRoot>
+```
+
+> Note:
+> 
+> DrawerTrigger and DrawerClose will merge its onClick event handler to its children.
+> Also, there is no default element for those.
+> So you always have to provide the clickable children for DialogTrigger and DialogClose.
+>
+> It is easier to understand if you think of this component as always having the `asChild` prop applied to it.
+
+## Props
+
+### DrawerRoot
+
+#### Special
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `closeThreshold` | `number` | `0.3` | The threshold for the drawer to close with swipe or drag. |
+| `opened` | `boolean` | - (Controlled) | Whether the drawer is opened. |
+
+### DrawerOverlay
+
+#### Special
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `asChild` | `boolean` | `false` | Whether the component is rendered as a child of a component |
+
+### DrawerContent
+
+#### Variants
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `position` | `"top" \| "bottom" \| "left" \| "right"` | `"left"` | The position of the drawer |
+
+#### Special
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `asChild` | `boolean` | `false` | Whether the component is rendered as a child of a component |
+
+### DrawerHeader
+
+#### Special
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `asChild` | `boolean` | `false` | Whether the component is rendered as a child of a component |
+
+### DrawerBody
+
+#### Special
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `asChild` | `boolean` | `false` | Whether the component is rendered as a child of a component |
+
+### DrawerFooter
+
+#### Special
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `asChild` | `boolean` | `false` | Whether the component is rendered as a child of a component |
+
+## Examples
+
+### Left
+
+<TabProvider defaultName="preview">
+    <TabList>
+        <TabTrigger name="preview">Preview</TabTrigger>
+        <TabTrigger name="code">Code</TabTrigger>
+    </TabList>
+    <TabContent name="preview">
+        <Story layout="centered">
+            <Examples.Left />
+        </Story>
+    </TabContent>
+    <TabContent name="code">
+        <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/DrawerBlocks/Examples/Left.tsx`} />
+    </TabContent>
+</TabProvider>
+
+### Right
+
+<TabProvider defaultName="preview">
+    <TabList>
+        <TabTrigger name="preview">Preview</TabTrigger>
+        <TabTrigger name="code">Code</TabTrigger>
+    </TabList>
+    <TabContent name="preview">
+        <Story layout="centered">
+            <Examples.Right />
+        </Story>
+    </TabContent>
+    <TabContent name="code">
+        <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/DrawerBlocks/Examples/Right.tsx`} />
+    </TabContent>
+</TabProvider>
+
+### Top
+
+<TabProvider defaultName="preview">
+    <TabList>
+        <TabTrigger name="preview">Preview</TabTrigger>
+        <TabTrigger name="code">Code</TabTrigger>
+    </TabList>
+    <TabContent name="preview">
+        <Story layout="centered">
+            <Examples.Top />
+        </Story>
+    </TabContent>
+    <TabContent name="code">
+        <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/DrawerBlocks/Examples/Top.tsx`} />
+    </TabContent>
+</TabProvider>
+
+### Bottom
+
+<TabProvider defaultName="preview">
+    <TabList>
+        <TabTrigger name="preview">Preview</TabTrigger>
+        <TabTrigger name="code">Code</TabTrigger>
+    </TabList>
+    <TabContent name="preview">
+        <Story layout="centered">
+            <Examples.Bottom />
+        </Story>
+    </TabContent>
+    <TabContent name="code">
+        <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/DrawerBlocks/Examples/Bottom.tsx`} />
+    </TabContent>
+</TabProvider>
