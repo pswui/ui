@@ -33,6 +33,9 @@ import ComponentsDrawer, {
 import ComponentsTabs, {
   tableOfContents as componentsTabsToc,
 } from "./docs/components/Tabs.mdx";
+import ComponentsToast, {
+  tableOfContents as componentsToastToc,
+} from "./docs/components/Toast.mdx";
 
 import { ForwardedRef, forwardRef, useContext, useEffect, useRef } from "react";
 import { HeadingContext } from "./HeadingContext";
@@ -179,6 +182,14 @@ const router = createBrowserRouter(
             element={
               <DynamicLayout toc={componentsTabsToc}>
                 <ComponentsTabs components={overrideComponents} />
+              </DynamicLayout>
+            }
+          />
+          <Route
+            path="toast"
+            element={
+              <DynamicLayout toc={componentsToastToc}>
+                <ComponentsToast components={overrideComponents} />
               </DynamicLayout>
             }
           />
