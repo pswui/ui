@@ -1,0 +1,125 @@
+import {
+    TabProvider, TabTrigger, TabContent, TabList
+} from "@components/Tabs";
+import { Story } from "@/components/Story";
+import { LoadedCode, GITHUB } from "@/components/LoadedCode";
+import { LabelDemo } from "./LabelBlocks/Preview";
+import Examples from "./LabelBlocks/Examples"
+
+# Label
+A wrapper that used to tag and describe form elements clearly and accessibly.
+
+<TabProvider defaultName="preview">
+    <TabList>
+        <TabTrigger name="preview">Preview</TabTrigger>
+        <TabTrigger name="code">Code</TabTrigger>
+    </TabList>
+    <TabContent name="preview">
+        <Story layout="centered">
+            <LabelDemo />
+        </Story>
+    </TabContent>
+    <TabContent name="code">
+        <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/LabelBlocks/Preview.tsx`} />
+    </TabContent>
+</TabProvider>
+
+## Installation
+
+1. Create a new file `Label.tsx` in your component folder.
+2. Copy and paste the following code into the file.
+
+<LoadedCode from={`${GITHUB}/packages/react/components/Label.tsx`} />
+
+## Usage
+
+```tsx
+import { Label } from "@components/Label"
+```
+
+```html
+<Label>
+    <input />
+</Label>
+
+<Label htmlFor="input">Label</Label>
+<input id="input" />
+```
+
+## Props
+
+### Variants
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `direction` | `"vertical" \| "horizontal"` | `"vertical"` | The direction of the label. |
+
+## Examples
+
+### Vertical
+
+<TabProvider defaultName="preview">
+    <TabList>
+        <TabTrigger name="preview">Preview</TabTrigger>
+        <TabTrigger name="code">Code</TabTrigger>
+    </TabList>
+    <TabContent name="preview">
+        <Story layout="centered">
+            <Examples.Vertical />
+        </Story>
+    </TabContent>
+    <TabContent name="code">
+        <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/LabelBlocks/Examples/Vertical.tsx`} />
+    </TabContent>
+</TabProvider>
+
+### Horizontal
+
+<TabProvider defaultName="preview">
+    <TabList>
+        <TabTrigger name="preview">Preview</TabTrigger>
+        <TabTrigger name="code">Code</TabTrigger>
+    </TabList>
+    <TabContent name="preview">
+        <Story layout="centered">
+            <Examples.Horizontal />
+        </Story>
+    </TabContent>
+    <TabContent name="code">
+        <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/LabelBlocks/Examples/Horizontal.tsx`} />
+    </TabContent>
+</TabProvider>
+
+### Invalid
+
+<TabProvider defaultName="preview">
+    <TabList>
+        <TabTrigger name="preview">Preview</TabTrigger>
+        <TabTrigger name="code">Code</TabTrigger>
+    </TabList>
+    <TabContent name="preview">
+        <Story layout="centered">
+            <Examples.Invalid />
+        </Story>
+    </TabContent>
+    <TabContent name="code">
+        <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/LabelBlocks/Examples/Invalid.tsx`} />
+    </TabContent>
+</TabProvider>
+
+### Disabled
+
+<TabProvider defaultName="preview">
+    <TabList>
+        <TabTrigger name="preview">Preview</TabTrigger>
+        <TabTrigger name="code">Code</TabTrigger>
+    </TabList>
+    <TabContent name="preview">
+        <Story layout="centered">
+            <Examples.Disabled />
+        </Story>
+    </TabContent>
+    <TabContent name="code">
+        <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/LabelBlocks/Examples/Disabled.tsx`} />
+    </TabContent>
+</TabProvider>
