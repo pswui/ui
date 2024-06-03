@@ -37,12 +37,20 @@ export const LoadedCode = forwardRef<
         size="icon"
         className="absolute top-4 right-4 text-black dark:text-white z-10"
         onClick={() => {
-          navigator.clipboard.writeText(state ?? "");
-          toast({
-            title: "Copied",
-            description: "The code has been copied to your clipboard.",
-            status: "success",
-          });
+          if (typeof state === "string" && state.length > 0) {
+            navigator.clipboard.writeText(state ?? "");
+            toast({
+              title: "Copied",
+              description: "The code has been copied to your clipboard.",
+              status: "success",
+            });
+          } else {
+            toast({
+              title: "Error",
+              description: "It seems like code is not loaded yet.",
+              status: "error",
+            });
+          }
         }}
       >
         <svg
