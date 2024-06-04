@@ -110,6 +110,13 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
     }
 
     const Comp = asChild ? Slot : "div";
+    const backdropFilter = `brightness(${
+      state.isDragging
+        ? state.movePercentage + DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS
+        : state.opened
+        ? DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS
+        : 1
+    })`;
 
     return createPortal(
       <Comp
@@ -120,13 +127,8 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
         })}
         onClick={onOutsideClick}
         style={{
-          backdropFilter: `brightness(${
-            state.isDragging
-              ? state.movePercentage + DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS
-              : state.opened
-              ? DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS
-              : 1
-          })`,
+          backdropFilter,
+          WebkitBackdropFilter: backdropFilter,
           transitionDuration: state.isDragging ? "0s" : undefined,
         }}
         ref={ref}
