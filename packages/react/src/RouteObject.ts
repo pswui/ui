@@ -1,4 +1,4 @@
-const docsModules = import.meta.glob('./docs/**/*.mdx');
+const docsModules = import.meta.glob('./docs/components/*.mdx');
 
 const mainNav = [
   {
@@ -19,14 +19,24 @@ const mainNav = [
 ];
 
 const sideNav: Record<string, ({ path: string; name: string; eq: (path: string) => boolean })[]> = {
-  "Documents": [],
+  "Documents": [
+    {
+      path: "/docs/introduction",
+      name: "Introduction",
+      eq: (pathname: string) => pathname === "/docs/introduction"
+    },
+    {
+      path: "/docs/installation",
+      name: "Installation",
+      eq: (pathname: string) => pathname === "/docs/installation"
+    }
+  ],
   "Components": []
 };
 
 Object.keys(docsModules).forEach((path) => {
   const name = (path.split('/').pop() ?? '').replace('.mdx', '');
-  const section = path.includes('/components/') ? "Components" : "Documents";
-  sideNav[section].push({
+  sideNav["Components"].push({
     path: path.replace('./docs', '/docs').replace('.mdx', ''),
     name: name.charAt(0).toUpperCase() + name.slice(1),
     eq: (pathname: string) => pathname === path.replace('./docs', '/docs').replace('.mdx', '')

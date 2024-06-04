@@ -11,6 +11,13 @@ import DocsLayout from "./DocsLayout";
 import ErrorBoundary from "./ErrorHandler";
 import DynamicLayout from "./DynamicLayout";
 
+import DocsIntroduction, {
+  tableOfContents as docsIntroductionToc,
+} from "./docs/introduction.mdx";
+import DocsInstallation, {
+  tableOfContents as docsInstallationToc,
+} from "./docs/installation.mdx";
+
 import { HeadingContext } from "./HeadingContext";
 import { ForwardedRef, forwardRef, useContext, useEffect, useRef } from "react";
 
@@ -96,7 +103,7 @@ const overrideComponents = {
   h6: forwardRef<HTMLHeadingElement, any>(HashedHeaders("h6")),
 };
 
-const docsModules = import.meta.glob("./docs/**/*.mdx");
+const docsModules = import.meta.glob("./docs/components/*.mdx");
 
 const routes = Object.keys(docsModules).map((path) => {
   const sfPath = path.replace("./docs", "").replace(".mdx", "");
@@ -126,6 +133,23 @@ const router = createBrowserRouter(
     <Route path="/" element={<MainLayout />} errorElement={<ErrorBoundary />}>
       <Route index element={<Home />} />
       <Route path="docs" element={<DocsLayout />}>
+        <Route index loader={() => redirect("/docs/introduction")} />
+        <Route
+          path="introduction"
+          element={
+            <DynamicLayout toc={docsIntroductionToc}>
+              <DocsIntroduction />
+            </DynamicLayout>
+          }
+        />
+        <Route
+          path="installation"
+          element={
+            <DynamicLayout toc={docsInstallationToc}>
+              <DocsInstallation />
+            </DynamicLayout>
+          }
+        />
         <Route
           path="components"
           loader={() => redirect("/docs/components/button")}
