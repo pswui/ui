@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import Highlight from "react-highlight";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { gruvboxDark } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 import { Button } from "@components/Button";
 import { useToast } from "@components/Toast";
 import { twMerge } from "tailwind-merge";
@@ -59,13 +60,14 @@ export const LoadedCode = ({
           />
         </svg>
       </Button>
-      <Highlight
-        className={`w-full h-64 rounded-lg language-tsx ${
-          !state ? "animate-pulse" : ""
-        }`}
+      <SyntaxHighlighter
+        language="typescript"
+        style={gruvboxDark}
+        className={`w-full h-64 rounded-lg ${!state ? "animate-pulse" : ""}`}
+        customStyle={{ padding: "1rem" }}
       >
         {state ?? ""}
-      </Highlight>
+      </SyntaxHighlighter>
     </div>
   );
 };
