@@ -10,6 +10,7 @@ import Home from "./Home";
 import DocsLayout from "./DocsLayout";
 import ErrorBoundary from "./ErrorHandler";
 import DynamicLayout from "./DynamicLayout";
+import { Code } from "./components/LoadedCode";
 
 import DocsIntroduction, {
   tableOfContents as docsIntroductionToc,
@@ -19,7 +20,13 @@ import DocsInstallation, {
 } from "./docs/installation.mdx";
 
 import { HeadingContext } from "./HeadingContext";
-import { ForwardedRef, forwardRef, useContext, useEffect, useRef } from "react";
+import React, {
+  ForwardedRef,
+  forwardRef,
+  useContext,
+  useEffect,
+  useRef,
+} from "react";
 
 function buildThresholdList() {
   let thresholds = [];
@@ -80,9 +87,13 @@ function HashedHeaders(Level: `h${1 | 2 | 3 | 4 | 5 | 6}`) {
 }
 
 const overrideComponents = {
-  pre: forwardRef<HTMLPreElement, any>((props: any, ref) => (
-    <pre ref={ref} {...props} className={`${props.className} hljs`} />
-  )),
+  pre: forwardRef<HTMLDivElement, { children: React.ReactElement }>((props, ref) => {
+    const { props: { children, className } } = React.cloneElement(React.Children.only(props.children));
+
+    const language = (typeof className !== "string" || !className.includes("language-") ? "typescript" : /language-([a-z]+)/.exec(className)![1]) ?? "typescript"
+
+    return <Code ref={ref} language={language}>{children as string}</Code>;
+  }),
   code: forwardRef<HTMLElement, any>((props: any, ref) => (
     <code
       ref={ref}
