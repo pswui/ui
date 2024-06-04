@@ -86,7 +86,7 @@ export const Code = forwardRef<HTMLDivElement, { children: string; className?: s
         size="icon"
         className="absolute top-4 right-4 text-black dark:text-white z-10"
         onClick={() => {
-          navigator.clipboard.writeText(children ?? "");
+          void navigator.clipboard.writeText(children ?? "");
           toast({
             title: "Copied",
             description: "The code has been copied to your clipboard.",
