@@ -106,15 +106,15 @@ const overrideComponents = {
 const docsModules = import.meta.glob("./docs/components/*.mdx");
 
 const routes = Object.keys(docsModules).map((path) => {
-  const sfPath = path.replace("./docs", "").replace(".mdx", "");
+  const sfPath = path.split("/").pop()?.replace(".mdx", "");
 
   return (
     <Route
       key={path}
-      path={path.replace("./docs", "/docs").replace(".mdx", "")}
+      path={sfPath}
       lazy={async () => {
         const { default: C, tableOfContents } = await import(
-          `./docs${sfPath}.mdx`
+          `./docs/components/${sfPath}.mdx`
         );
         return {
           Component: () => (
@@ -150,11 +150,20 @@ const router = createBrowserRouter(
             </DynamicLayout>
           }
         />
-        <Route
-          path="components"
-          loader={() => redirect("/docs/components/button")}
-        />
-        {routes}
+        <Route path="components">
+          <Route
+            index
+            loader={() =>
+              redirect(
+                `/docs/components/${Object.keys(docsModules)[0]
+                  .split("/")
+                  .pop()
+                  ?.replace(".mdx", "")}`
+              )
+            }
+          />
+          {routes}
+        </Route>
       </Route>
     </Route>
   )
