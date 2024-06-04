@@ -32,8 +32,8 @@ export const LoadedCode = ({
         size="icon"
         className="absolute top-4 right-4 text-black dark:text-white z-10"
         onClick={() => {
-          if (typeof state === "string" && state.length > 0) {
-            navigator.clipboard.writeText(state ?? "");
+          if (state && state.length > 0) {
+            void navigator.clipboard.writeText(state ?? "");
             toast({
               title: "Copied",
               description: "The code has been copied to your clipboard.",
