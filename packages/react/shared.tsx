@@ -85,7 +85,7 @@ type PresetType<V extends VariantType> = {
 /**
  * A utility function to provide variants and presets to the component
  *
- * @param config - Variant Configuration
+ * @param param - Variant Configuration
  * @returns function (variantProps) -> class name,
  * @returns function (anyProps) -> [variantProps, otherProps]
  */
@@ -109,7 +109,7 @@ export function vcn<V extends VariantType>(param: {
   /**
    * Any Props -> Variant Props, Other Props
    */
-  <AnyPropBeforeResolve extends Record<string, any>>(
+  <AnyPropBeforeResolve extends Record<string, unknown>>(
     anyProps: AnyPropBeforeResolve
   ) => [
     Partial<VariantKV<V>> & {
@@ -139,7 +139,7 @@ export function vcn<V extends VariantType, P extends PresetType<V>>(param: {
   /**
    * Any Props -> Variant Props, Other Props
    */
-  <AnyPropBeforeResolve extends Record<string, any>>(
+  <AnyPropBeforeResolve extends Record<string, unknown>>(
     anyProps: AnyPropBeforeResolve
   ) => [
     Partial<VariantKV<V>> & {
@@ -174,11 +174,9 @@ export function vcn<
      * @param variantProps - The variant props including className.
      * @returns The class name.
      */
-    ({
-      className,
-      preset,
-      ...variantProps
-    }: { className?: string; preset?: keyof P } & Partial<VariantKV<V>>) => {
+    (variantProps: { className?: string; preset?: keyof P } & Partial<VariantKV<V>>) => {
+      const { className, preset, ...otherVariantProps } = variantProps;
+
       const currentPreset: P[keyof P] | null =
         presets && preset ? (presets as NonNullable<P>)[preset] ?? null : null;
       const presetVariantKeys: (keyof V)[] = Object.keys(currentPreset ?? {});
@@ -189,7 +187,7 @@ export function vcn<
         ).map<string>(
           ([variantKey, defaultValue]) =>
             variants[variantKey][
-              (variantProps as unknown as Partial<VariantKV<V>>)[variantKey] ??
+              (otherVariantProps as unknown as Partial<VariantKV<V>>)[variantKey] ??
                 (!!currentPreset && presetVariantKeys.includes(variantKey)
                   ? (currentPreset as Partial<VariantKV<V>>)[variantKey] ??
                     defaultValue
