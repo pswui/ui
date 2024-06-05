@@ -261,7 +261,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
                 movement < 0)
             ) {
               movement =
-                movement / (dragState.delta === 0 ? 1 : dragState.delta);
+                movement / Math.abs(dragState.delta === 0 ? 1 : dragState.delta);
             }
             return {
               ...prev,
