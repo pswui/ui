@@ -32,9 +32,9 @@ Meet our [web documentation](https://ui.psw.kr)!
   - [ ] Context Menu
   - [ ] Data Table
   - [x] Dialog
-  - [ ] Drawer
+  - [x] Drawer
   - [ ] Dropdown Menu
-  - [ ] Label
+  - [x] Label
   - [ ] Menubar
   - [ ] Navigation Menu
   - [ ] Pagination
