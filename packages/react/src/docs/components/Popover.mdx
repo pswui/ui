@@ -1,0 +1,117 @@
+import { TabProvider, TabTrigger, TabContent, TabList } from "@components/Tabs";
+import { Story } from "@/components/Story";
+import { LoadedCode, GITHUB } from "@/components/LoadedCode";
+import { PopoverDemo } from "./PopoverBlocks/Preview";
+import Examples from "./PopoverBlocks/Examples";
+
+# Popover
+Displays rich content in a portal, triggered by a button.
+
+<TabProvider defaultName="preview">
+    <TabList>
+        <TabTrigger name="preview">Preview</TabTrigger>
+        <TabTrigger name="code">Code</TabTrigger>
+    </TabList>
+    <TabContent name="preview">
+        <Story layout="centered">
+            <PopoverDemo />
+        </Story>
+    </TabContent>
+    <TabContent name="code">
+        <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/PopoverBlocks/Preview.tsx`} />
+    </TabContent>
+</TabProvider>
+
+## Installation
+
+1. Create a new file `Popover.tsx` in your component folder.
+2. Copy and paste the following code into the file.
+
+<LoadedCode from={`${GITHUB}/packages/react/components/Popover.tsx`} />
+
+## Usage
+
+```tsx
+import { Popover, PopoverTrigger, PopoverContent } from "@components/popover"
+```
+
+```html
+<Popover>
+  <PopoverTrigger>
+    <Button />
+  </PopoverTrigger>
+  <PopoverContent>
+    {/* content of popover */}
+  </PopoverContent>
+</Popover
+```
+
+> Note:
+>
+> PopoverTrigger will merge its onClick event handler to its children.
+> Also, there is no default element for those.
+> So you always have to provide the clickable children for PopoverTrigger.
+>
+> It is easier to understand if you think of this component as always having the `asChild` prop applied to it.
+
+## Props
+
+### Popover
+
+#### Special
+
+| Prop      | Type      | Default | Description                                                       |
+|:----------|:----------|:--------|:------------------------------------------------------------------|
+| `opened`  | `boolean` | `false` | Initial open state                                                |
+| `asChild` | `boolean` | `false` | Whether the root of popover is rendered as a child of a component |
+
+### PopoverContent
+
+#### Variants
+
+| Prop     | Type                                                                     | Default          | Description                     |
+|:---------|:-------------------------------------------------------------------------|:-----------------|:--------------------------------|
+| `anchor` | `` `${"top" \| "middle" \| "bottom"}${"Left" \| "Center" \| "Right"}` `` | `"bottomCenter"` | Position of Popover content     |
+| `offset` | `"sm" \| "md" \| "lg"`                                                   | `"md"`           | Gap between trigger and popover |
+
+#### Special
+
+| Prop      | Type      | Default | Description                                                                     |
+|:----------|:----------|:--------|:--------------------------------------------------------------------------------|
+| `asChild` | `boolean` | `false` | `Whether the container of popover content is rendered as a child of a component |
+
+## Examples
+
+### Theme Selector
+
+<TabProvider defaultName={"preview"}>
+  <TabList>
+    <TabTrigger name={"preview"}>Preview</TabTrigger>
+    <TabTrigger name={"code"}>Code</TabTrigger>
+  </TabList>
+  <TabContent name={"preview"}>
+    <Story layout={"centered"}>
+      <Examples.ThemeSelector />
+    </Story>
+  </TabContent>
+  <TabContent name={"code"}>
+    <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/PopoverBlocks/Examples/ThemeSelector.tsx`} />
+  </TabContent>
+</TabProvider>
+
+### User Control
+
+<TabProvider defaultName={"preview"}>
+  <TabList>
+    <TabTrigger name={"preview"}>Preview</TabTrigger>
+    <TabTrigger name={"code"}>Code</TabTrigger>
+  </TabList>
+  <TabContent name={"preview"}>
+    <Story layout={"centered"}>
+      <Examples.UserControl />
+    </Story>
+  </TabContent>
+  <TabContent name={"code"}>
+    <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/PopoverBlocks/Examples/UserControl.tsx`} />
+  </TabContent>
+</TabProvider>
