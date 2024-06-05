@@ -104,13 +104,13 @@ export function vcn<V extends VariantType>(param: {
   (
     variantProps: Partial<VariantKV<V>> & {
       className?: string;
-    }
+    },
   ) => string,
   /**
    * Any Props -> Variant Props, Other Props
    */
   <AnyPropBeforeResolve extends Record<string, any>>(
-    anyProps: AnyPropBeforeResolve
+    anyProps: AnyPropBeforeResolve,
   ) => [
     Partial<VariantKV<V>> & {
       className?: string;
@@ -134,13 +134,13 @@ export function vcn<V extends VariantType, P extends PresetType<V>>(param: {
     variantProps: Partial<VariantKV<V>> & {
       className?: string;
       preset?: keyof P;
-    }
+    },
   ) => string,
   /**
    * Any Props -> Variant Props, Other Props
    */
   <AnyPropBeforeResolve extends Record<string, any>>(
-    anyProps: AnyPropBeforeResolve
+    anyProps: AnyPropBeforeResolve,
   ) => [
     Partial<VariantKV<V>> & {
       className?: string;
@@ -174,7 +174,11 @@ export function vcn<
      * @param variantProps - The variant props including className.
      * @returns The class name.
      */
-    (variantProps: { className?: string; preset?: keyof P } & Partial<VariantKV<V>>) => {
+    (
+      variantProps: { className?: string; preset?: keyof P } & Partial<
+        VariantKV<V>
+      >,
+    ) => {
       const { className, preset, ...otherVariantProps } = variantProps;
 
       const currentPreset: P[keyof P] | null =
@@ -183,19 +187,32 @@ export function vcn<
       return twMerge(
         base,
         ...(
-          Object.entries(defaults) as [keyof V, keyof V[keyof V]][]
-        ).map<string>(
-          ([variantKey, defaultValue]) =>
-            variants[variantKey][
-              (otherVariantProps as unknown as Partial<VariantKV<V>>)[variantKey] ??
-                (!!currentPreset && presetVariantKeys.includes(variantKey)
-                  ? (currentPreset as Partial<VariantKV<V>>)[variantKey] ??
-                    defaultValue
-                  : defaultValue)
-            ]
-        ),
-        (currentPreset as Partial<VariantKV<V>> | null)?.className, // preset's classname comes after user's variant props? huh..
-        className
+          Object.entries(defaults) as [keyof V, keyof V[keyof V] & string][]
+        ).map<string>(([variantKey, defaultValue]) => {
+          // Omit<Partial<VariantKV<V>> & { className; preset; }, className | preset> = Partial<VariantKV<V>> (safe to cast)
+          // Partial<VariantKV<V>>[keyof V] => { [k in keyof V]?: BooleanString<keyof V[keyof V] & string> } => BooleanString<keyof V[keyof V]>
+
+          const directVariantValue: (keyof V[keyof V] & string) | undefined = (
+            otherVariantProps as unknown as Partial<VariantKV<V>>
+          )[variantKey]?.toString?.(); // BooleanString<> -> string (safe to index V[keyof V])
+
+          const currentPresetVariantValue:
+            | (keyof V[keyof V] & string)
+            | undefined =
+            !!currentPreset && presetVariantKeys.includes(variantKey)
+              ? (currentPreset as Partial<VariantKV<V>>)[
+                  variantKey
+                ]?.toString?.()
+              : undefined;
+
+          const variantValue: keyof V[keyof V] & string =
+            directVariantValue ?? currentPresetVariantValue ?? defaultValue;
+          return variants[variantKey][variantValue];
+        }),
+        (
+          currentPreset as Partial<VariantKV<V>> | null
+        )?.className?.toString?.(), // preset's classname comes after user's variant props? huh..
+        className,
       );
     },
     /**
@@ -207,7 +224,7 @@ export function vcn<
      * @returns [variantProps, otherProps]
      */
     <AnyPropBeforeResolve extends Record<string, any>>(
-      anyProps: AnyPropBeforeResolve
+      anyProps: AnyPropBeforeResolve,
     ) => {
       const variantKeys = Object.keys(variants) as (keyof V)[];
 
@@ -222,7 +239,7 @@ export function vcn<
           }
           return [variantProps, { ...otherProps, [key]: value }];
         },
-        [{}, {}]
+        [{}, {}],
       ) as [
         Partial<VariantKV<V>> & {
           className?: string;
@@ -252,7 +269,7 @@ export function vcn<
  * ```
  */
 export type VariantProps<F extends (props: any) => string> = F extends (
-  props: infer P
+  props: infer P,
 ) => string
   ? P
   : never;
@@ -268,7 +285,7 @@ export type VariantProps<F extends (props: any) => string> = F extends (
  */
 function mergeReactProps(
   parentProps: Record<string, any>,
-  childProps: Record<string, any>
+  childProps: Record<string, any>,
 ) {
   const overrideProps = { ...childProps };
 
@@ -328,7 +345,7 @@ export const Slot = React.forwardRef<any, SlotProps & Record<string, any>>(
       ...mergeReactProps(safeSlotProps, children.props),
       ref: combinedRef([ref, (children as any).ref]),
     } as any);
-  }
+  },
 );
 
 export interface AsChild {
