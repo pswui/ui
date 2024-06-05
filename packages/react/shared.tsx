@@ -109,7 +109,7 @@ export function vcn<V extends VariantType>(param: {
   /**
    * Any Props -> Variant Props, Other Props
    */
-  <AnyPropBeforeResolve extends Record<string, unknown>>(
+  <AnyPropBeforeResolve extends Record<string, any>>(
     anyProps: AnyPropBeforeResolve
   ) => [
     Partial<VariantKV<V>> & {
@@ -139,7 +139,7 @@ export function vcn<V extends VariantType, P extends PresetType<V>>(param: {
   /**
    * Any Props -> Variant Props, Other Props
    */
-  <AnyPropBeforeResolve extends Record<string, unknown>>(
+  <AnyPropBeforeResolve extends Record<string, any>>(
     anyProps: AnyPropBeforeResolve
   ) => [
     Partial<VariantKV<V>> & {
@@ -254,7 +254,7 @@ export function vcn<
 export type VariantProps<F extends (props: any) => string> = F extends (
   props: infer P
 ) => string
-  ? P & { [key: string]: unknown }
+  ? P
   : never;
 
 /**
