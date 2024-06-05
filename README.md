@@ -34,12 +34,11 @@ Meet our [web documentation](https://ui.psw.kr)!
   - [x] Dialog
   - [ ] Drawer
   - [ ] Dropdown Menu
-  - [ ] Hover
   - [ ] Label
   - [ ] Menubar
   - [ ] Navigation Menu
   - [ ] Pagination
-  - [ ] Popover
+  - [x] Popover
   - [ ] Progress
   - [ ] Radio Group
   - [ ] Scroll Area
