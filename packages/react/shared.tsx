@@ -254,7 +254,7 @@ export function vcn<
 export type VariantProps<F extends (props: any) => string> = F extends (
   props: infer P
 ) => string
-  ? P
+  ? P & { [key: string]: unknown }
   : never;
 
 /**
