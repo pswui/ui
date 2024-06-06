@@ -1,17 +1,80 @@
-import { LoadedCode } from "@/components/LoadedCode";
-
 # Installation
 
-Unfortunately, this library is not have its CLI or a script to install quickly and easily.
+## Main Dependency
 
-But don't worry, you can install it manually.
+you have to install [TailwindCSS](https://tailwindcss.com/docs/installation) and [tailwind-merge](https://github.com/dhiwise/tailwind-merge) and configure it yourself.
 
-## Manual Installation
+## Configuration
 
-1. Install [TailwindCSS](https://tailwindcss.com/docs/installation) and [tailwind-merge](https://github.com/dhiwise/tailwind-merge)
-2. Copy & paste `shared.ts` for shared utility used by components.
-    * You can place it anywhere you want. Just make sure to fix the import in components.
-    * <LoadedCode from="https://raw.githubusercontent.com/p-sw/ui/main/packages/react/shared.tsx" />
-3. Copy & paste components you want to use.
-4. Import, and use it.
+Every PSWUI component uses `shared.tsx` core utility file. So, you have to care about import of `shared.tsx`.
 
+All component file uses `../shared.tsx` to import `shared.tsx`.
+You can simply put `shared.tsx` at the same level as component folder, but you can also change import path to yours.
+
+## CLI
+
+Now, we have our [CLI](https://www.npmjs.com/package/@psw-ui/cli) to automatically install component and shared core utility.
+
+You can simply type this:
+
+```shell
+$ [packageManager] install @psw-ui/cli
+
+$ pswui [COMMAND] ...
+```
+
+### `pswui list`
+
+`List` command prints the component registry, so you can check available or installed components.
+
+### `pswui add`
+
+`Add` command install component provided to your project.
+
+It adds:
+* `shared.tsx` core utility
+* `[component].tsx` component file
+
+You can configure the installation path and import path by configuration file.
+
+### Configuration
+
+#### Naming
+
+Basically, name of config file can be one of this:
+* `pswui.config.js`
+* `pswui.config.mjs`
+* `pswui.config.cjs`
+
+CLI takes default export, so you should make it export as default.
+
+If you want to make CLi to take different config file, you can provide the configuration file name via flag:
+
+```shell
+$ pswui [COMMAND] -p pswui-config.js
+$ pswui [COMMAND] --config=pswui-config.js
+```
+
+#### Type
+
+There is export of `Config` type and `buildConfig` function in `@psw-ui/cli`.
+
+You can leverage your IDE's intellisense with those.
+
+```ts
+import { Config } from "@psw-ui/cli"
+
+const config: Config = {
+  /* ... */
+}
+
+export default config
+```
+
+```ts
+import { buildConfig } from "@psw-ui/cli"
+
+export default buildConfig({
+  /* ... */
+})
+```
