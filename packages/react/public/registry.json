@@ -1,0 +1,16 @@
+{
+  "base": "https://raw.githubusercontent.com/p-sw/ui/main/packages/react/components/{componentName}",
+  "components": {
+    "button": "Button.tsx",
+    "checkbox": "Checkbox.tsx",
+    "dialog": "Dialog.tsx",
+    "drawer": "Drawer.tsx",
+    "Input": "Input.tsx",
+    "Label": "Label.tsx",
+    "popover": "Popover.tsx",
+    "switch": "Switch.tsx",
+    "tabs": "Tabs.tsx",
+    "toast": "Toast.tsx",
+    "tooltip": "Tooltip.tsx"
+  }
+}
