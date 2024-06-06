@@ -6,7 +6,7 @@
   "bin": {
     "pswui": "./bin/run.js"
   },
-  "bugs": "https://github.com/p-sw/ui/issues",
+  "bugs": "https://github.com/pswui/ui/issues",
   "dependencies": {
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",

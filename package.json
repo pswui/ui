@@ -2,7 +2,7 @@
   "name": "ui",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/p-sw/ui",
+  "repository": "https://github.com/pswui/ui",
   "author": "p-sw <shinwoo.park@psw.kr>",
   "license": "MIT",
   "workspaces": [
