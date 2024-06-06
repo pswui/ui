@@ -13,7 +13,7 @@ export default class List extends Command {
 
   static override flags = {
     url: Flags.boolean({char: 'u', description: 'include component file URL'}),
-    config: Flags.string({char: 'p', description: 'path to config', default: CONFIG_DEFAULT_PATH}),
+    config: Flags.string({char: 'p', description: 'path to config'}),
   }
 
   public async run(): Promise<void> {
