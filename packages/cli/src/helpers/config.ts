@@ -13,6 +13,10 @@ export async function loadConfig(config?: string): Promise<unknown> {
   }
 }
 
-export async function validateConfig(config?: unknown): Promise<ResolvedConfig> {
-  return await configZod.parseAsync(config)
+export async function validateConfig(log: (message: string) => void, config?: unknown): Promise<ResolvedConfig> {
+  const parsedConfig: ResolvedConfig = await configZod.parseAsync(config)
+  log(`Install component to: ${join(process.cwd(), parsedConfig.paths.components)}`)
+  log(`Install shared module to: ${join(process.cwd(), parsedConfig.paths.shared)}`)
+  log(`Import shared with: ${parsedConfig.import.shared}`)
+  return parsedConfig
 }
