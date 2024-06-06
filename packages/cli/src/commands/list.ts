@@ -1,5 +1,5 @@
 import {Command, Flags} from '@oclif/core'
-import {getAvailableComponentNames, getRegistry, getComponentURL} from '../helpers/registry.js'
+import {getAvailableComponentNames, getRegistry, getComponentURL, getComponentRealname} from '../helpers/registry.js'
 import ora from 'ora'
 import treeify from 'treeify'
 import {CONFIG_DEFAULT_PATH} from '../const.js'
@@ -36,12 +36,15 @@ export default class List extends Command {
     const names = await getAvailableComponentNames(registry)
 
     getInstalledSpinner.start()
-    const installedNames = await getComponentsInstalled(names, loadedConfig)
+    const installedNames = await getComponentsInstalled(
+      await Promise.all(names.map(async (name) => await getComponentRealname(registry, name))),
+      loadedConfig,
+    )
     getInstalledSpinner.succeed(`Got ${installedNames.length} installed components.`)
 
     let final: Record<string, {URL?: string; installed: 'yes' | 'no'}> = {}
     for (const name of names) {
-      const installed = installedNames.includes(name) ? 'yes' : 'no'
+      const installed = installedNames.includes(await getComponentRealname(registry, name)) ? 'yes' : 'no'
       if (flags.url) {
         const url = await getComponentURL(registry, name)
         final = {...final, [name]: {URL: url, installed}}
