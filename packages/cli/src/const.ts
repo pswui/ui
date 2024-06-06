@@ -15,7 +15,7 @@ export interface Config {
    */
   paths?: {
     components?: 'src/pswui/components' | string
-    shared?: 'src/pswui/shared.ts' | string
+    shared?: 'src/pswui/shared.tsx' | string
   }
   /**
    * Absolute path that will used for import in component
@@ -31,7 +31,7 @@ export type ResolvedConfig<T = Config> = {
 export const DEFAULT_CONFIG = {
   paths: {
     components: 'src/pswui/components',
-    shared: 'src/pswui/shared.ts',
+    shared: 'src/pswui/shared.tsx',
   },
   import: {
     shared: '@pswui-shared',
