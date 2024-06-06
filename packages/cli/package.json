@@ -1,7 +1,7 @@
 {
   "name": "@psw-ui/cli",
   "description": "CLI for PSW/UI",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": "p-sw",
   "bin": {
     "pswui": "./bin/run.js"
@@ -10,20 +10,22 @@
   "dependencies": {
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
-    "@oclif/plugin-plugins": "^5"
+    "@oclif/plugin-plugins": "^5",
+    "@types/treeify": "^1.0.3",
+    "ora": "^8.0.1",
+    "treeify": "^1.1.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@oclif/prettier-config": "^0.2.1",
     "@oclif/test": "^4",
     "@types/chai": "^4",
-    "@types/mocha": "^10",
     "@types/node": "^18",
     "chai": "^4",
     "eslint": "^8",
     "eslint-config-oclif": "^5",
     "eslint-config-oclif-typescript": "^3",
     "eslint-config-prettier": "^9",
-    "mocha": "^10",
     "oclif": "^4",
     "shx": "^0.3.3",
     "ts-node": "^10",
@@ -64,9 +66,7 @@
     "build": "shx rm -rf dist && tsc",
     "lint": "eslint . --ext .ts",
     "postpack": "shx rm -f oclif.manifest.json",
-    "posttest": "yarn lint",
     "prepack": "oclif manifest && oclif readme",
-    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },
   "types": "dist/index.d.ts"
