@@ -2,15 +2,32 @@ import {CONFIG_DEFAULT_PATH, DEFAULT_CONFIG, ResolvedConfig} from '../const.js'
 import {configZod} from '../const.js'
 import {join} from 'node:path'
 import {existsSync} from 'node:fs'
+import {changeExtension} from './path.js'
 
 export async function loadConfig(config?: string): Promise<unknown> {
-  const configPath = join(process.cwd(), config ?? CONFIG_DEFAULT_PATH)
+  const userConfigPath = config ? join(process.cwd(), config) : null
+  const defaultConfigPath = join(process.cwd(), CONFIG_DEFAULT_PATH)
+  const cjsConfigPath = join(process.cwd(), await changeExtension(CONFIG_DEFAULT_PATH, '.cjs'))
+  const mjsConfigPath = join(process.cwd(), await changeExtension(CONFIG_DEFAULT_PATH, '.mjs'))
 
-  if (existsSync(configPath)) {
-    return (await import(configPath)).default
-  } else {
-    return DEFAULT_CONFIG
+  if (userConfigPath) {
+    if (existsSync(userConfigPath)) {
+      return (await import(userConfigPath)).default
+    } else {
+      throw new Error(`Error: config ${userConfigPath} not found.`)
+    }
   }
+
+  if (existsSync(defaultConfigPath)) {
+    return (await import(defaultConfigPath)).default
+  }
+  if (existsSync(cjsConfigPath)) {
+    return (await import(cjsConfigPath)).default
+  }
+  if (existsSync(mjsConfigPath)) {
+    return (await import(mjsConfigPath)).default
+  }
+  return DEFAULT_CONFIG
 }
 
 export async function validateConfig(log: (message: string) => void, config?: unknown): Promise<ResolvedConfig> {

@@ -1,7 +1,7 @@
 import {ResolvedConfig} from '../const.js'
 import {readdir} from 'node:fs/promises'
 import {existsSync} from 'node:fs'
-import {join} from 'node:path'
+import {basename, dirname, extname, join} from 'node:path'
 
 export async function getComponentsInstalled(components: string[], config: ResolvedConfig) {
   const componentPath = join(process.cwd(), config.paths.components)
@@ -11,4 +11,8 @@ export async function getComponentsInstalled(components: string[], config: Resol
   } else {
     return []
   }
+}
+
+export async function changeExtension(path: string, extension: string): Promise<string> {
+  return join(dirname(path), basename(path, extname(path)) + extension)
 }
