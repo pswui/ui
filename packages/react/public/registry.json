@@ -1,5 +1,6 @@
 {
   "base": "https://raw.githubusercontent.com/p-sw/ui/main/packages/react/components/{componentName}",
+  "shared": "https://raw.githubusercontent.com/p-sw/ui/main/packages/react/shared.ts",
   "components": {
     "button": "Button.tsx",
     "checkbox": "Checkbox.tsx",
