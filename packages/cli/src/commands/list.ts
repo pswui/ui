@@ -7,7 +7,7 @@ import {loadConfig, validateConfig} from '../helpers/config.js'
 import {getComponentsInstalled} from '../helpers/path.js'
 
 export default class List extends Command {
-  static override description = 'Prints all available components in registry and components installed in this project'
+  static override description = 'Prints all available components in registry and components installed in this project.'
 
   static override examples = ['<%= config.bin %> <%= command.id %>']
 
