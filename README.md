@@ -57,7 +57,8 @@ Meet our [web documentation](https://ui.psw.kr)!
   - [ ] React
   - [ ] Svelte
 - CLI
-  - [ ] Add
+  - [x] Add
+  - [x] List
 
 ## Building local development environment
 
