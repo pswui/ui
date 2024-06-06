@@ -17,5 +17,5 @@
     "cli:build": "yarn workspace @psw-ui/cli build"
   },
   "private": true,
-  "packageManager": "yarn@4.2.2+sha512.c44e283c54e02de9d1da8687025b030078c1b9648d2895a65aab8e64225bfb7becba87e1809fc0b4b6778bbd47a1e2ab6ac647de4c5e383a53a7c17db6c3ff4b"
+  "packageManager": "yarn@3.8.2+sha512.8cf1a37cdbccd13909ba9299dcb8e772292e76155aeeff14fd0a2488f74852c5345e4a2ca81c86a662d727c6d576f6e5b752b4b0958e8433e2c9869a748daaec"
 }
