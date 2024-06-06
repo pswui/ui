@@ -31,7 +31,7 @@ export default class Add extends Command {
       this.error('No component name provided. Please provide name of component you want to be installed.')
     }
 
-    const resolvedConfig = await validateConfig(this.log, await loadConfig(flags.config))
+    const resolvedConfig = await validateConfig((message: string) => this.log(message), await loadConfig(flags.config))
     const componentFolder = join(process.cwd(), resolvedConfig.paths.components)
     const sharedFile = join(process.cwd(), resolvedConfig.paths.shared)
 
