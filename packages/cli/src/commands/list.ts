@@ -22,10 +22,15 @@ export default class List extends Command {
     const registrySpinner = ora('Fetching registry...')
     const getInstalledSpinner = ora('Getting installed components...')
 
-    const loadedConfig = await validateConfig(await loadConfig(flags.config))
+    const loadedConfig = await validateConfig(this.log, await loadConfig(flags.config))
 
     registrySpinner.start()
-    const registry = await getRegistry()
+    const unsafeRegistry = await getRegistry()
+    if (!unsafeRegistry.ok) {
+      registrySpinner.fail(unsafeRegistry.message)
+      return
+    }
+    const registry = unsafeRegistry.registry
     registrySpinner.succeed(`Fetched ${Object.keys(registry.components).length} components.`)
 
     const names = await getAvailableComponentNames(registry)

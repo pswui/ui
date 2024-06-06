@@ -1,7 +1,19 @@
 import {REGISTRY_URL, Registry} from '../const.js'
 
-export async function getRegistry(): Promise<Registry> {
-  return (await (await fetch(REGISTRY_URL)).json()) as Registry
+export async function getRegistry(): Promise<{ok: true; registry: Registry} | {ok: false; message: string}> {
+  const registryResponse = await fetch(REGISTRY_URL)
+
+  if (registryResponse.ok) {
+    return {
+      ok: true,
+      registry: (await registryResponse.json()) as Registry,
+    }
+  } else {
+    return {
+      ok: false,
+      message: `Error while fetching registry: ${registryResponse.status} ${registryResponse.statusText}`,
+    }
+  }
 }
 
 export async function getAvailableComponentNames(registry: Registry): Promise<string[]> {
