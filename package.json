@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "react": "yarn workspace react",
-    "cli":  "yarn workspace @psw-ui/cli",
+    "cli": "yarn workspace @psw-ui/cli",
     "react:build": "yarn workspace react build",
     "react:dev": "yarn workspace react dev",
     "cli:build": "yarn workspace @psw-ui/cli build"
