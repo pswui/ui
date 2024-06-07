@@ -13,7 +13,6 @@
     "@oclif/plugin-plugins": "^5",
     "@types/treeify": "^1.0.3",
     "ink": "^5.0.1",
-    "ink-spinner": "^5.0.0",
     "ink-text-input": "^6.0.0",
     "ora": "^8.0.1",
     "react": "^18.3.1",
