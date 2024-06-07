@@ -56,6 +56,5 @@ export async function getSuggestion(componentNames: string[], input: string): Pr
   return componentJw
     .filter(([_, score]) => score > 0)
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
     .map(([name]) => name)
 }
