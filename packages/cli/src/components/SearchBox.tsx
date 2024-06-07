@@ -5,8 +5,16 @@ import {Divider} from './Divider.js'
 import Spinner from 'ink-spinner'
 import {Box, Text} from 'ink'
 
-export function SearchBox({components, helper}: {components: string[]; helper: string}) {
-  const [query, setQuery] = useState<string>('')
+export function SearchBox({
+  components,
+  helper,
+  initialQuery,
+}: {
+  components: string[]
+  helper: string
+  initialQuery?: string
+}) {
+  const [query, setQuery] = useState<string>(initialQuery ?? '')
   const [isLoading, setLoading] = useState<boolean>(false)
   const [suggestions, setSuggestions] = useState<string[]>([])
 
