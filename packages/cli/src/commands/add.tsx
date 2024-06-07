@@ -3,8 +3,72 @@ import {loadConfig, validateConfig} from '../helpers/config.js'
 import {existsSync} from 'node:fs'
 import {mkdir, writeFile} from 'node:fs/promises'
 import {join} from 'node:path'
-import {getAvailableComponentNames, getComponentURL, getRegistry} from '../helpers/registry.js'
+import {getAvailableComponentNames, getComponentRealname, getComponentURL, getRegistry} from '../helpers/registry.js'
 import ora from 'ora'
+import React, {ComponentPropsWithoutRef, useState} from 'react'
+import {render, Box} from 'ink'
+import {SearchBox} from '../components/SearchBox.js'
+import {getComponentsInstalled} from '../helpers/path.js'
+import {Choice} from '../components/Choice.js'
+import {colorize} from '@oclif/core/ux'
+
+function Generator() {
+  let complete: boolean = false
+
+  function ComponentSelector<T extends {displayName: string; key: string; installed: boolean}>(
+    props: Omit<ComponentPropsWithoutRef<typeof SearchBox<T>>, 'helper' | 'onSubmit'> & {
+      installed: string[]
+      onComplete: (value: T, force: 'yes' | 'no' | null) => void
+      skipForce: boolean
+    },
+  ) {
+    const [forceStaged, setForceStaged] = useState<boolean>(false)
+    const [onCompleteCache, setCache] = useState<T>({key: '', displayName: '', installed: false} as T)
+
+    return (
+      <Box>
+        {!forceStaged ? (
+          <SearchBox
+            helper={'Press Enter to select component.'}
+            {...props}
+            onSubmit={(T) => {
+              if (T.installed && !props.skipForce) {
+                setForceStaged(true)
+                setCache(T)
+              } else {
+                complete = true
+                props.onComplete(T, null)
+              }
+            }}
+          />
+        ) : null}
+        {forceStaged ? (
+          <Choice
+            question={'You already installed this component. Overwrite?'}
+            yes={'Yes, overwrite existing file and install it.'}
+            no={'No, cancel the action.'}
+            onSubmit={(value) => {
+              complete = true
+              props.onComplete(onCompleteCache, value)
+            }}
+          />
+        ) : null}
+      </Box>
+    )
+  }
+
+  return [
+    ComponentSelector,
+    new Promise<void>((r) => {
+      const i = setInterval(() => {
+        if (complete) {
+          r()
+          clearInterval(i)
+        }
+      }, 100)
+    }),
+  ] as const
+}
 
 export default class Add extends Command {
   static override args = {
@@ -25,18 +89,14 @@ export default class Add extends Command {
   }
 
   public async run(): Promise<void> {
-    const {args, flags} = await this.parse(Add)
-
-    if (!args.name) {
-      this.error('No component name provided. Please provide name of component you want to be installed.')
-    }
-
-    const name = args.name.toLowerCase()
+    let {
+      args,
+      flags: {force, ...flags},
+    } = await this.parse(Add)
 
     const resolvedConfig = await validateConfig((message: string) => this.log(message), await loadConfig(flags.config))
     const componentFolder = join(process.cwd(), resolvedConfig.paths.components)
     const sharedFile = join(process.cwd(), resolvedConfig.paths.shared)
-
     if (!existsSync(componentFolder)) {
       await mkdir(componentFolder, {recursive: true})
     }
@@ -50,9 +110,46 @@ export default class Add extends Command {
     const registry = unsafeRegistry.registry
     const componentNames = await getAvailableComponentNames(registry)
     loadRegistryOra.succeed(`Successfully fetched registry! (${componentNames.length} components)`)
+    const componentRealNames = await Promise.all(
+      componentNames.map(async (name) => await getComponentRealname(registry, name)),
+    )
+    const installed = await getComponentsInstalled(componentRealNames, resolvedConfig)
+    const searchBoxComponent = componentNames.map((name, index) => ({
+      displayName: installed.includes(componentRealNames[index]) ? `${name} (installed)` : name,
+      key: name,
+      installed: installed.includes(componentRealNames[index]),
+    }))
 
-    if (!componentNames.includes(name)) {
-      this.error(`Component with name ${name} does not exists in registry. Please provide correct name.`)
+    let name: string | undefined = args.name?.toLowerCase?.()
+    let quit = false
+
+    if (!name || !componentNames.includes(name.toLowerCase())) {
+      const [ComponentSelector, waitForComplete] = Generator()
+
+      const inkInstance = render(
+        <ComponentSelector
+          components={searchBoxComponent}
+          initialQuery={args.name}
+          installed={installed}
+          skipForce={force}
+          onComplete={(comp, forceSelected) => {
+            name = comp.key
+            force = forceSelected === 'yes'
+            quit = forceSelected === 'no'
+            inkInstance.clear()
+          }}
+        />,
+      )
+      await waitForComplete
+      inkInstance.unmount()
+      if (quit) {
+        this.log(colorize('redBright', 'Installation canceled by user.'))
+        return
+      }
+    }
+
+    if (!name) {
+      this.error('Component name is not provided, or not selected.')
     }
 
     const sharedFileOra = ora('Installing shared module...').start()
@@ -73,7 +170,7 @@ export default class Add extends Command {
 
     const componentFileOra = ora(`Installing ${name} component...`).start()
     const componentFile = join(componentFolder, registry.components[name])
-    if (existsSync(componentFile) && !flags.force) {
+    if (existsSync(componentFile) && !force) {
       componentFileOra.succeed(`Component is already installed! (${componentFile})`)
     } else {
       const componentFileContentResponse = await fetch(await getComponentURL(registry, name))
