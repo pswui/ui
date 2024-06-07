@@ -20,7 +20,7 @@ $ npm install -g @psw-ui/cli
 $ pswui COMMAND
 running command...
 $ pswui (--version)
-@psw-ui/cli/0.1.0 linux-x64 node-v20.13.1
+@psw-ui/cli/0.2.0 linux-x64 node-v20.13.1
 $ pswui --help [COMMAND]
 USAGE
   $ pswui COMMAND
@@ -58,7 +58,7 @@ EXAMPLES
   $ pswui add
 ```
 
-_See code: [src/commands/add.ts](https://github.com/p-sw/ui/blob/v0.1.0/src/commands/add.ts)_
+_See code: [packages/cli/src/commands/add.tsx](https://github.com/pswui/ui/blob/cli@0.2.0/packages/cli/src/commands/add.tsx)_
 
 ## `pswui help [COMMAND]`
 
@@ -99,5 +99,27 @@ EXAMPLES
   $ pswui list
 ```
 
-_See code: [src/commands/list.ts](https://github.com/p-sw/ui/blob/v0.1.0/src/commands/list.ts)_
+_See code: [packages/cli/src/commands/list.ts](https://github.com/pswui/ui/blob/cli@0.2.0/packages/cli/src/commands/list.ts)_
+
+## `pswui search`
+
+Search components.
+
+```
+Search components.
+
+USAGE
+  $ pswui search [QUERY]
+
+ARGUMENTS
+  QUERY  search query
+
+DESCRIPTION
+  Search components.
+
+EXAMPLES
+  $ pswui search
+```
+
+_See code: [packages/cli/src/commands/search.tsx](https://github.com/pswui/ui/blob/cli@0.2.0/packages/cli/src/commands/search.tsx)_
 <!-- commandsstop -->
