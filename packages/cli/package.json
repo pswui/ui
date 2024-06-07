@@ -43,7 +43,7 @@
     "/dist",
     "/oclif.manifest.json"
   ],
-  "homepage": "https://github.com/p-sw/ui",
+  "homepage": "https://ui.psw.kr",
   "keywords": [
     "oclif"
   ],
@@ -64,13 +64,10 @@
       }
     }
   },
-  "repository": "p-sw/ui",
+  "repository": "pswui/ui",
   "scripts": {
     "build": "shx rm -rf dist && tsc",
-    "lint": "eslint . --ext .ts",
-    "postpack": "shx rm -f oclif.manifest.json",
-    "prepack": "oclif manifest && oclif readme",
-    "version": "oclif readme && git add README.md"
+    "lint": "eslint . --ext .ts"
   },
   "types": "dist/index.d.ts"
 }
