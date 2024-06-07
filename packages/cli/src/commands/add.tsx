@@ -5,7 +5,7 @@ import {mkdir, writeFile} from 'node:fs/promises'
 import {join} from 'node:path'
 import {getAvailableComponentNames, getComponentRealname, getComponentURL, getRegistry} from '../helpers/registry.js'
 import ora from 'ora'
-import React, {ComponentPropsWithoutRef, useState} from 'react'
+import React, {ComponentPropsWithoutRef} from 'react'
 import {render, Box} from 'ink'
 import {SearchBox} from '../components/SearchBox.js'
 import {getComponentsInstalled} from '../helpers/path.js'
@@ -16,49 +16,54 @@ function Generator() {
   let complete: boolean = false
 
   function ComponentSelector<T extends {displayName: string; key: string; installed: boolean}>(
-    props: Omit<ComponentPropsWithoutRef<typeof SearchBox<T>>, 'helper' | 'onSubmit'> & {
-      installed: string[]
-      onComplete: (value: T, force: 'yes' | 'no' | null) => void
-      skipForce: boolean
-    },
+    props: Omit<ComponentPropsWithoutRef<typeof SearchBox<T>>, 'helper'>,
   ) {
-    const [forceStaged, setForceStaged] = useState<boolean>(false)
-    const [onCompleteCache, setCache] = useState<T>({key: '', displayName: '', installed: false} as T)
-
     return (
       <Box>
-        {!forceStaged ? (
-          <SearchBox
-            helper={'Press Enter to select component.'}
-            {...props}
-            onSubmit={(T) => {
-              if (T.installed && !props.skipForce) {
-                setForceStaged(true)
-                setCache(T)
-              } else {
-                complete = true
-                props.onComplete(T, null)
-              }
-            }}
-          />
-        ) : null}
-        {forceStaged ? (
-          <Choice
-            question={'You already installed this component. Overwrite?'}
-            yes={'Yes, overwrite existing file and install it.'}
-            no={'No, cancel the action.'}
-            onSubmit={(value) => {
-              complete = true
-              props.onComplete(onCompleteCache, value)
-            }}
-          />
-        ) : null}
+        <SearchBox
+          helper={'Press Enter to select component.'}
+          {...props}
+          onSubmit={(value) => {
+            complete = true
+            props.onSubmit?.(value)
+          }}
+        />
       </Box>
     )
   }
 
   return [
     ComponentSelector,
+    new Promise<void>((r) => {
+      const i = setInterval(() => {
+        if (complete) {
+          r()
+          clearInterval(i)
+        }
+      }, 100)
+    }),
+  ] as const
+}
+
+function Generator2() {
+  let complete = false
+
+  function ForceSelector({onComplete}: {onComplete: (value: 'yes' | 'no') => void}) {
+    return (
+      <Choice
+        question={'You already installed this component. Overwrite?'}
+        yes={'Yes, overwrite existing file and install it.'}
+        no={'No, cancel the action.'}
+        onSubmit={(value) => {
+          complete = true
+          onComplete(value)
+        }}
+      />
+    )
+  }
+
+  return [
+    ForceSelector,
     new Promise<void>((r) => {
       const i = setInterval(() => {
         if (complete) {
@@ -121,7 +126,12 @@ export default class Add extends Command {
     }))
 
     let name: string | undefined = args.name?.toLowerCase?.()
-    let quit = false
+    let requireForce: boolean =
+      !name || !componentNames.includes(name.toLowerCase())
+        ? false
+        : searchBoxComponent.find(({key}) => key === name)?.installed
+          ? !force
+          : false
 
     if (!name || !componentNames.includes(name.toLowerCase())) {
       const [ComponentSelector, waitForComplete] = Generator()
@@ -130,12 +140,27 @@ export default class Add extends Command {
         <ComponentSelector
           components={searchBoxComponent}
           initialQuery={args.name}
-          installed={installed}
-          skipForce={force}
-          onComplete={(comp, forceSelected) => {
+          onSubmit={(comp) => {
             name = comp.key
-            force = forceSelected === 'yes'
-            quit = forceSelected === 'no'
+            requireForce = comp.installed
+            inkInstance.clear()
+          }}
+        />,
+      )
+      await waitForComplete
+      inkInstance.unmount()
+    }
+
+    let quit = false
+
+    if (requireForce) {
+      const [ForceSelector, waitForComplete] = Generator2()
+
+      const inkInstance = render(
+        <ForceSelector
+          onComplete={(value) => {
+            force = value === 'yes'
+            quit = value === 'no'
             inkInstance.clear()
           }}
         />,
