@@ -50,7 +50,7 @@ export function SearchBox<T extends {key: string; displayName: string}>({
       setQueryMode(false)
       setQuery(suggestions[selected] ?? '')
     }
-  }, [selected, onChange])
+  }, [selected, suggestions, onChange])
 
   const app = useApp()
 
