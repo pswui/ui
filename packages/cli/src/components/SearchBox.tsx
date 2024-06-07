@@ -61,10 +61,10 @@ export function SearchBox<T extends {key: string; displayName: string}>({
     <Box width={50} display={'flex'} flexDirection={'column'}>
       <Text color={'gray'}>{helper}</Text>
       <Box display={'flex'} flexDirection={'row'}>
-        <Box marginRight={2} display={'flex'} flexDirection={'row'}>
+        <Box marginRight={1} display={'flex'} flexDirection={'row'}>
           <Text color={'greenBright'}>Search?</Text>
         </Box>
-        <Input value={query} onChange={(v) => setQuery(v)} showCursor placeholder={'query'} onSubmit={onSubmit} />
+        <Input value={query} onChange={(v) => setQuery(v)} showCursor placeholder={' query'} onSubmit={onSubmit} />
       </Box>
       <Divider title={isLoading ? 'Loading...' : `${suggestions.length} components found.`} />
       <Box display={'flex'} flexDirection={'column'}>
