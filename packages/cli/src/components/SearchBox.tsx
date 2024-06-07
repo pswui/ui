@@ -5,7 +5,7 @@ import {Divider} from './Divider.js'
 import Spinner from 'ink-spinner'
 import {Box, Text} from 'ink'
 
-export function SearchBox({components}: {components: string[]}) {
+export function SearchBox({components, helper}: {components: string[]; helper: string}) {
   const [query, setQuery] = useState<string>('')
   const [isLoading, setLoading] = useState<boolean>(false)
   const [suggestions, setSuggestions] = useState<string[]>([])
@@ -20,7 +20,8 @@ export function SearchBox({components}: {components: string[]}) {
 
   return (
     <Box width={50} display={'flex'} flexDirection={'column'} columnGap={4}>
-      <Box display={'flex'} flexDirection={'row'}>
+      <Text color={'gray'}>{helper}</Text>
+      <Box display={'flex'} flexDirection={'row'} borderStyle={'double'}>
         <Box marginRight={2}>
           <Text color={'greenBright'}>?</Text>
         </Box>
