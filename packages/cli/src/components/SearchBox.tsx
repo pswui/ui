@@ -32,7 +32,7 @@ export function SearchBox<T extends {key: string; displayName: string}>({
     ).then((result) => {
       setSuggestions(result)
       setLoading(false)
-      if (result.length >= selected) {
+      if (result.length <= selected) {
         setSelected(result.length - 1)
       }
     })
