@@ -25,6 +25,7 @@
     "@oclif/prettier-config": "^0.2.1",
     "@oclif/test": "^4",
     "@types/chai": "^4",
+    "@types/ink-divider": "^2.0.4",
     "@types/node": "^18",
     "chai": "^4",
     "eslint": "^8",

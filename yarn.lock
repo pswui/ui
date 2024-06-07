@@ -2265,6 +2265,13 @@
   resolved "https://registry.yarnpkg.com/@types/http-cache-semantics/-/http-cache-semantics-4.0.4.tgz#b979ebad3919799c979b17c72621c0bc0a31c6c4"
   integrity sha512-1m0bIFVc7eJWyve9S0RnuRgcQqF/Xd5QsUZAZeQFr1Q3/p9JWoQQEqmVy+DPTNpGXwhgIetAoYF8JSc33q29QA==
 
+"@types/ink-divider@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@types/ink-divider/-/ink-divider-2.0.4.tgz#ca3cefa9476abeb5a91108ad6c1ae8714ac42332"
+  integrity sha512-9edcdEh7JMnkI0CZ4mI8xZ4Gc9cQO3v5+7peJvamWcvJVZKHzmEGorWdgeIu4o86QnwRP3k4Uipnxgh9ljx3iQ==
+  dependencies:
+    "@types/react" "*"
+
 "@types/json-schema@^7.0.12", "@types/json-schema@^7.0.9":
   version "7.0.15"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.15.tgz#596a1747233694d50f6ad8a7869fcb6f56cf5841"
