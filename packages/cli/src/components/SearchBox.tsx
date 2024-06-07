@@ -17,7 +17,7 @@ export function SearchBox<T extends {key: string; displayName: string}>({
   initialQuery?: string
   onKeyDown?: (i: string, k: Key, app: ReturnType<typeof useApp>) => void
   onChange?: (item: T) => void
-  onSubmit?: (value: string) => void
+  onSubmit?: (item: T) => void
 }) {
   const [query, setQuery] = useState<string>(initialQuery ?? '')
   const [queryMode, setQueryMode] = useState<boolean>(true)
@@ -79,7 +79,10 @@ export function SearchBox<T extends {key: string; displayName: string}>({
           }}
           showCursor
           placeholder={' query'}
-          onSubmit={onSubmit}
+          onSubmit={() => {
+            const found = components.find(({key}) => key === suggestions[selected])
+            found && onSubmit?.(found)
+          }}
         />
       </Box>
       <Divider title={isLoading ? 'Loading...' : `${suggestions.length} components found.`} />
