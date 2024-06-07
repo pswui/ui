@@ -25,7 +25,7 @@ export default class Search extends Command {
 
     await render(
       <SearchBox
-        components={componentNames}
+        components={componentNames.map((v) => ({key: v, displayName: v}))}
         initialQuery={args.query}
         helper={'Press ESC to quit'}
         onKeyDown={(_, k, app) => k.escape && app.exit()}
