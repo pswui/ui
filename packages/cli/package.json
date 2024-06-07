@@ -67,7 +67,8 @@
   "repository": "pswui/ui",
   "scripts": {
     "build": "shx rm -rf dist && tsc",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "prepack": "yarn build"
   },
   "types": "dist/index.d.ts"
 }
