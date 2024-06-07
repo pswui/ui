@@ -20,28 +20,35 @@ export function SearchBox<T extends {key: string; displayName: string}>({
   onSubmit?: (value: string) => void
 }) {
   const [query, setQuery] = useState<string>(initialQuery ?? '')
+  const [queryMode, setQueryMode] = useState<boolean>(true)
   const [isLoading, setLoading] = useState<boolean>(false)
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [selected, setSelected] = useState<number>(0)
 
   useEffect(() => {
-    setLoading(true)
-    getSuggestion(
-      components.map(({key}) => key),
-      query,
-    ).then((result) => {
-      setSuggestions(result)
-      setLoading(false)
-      if (result.length <= selected) {
-        setSelected(result.length - 1)
-      }
-    })
-  }, [query])
+    if (queryMode) {
+      setLoading(true)
+      getSuggestion(
+        components.map(({key}) => key),
+        query,
+      ).then((result) => {
+        setSuggestions(result)
+        setLoading(false)
+        if (result.length <= selected) {
+          setSelected(result.length - 1)
+        }
+      })
+    }
+  }, [query, queryMode])
 
   useEffect(() => {
     if (onChange) {
       const found = components.find(({key}) => key === suggestions[selected])
       found && onChange(found)
+    }
+    if (suggestions[selected]) {
+      setQueryMode(false)
+      setQuery(suggestions[selected] ?? '')
     }
   }, [selected, onChange])
 
@@ -64,7 +71,16 @@ export function SearchBox<T extends {key: string; displayName: string}>({
         <Box marginRight={1} display={'flex'} flexDirection={'row'}>
           <Text color={'greenBright'}>Search?</Text>
         </Box>
-        <Input value={query} onChange={(v) => setQuery(v)} showCursor placeholder={' query'} onSubmit={onSubmit} />
+        <Input
+          value={query}
+          onChange={(v) => {
+            setQueryMode(true)
+            setQuery(v)
+          }}
+          showCursor
+          placeholder={' query'}
+          onSubmit={onSubmit}
+        />
       </Box>
       <Divider title={isLoading ? 'Loading...' : `${suggestions.length} components found.`} />
       <Box display={'flex'} flexDirection={'column'}>
