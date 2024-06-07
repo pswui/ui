@@ -31,6 +31,8 @@ export default class Add extends Command {
       this.error('No component name provided. Please provide name of component you want to be installed.')
     }
 
+    const name = args.name.toLowerCase()
+
     const resolvedConfig = await validateConfig((message: string) => this.log(message), await loadConfig(flags.config))
     const componentFolder = join(process.cwd(), resolvedConfig.paths.components)
     const sharedFile = join(process.cwd(), resolvedConfig.paths.shared)
@@ -49,8 +51,8 @@ export default class Add extends Command {
     const componentNames = await getAvailableComponentNames(registry)
     loadRegistryOra.succeed(`Successfully fetched registry! (${componentNames.length} components)`)
 
-    if (!componentNames.includes(args.name)) {
-      this.error(`Component with name ${args.name} does not exists in registry. Please provide correct name.`)
+    if (!componentNames.includes(name)) {
+      this.error(`Component with name ${name} does not exists in registry. Please provide correct name.`)
     }
 
     const sharedFileOra = ora('Installing shared module...').start()
@@ -69,12 +71,12 @@ export default class Add extends Command {
       sharedFileOra.succeed('Shared module is already installed!')
     }
 
-    const componentFileOra = ora(`Installing ${args.name} component...`).start()
-    const componentFile = join(componentFolder, registry.components[args.name])
+    const componentFileOra = ora(`Installing ${name} component...`).start()
+    const componentFile = join(componentFolder, registry.components[name])
     if (existsSync(componentFile) && !flags.force) {
       componentFileOra.succeed(`Component is already installed! (${componentFile})`)
     } else {
-      const componentFileContentResponse = await fetch(await getComponentURL(registry, args.name))
+      const componentFileContentResponse = await fetch(await getComponentURL(registry, name))
       if (!componentFileContentResponse.ok) {
         componentFileOra.fail(
           `Error while fetching component file content: ${componentFileContentResponse.status} ${componentFileContentResponse.statusText}`,
