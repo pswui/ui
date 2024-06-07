@@ -5,18 +5,18 @@ import {Divider} from './Divider.js'
 import Spinner from 'ink-spinner'
 import {Box, Text, useInput, useApp, type Key} from 'ink'
 
-export function SearchBox({
+export function SearchBox<T extends {key: string; displayName: string}>({
   components,
   helper,
   initialQuery,
   onKeyDown,
   onChange,
 }: {
-  components: {key: string; displayName: string}[]
+  components: T[]
   helper: string
   initialQuery?: string
   onKeyDown?: (i: string, k: Key, app: ReturnType<typeof useApp>) => void
-  onChange?: (key: string) => void
+  onChange?: (item: T) => void
 }) {
   const [query, setQuery] = useState<string>(initialQuery ?? '')
   const [isLoading, setLoading] = useState<boolean>(false)
@@ -38,7 +38,10 @@ export function SearchBox({
   }, [query])
 
   useEffect(() => {
-    onChange?.(suggestions[selected])
+    if (onChange) {
+      const found = components.find(({key}) => key === suggestions[selected])
+      found && onChange(found)
+    }
   }, [selected, onChange])
 
   const app = useApp()
