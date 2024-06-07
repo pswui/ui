@@ -11,12 +11,14 @@ export function SearchBox<T extends {key: string; displayName: string}>({
   initialQuery,
   onKeyDown,
   onChange,
+  onSubmit,
 }: {
   components: T[]
   helper: string
   initialQuery?: string
   onKeyDown?: (i: string, k: Key, app: ReturnType<typeof useApp>) => void
   onChange?: (item: T) => void
+  onSubmit?: (value: string) => void
 }) {
   const [query, setQuery] = useState<string>(initialQuery ?? '')
   const [isLoading, setLoading] = useState<boolean>(false)
@@ -57,23 +59,23 @@ export function SearchBox<T extends {key: string; displayName: string}>({
   })
 
   return (
-    <Box width={50} display={'flex'} flexDirection={'column'} columnGap={4}>
+    <Box width={50} display={'flex'} flexDirection={'column'}>
       <Text color={'gray'}>{helper}</Text>
-      <Box display={'flex'} flexDirection={'row'} borderStyle={'double'}>
-        <Box marginRight={2}>
-          <Text color={'greenBright'}>?</Text>
+      <Box display={'flex'} flexDirection={'row'}>
+        <Box marginRight={2} display={'flex'} flexDirection={'row'}>
+          <Text color={'greenBright'}>Search?</Text>
         </Box>
-        <Input value={query} onChange={(v) => setQuery(v)} />
+        <Input value={query} onChange={(v) => setQuery(v)} showCursor placeholder={'query'} onSubmit={onSubmit} />
       </Box>
       <Divider title={isLoading ? 'Loading...' : `${suggestions.length} components found.`} />
       {isLoading ? (
         <Spinner />
       ) : (
-        <Box display={'flex'} flexDirection={'column'} columnGap={1}>
+        <Box display={'flex'} flexDirection={'column'}>
           {suggestions.map((name, index) => {
             return (
-              <Box borderStyle={'round'} key={name}>
-                <Text backgroundColor={selected === index ? 'white' : undefined}>
+              <Box key={name}>
+                <Text color={selected === index ? undefined : 'gray'}>
                   {components[components.findIndex(({key}) => key === name)].displayName}
                 </Text>
               </Box>
