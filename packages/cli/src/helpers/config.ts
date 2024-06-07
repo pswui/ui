@@ -3,6 +3,7 @@ import {configZod} from '../const.js'
 import {join} from 'node:path'
 import {existsSync} from 'node:fs'
 import {changeExtension} from './path.js'
+import {colorize} from '@oclif/core/ux'
 
 export async function loadConfig(config?: string): Promise<unknown> {
   const userConfigPath = config ? join(process.cwd(), config) : null
@@ -32,8 +33,8 @@ export async function loadConfig(config?: string): Promise<unknown> {
 
 export async function validateConfig(log: (message: string) => void, config?: unknown): Promise<ResolvedConfig> {
   const parsedConfig: ResolvedConfig = await configZod.parseAsync(config)
-  log(`Install component to: ${join(process.cwd(), parsedConfig.paths.components)}`)
-  log(`Install shared module to: ${join(process.cwd(), parsedConfig.paths.shared)}`)
-  log(`Import shared with: ${parsedConfig.import.shared}`)
+  log(colorize('gray', `Install component to: ${join(process.cwd(), parsedConfig.paths.components)}`))
+  log(colorize('gray', `Install shared module to: ${join(process.cwd(), parsedConfig.paths.shared)}`))
+  log(colorize('gray', `Import shared with: ${parsedConfig.import.shared}`))
   return parsedConfig
 }
