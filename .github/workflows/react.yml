@@ -28,8 +28,6 @@ jobs:
         id: enable-corepack
         run: |
           corepack enable
-          corepack install -g yarn@4
-          corepack use yarn@4
       - name: Restore cache
         uses: actions/cache@v4
         with:
