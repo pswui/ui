@@ -10,11 +10,13 @@ export function SearchBox({
   helper,
   initialQuery,
   onKeyDown,
+  onChange,
 }: {
-  components: string[]
+  components: {key: string; displayName: string}[]
   helper: string
   initialQuery?: string
   onKeyDown?: (i: string, k: Key, app: ReturnType<typeof useApp>) => void
+  onChange?: (key: string) => void
 }) {
   const [query, setQuery] = useState<string>(initialQuery ?? '')
   const [isLoading, setLoading] = useState<boolean>(false)
@@ -23,11 +25,21 @@ export function SearchBox({
 
   useEffect(() => {
     setLoading(true)
-    getSuggestion(components, query).then((result) => {
+    getSuggestion(
+      components.map(({key}) => key),
+      query,
+    ).then((result) => {
       setSuggestions(result)
       setLoading(false)
+      if (result.length >= selected) {
+        setSelected(result.length - 1)
+      }
     })
   }, [query])
+
+  useEffect(() => {
+    onChange?.(suggestions[selected])
+  }, [selected, onChange])
 
   const app = useApp()
 
@@ -58,7 +70,9 @@ export function SearchBox({
           {suggestions.map((name, index) => {
             return (
               <Box borderStyle={'round'} key={name}>
-                <Text backgroundColor={selected === index ? 'white' : undefined}>{name}</Text>
+                <Text backgroundColor={selected === index ? 'white' : undefined}>
+                  {components[components.findIndex(({key}) => key === name)].displayName}
+                </Text>
               </Box>
             )
           })}
