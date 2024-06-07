@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react'
 import {getSuggestion} from '../helpers/search.js'
 import Input from 'ink-text-input'
 import {Divider} from './Divider.js'
-import Spinner from 'ink-spinner'
 import {Box, Text, useInput, useApp, type Key} from 'ink'
 
 export function SearchBox<T extends {key: string; displayName: string}>({
@@ -68,21 +67,17 @@ export function SearchBox<T extends {key: string; displayName: string}>({
         <Input value={query} onChange={(v) => setQuery(v)} showCursor placeholder={'query'} onSubmit={onSubmit} />
       </Box>
       <Divider title={isLoading ? 'Loading...' : `${suggestions.length} components found.`} />
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <Box display={'flex'} flexDirection={'column'}>
-          {suggestions.map((name, index) => {
-            return (
-              <Box key={name}>
-                <Text color={selected === index ? undefined : 'gray'}>
-                  {components[components.findIndex(({key}) => key === name)].displayName}
-                </Text>
-              </Box>
-            )
-          })}
-        </Box>
-      )}
+      <Box display={'flex'} flexDirection={'column'}>
+        {suggestions.map((name, index) => {
+          return (
+            <Box key={name}>
+              <Text color={selected === index ? undefined : 'gray'}>
+                {components[components.findIndex(({key}) => key === name)].displayName}
+              </Text>
+            </Box>
+          )
+        })}
+      </Box>
     </Box>
   )
 }
