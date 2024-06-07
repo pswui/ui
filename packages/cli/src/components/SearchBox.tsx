@@ -23,7 +23,7 @@ export function SearchBox<T extends {key: string; displayName: string}>({
   const [queryMode, setQueryMode] = useState<boolean>(true)
   const [isLoading, setLoading] = useState<boolean>(false)
   const [suggestions, setSuggestions] = useState<string[]>([])
-  const [selected, setSelected] = useState<number>(0)
+  const [selected, setSelected] = useState<number>(-1)
 
   useEffect(() => {
     if (queryMode) {
@@ -33,10 +33,7 @@ export function SearchBox<T extends {key: string; displayName: string}>({
         query,
       ).then((result) => {
         setSuggestions(result)
-        setLoading(false)
-        if (result.length <= selected) {
-          setSelected(result.length - 1)
-        }
+        setSelected(-1)
       })
     }
   }, [query, queryMode])
@@ -46,10 +43,6 @@ export function SearchBox<T extends {key: string; displayName: string}>({
       const found = components.find(({key}) => key === suggestions[selected])
       found && onChange(found)
     }
-    if (suggestions[selected]) {
-      setQueryMode(false)
-      setQuery(suggestions[selected] ?? '')
-    }
   }, [selected, suggestions, onChange])
 
   const app = useApp()
@@ -57,12 +50,20 @@ export function SearchBox<T extends {key: string; displayName: string}>({
   useInput((i, k) => {
     if (k.downArrow) {
       setSelected((p) => (p >= suggestions.length - 1 ? 0 : p + 1))
+      setQueryMode(false)
     }
     if (k.upArrow) {
       setSelected((p) => (p <= 0 ? suggestions.length - 1 : p - 1))
+      setQueryMode(false)
     }
     onKeyDown?.(i, k, app)
   })
+
+  useEffect(() => {
+    if (!queryMode && suggestions[selected]) {
+      setQuery(suggestions[selected])
+    }
+  }, [queryMode, selected])
 
   return (
     <Box width={50} display={'flex'} flexDirection={'column'}>
