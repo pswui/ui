@@ -59,7 +59,7 @@ function HashedHeaders(Level: `h${1 | 2 | 3 | 4 | 5 | 6}`) {
           root: null,
           rootMargin: "0px",
           threshold: buildThresholdList(),
-        }
+        },
       );
       if (internalRef.current) {
         observer.observe(internalRef.current);
@@ -87,13 +87,24 @@ function HashedHeaders(Level: `h${1 | 2 | 3 | 4 | 5 | 6}`) {
 }
 
 const overrideComponents = {
-  pre: forwardRef<HTMLDivElement, { children: React.ReactElement }>((props, ref) => {
-    const { props: { children, className } } = React.cloneElement(React.Children.only(props.children));
+  pre: forwardRef<HTMLDivElement, { children: React.ReactElement }>(
+    (props, ref) => {
+      const {
+        props: { children, className },
+      } = React.cloneElement(React.Children.only(props.children));
 
-    const language = (typeof className !== "string" || !className.includes("language-") ? "typescript" : /language-([a-z]+)/.exec(className)![1]) ?? "typescript"
+      const language =
+        (typeof className !== "string" || !className.includes("language-")
+          ? "typescript"
+          : /language-([a-z]+)/.exec(className)![1]) ?? "typescript";
 
-    return <Code ref={ref} language={language}>{children as string}</Code>;
-  }),
+      return (
+        <Code ref={ref} language={language}>
+          {children as string}
+        </Code>
+      );
+    },
+  ),
   code: forwardRef<HTMLElement, any>((props: any, ref) => (
     <code
       ref={ref}
@@ -139,10 +150,20 @@ const routes = Object.keys(docsModules).map((path) => {
   );
 });
 
+const REDIRECTED_404 = /^\?(\/([a-zA-Z0-9\-_]+\/?)+)(&.*)*$/;
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />} errorElement={<ErrorBoundary />}>
-      <Route index element={<Home />} />
+      <Route
+        index
+        loader={() =>
+          REDIRECTED_404.test(window.location.search)
+            ? redirect(REDIRECTED_404.exec(window.location.search)?.[1] ?? "/")
+            : true
+        }
+        element={<Home />}
+      />
       <Route path="docs" element={<DocsLayout />}>
         <Route index loader={() => redirect("/docs/introduction")} />
         <Route
@@ -169,15 +190,15 @@ const router = createBrowserRouter(
                 `/docs/components/${Object.keys(docsModules)[0]
                   .split("/")
                   .pop()
-                  ?.replace(".mdx", "")}`
+                  ?.replace(".mdx", "")}`,
               )
             }
           />
           {routes}
         </Route>
       </Route>
-    </Route>
-  )
+    </Route>,
+  ),
 );
 
 function App() {
