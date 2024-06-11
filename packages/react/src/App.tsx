@@ -29,7 +29,9 @@ import React, {
   useContext,
   useEffect,
   useRef,
+  useState,
 } from "react";
+import { Tooltip, TooltipContent } from "@components/Tooltip.tsx";
 
 function buildThresholdList() {
   const thresholds: number[] = [];
@@ -48,6 +50,8 @@ function HashedHeaders(Level: `h${1 | 2 | 3 | 4 | 5 | 6}`) {
   return (prop: any, ref: ForwardedRef<HTMLHeadingElement>) => {
     const internalRef = useRef<HTMLHeadingElement | null>(null);
     const [_, setActiveHeadings] = useContext(HeadingContext);
+
+    const { children, ...restProp } = prop;
 
     useEffect(() => {
       const observer = new IntersectionObserver(
@@ -72,19 +76,58 @@ function HashedHeaders(Level: `h${1 | 2 | 3 | 4 | 5 | 6}`) {
       };
     }, [internalRef.current]);
 
+    const [status, setStatus] = useState<"normal" | "error" | "success">(
+      "normal",
+    );
+    const messages = {
+      normal: "Click to copy link",
+      success: "Copied link!",
+      error: "Failed to copy..",
+    };
+
+    useEffect(() => {
+      if (status !== "normal") {
+        const timeout = setTimeout(() => {
+          setStatus("normal");
+        }, 3000);
+        return () => {
+          clearTimeout(timeout);
+        };
+      }
+    }, [status]);
+
     return (
-      <Level
-        {...prop}
-        className={`${prop.className}`}
-        ref={(el) => {
-          internalRef.current = el;
-          if (typeof ref === "function") {
-            ref(el);
-          } else if (el && ref) {
-            ref.current = el;
-          }
-        }}
-      />
+      <Tooltip asChild position={"right"}>
+        <Level
+          ref={(el) => {
+            internalRef.current = el;
+            if (typeof ref === "function") {
+              ref(el);
+            } else if (el && ref) {
+              ref.current = el;
+            }
+          }}
+          className={`${prop.className} cursor-pointer select-none`}
+          onClick={async (e) => {
+            try {
+              await navigator.clipboard.writeText(
+                window.location.href.split("#")[0] + "#" + e.currentTarget.id,
+              );
+              setStatus("success");
+            } catch (e) {
+              setStatus("error");
+            }
+          }}
+          {...restProp}
+        >
+          {children}
+          <TooltipContent status={status} offset={"lg"} delay={"early"}>
+            <p className={"text-base font-normal whitespace-nowrap not-prose"}>
+              {messages[status]}
+            </p>
+          </TooltipContent>
+        </Level>
+      </Tooltip>
     );
   };
 }
