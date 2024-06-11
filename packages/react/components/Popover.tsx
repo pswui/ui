@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { AsChild, Slot, VariantProps, vcn } from "@pswui-lib/shared@1.0.0";
+import { AsChild, Slot, VariantProps, vcn } from "@pswui-lib";
 
 interface IPopoverContext {
   opened: boolean;

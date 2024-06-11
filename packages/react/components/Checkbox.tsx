@@ -1,5 +1,5 @@
 import React from "react";
-import { VariantProps, vcn } from "@pswui-lib/shared@1.0.0";
+import { VariantProps, vcn } from "@pswui-lib";
 
 const checkboxColors = {
   background: {
