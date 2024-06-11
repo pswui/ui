@@ -133,3 +133,54 @@ import { Tooltip, TooltipContent } from "@components/Tooltip";
         <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/TooltipBlocks/Examples/Right.tsx`} />
     </TabContent>
 </TabProvider>
+
+### No Delay
+
+<TabProvider defaultName="preview">
+  <TabList>
+    <TabTrigger name={"preview"}>Preview</TabTrigger>
+    <TabTrigger name={"code"}>Code</TabTrigger>
+  </TabList>
+  <TabContent name="preview">
+    <Story layout="centered">
+      <Examples.NoDelay />
+    </Story>
+  </TabContent>
+  <TabContent name="code">
+    <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/TooltipBlocks/Examples/NoDelay.tsx`} />
+  </TabContent>
+</TabProvider>
+
+### Early Delay
+
+<TabProvider defaultName="preview">
+  <TabList>
+    <TabTrigger name={"preview"}>Preview</TabTrigger>
+    <TabTrigger name={"code"}>Code</TabTrigger>
+  </TabList>
+  <TabContent name="preview">
+    <Story layout="centered">
+      <Examples.EarlyDelay />
+    </Story>
+  </TabContent>
+  <TabContent name="code">
+    <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/TooltipBlocks/Examples/EarlyDelay.tsx`} />
+  </TabContent>
+</TabProvider>
+
+### Late Delay
+
+<TabProvider defaultName="preview">
+  <TabList>
+    <TabTrigger name={"preview"}>Preview</TabTrigger>
+    <TabTrigger name={"code"}>Code</TabTrigger>
+  </TabList>
+  <TabContent name="preview">
+    <Story layout="centered">
+      <Examples.LateDelay />
+    </Story>
+  </TabContent>
+  <TabContent name="code">
+    <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/TooltipBlocks/Examples/LateDelay.tsx`} />
+  </TabContent>
+</TabProvider>
