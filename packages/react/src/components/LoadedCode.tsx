@@ -1,4 +1,4 @@
-import {forwardRef, useEffect, useState} from "react";
+import { forwardRef, useEffect, useState } from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { gruvboxDark } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 import { Button } from "@components/Button";
@@ -63,7 +63,7 @@ export const LoadedCode = ({
       <SyntaxHighlighter
         language="typescript"
         style={gruvboxDark}
-        className={`w-full h-64 rounded-lg ${!state ? "animate-pulse" : ""}`}
+        className={`w-full h-64 rounded-lg ${!state ? "animate-pulse" : ""} scrollbar-none`}
         customStyle={{ padding: "1rem" }}
       >
         {state ?? ""}
@@ -72,11 +72,10 @@ export const LoadedCode = ({
   );
 };
 
-export const Code = forwardRef<HTMLDivElement, { children: string; className?: string; language: string }>(({
-  children,
-  className,
-  language,
-}, ref) => {
+export const Code = forwardRef<
+  HTMLDivElement,
+  { children: string; className?: string; language: string }
+>(({ children, className, language }, ref) => {
   const { toast } = useToast();
 
   return (
@@ -109,7 +108,7 @@ export const Code = forwardRef<HTMLDivElement, { children: string; className?: s
       <SyntaxHighlighter
         language={language}
         style={gruvboxDark}
-        className={`w-full h-auto max-h-64 rounded-lg`}
+        className={`w-full h-auto max-h-64 rounded-lg scrollbar-none`}
         customStyle={{ padding: "1rem" }}
       >
         {children}
