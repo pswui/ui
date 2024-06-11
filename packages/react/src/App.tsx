@@ -18,6 +18,9 @@ import DocsIntroduction, {
 import DocsInstallation, {
   tableOfContents as docsInstallationToc,
 } from "./docs/installation.mdx";
+import DocsConfiguration, {
+  tableOfContents as docsConfigurationToc,
+} from "./docs/configuration.mdx";
 
 import { HeadingContext } from "./HeadingContext";
 import React, {
@@ -87,24 +90,18 @@ function HashedHeaders(Level: `h${1 | 2 | 3 | 4 | 5 | 6}`) {
 }
 
 const overrideComponents = {
-  pre: forwardRef<HTMLDivElement, { children: React.ReactElement }>(
-    (props, ref) => {
-      const {
-        props: { children, className },
-      } = React.cloneElement(React.Children.only(props.children));
+  pre: (props: any) => {
+    const {
+      props: { children, className },
+    } = React.cloneElement(React.Children.only(props.children));
 
-      const language =
-        (typeof className !== "string" || !className.includes("language-")
-          ? "typescript"
-          : /language-([a-z]+)/.exec(className)![1]) ?? "typescript";
+    const language =
+      (!className || !className.includes("language-")
+        ? "typescript"
+        : /language-([a-z]+)/.exec(className)![1]) ?? "typescript";
 
-      return (
-        <Code ref={ref} language={language}>
-          {children as string}
-        </Code>
-      );
-    },
-  ),
+    return <Code language={language}>{children as string}</Code>;
+  },
   code: forwardRef<HTMLElement, any>((props: any, ref) => (
     <code
       ref={ref}
@@ -170,7 +167,7 @@ const router = createBrowserRouter(
           path="introduction"
           element={
             <DynamicLayout toc={docsIntroductionToc}>
-              <DocsIntroduction />
+              <DocsIntroduction components={overrideComponents} />
             </DynamicLayout>
           }
         />
@@ -178,7 +175,15 @@ const router = createBrowserRouter(
           path="installation"
           element={
             <DynamicLayout toc={docsInstallationToc}>
-              <DocsInstallation />
+              <DocsInstallation components={overrideComponents} />
+            </DynamicLayout>
+          }
+        />
+        <Route
+          path="configuration"
+          element={
+            <DynamicLayout toc={docsConfigurationToc}>
+              <DocsConfiguration components={overrideComponents} />
             </DynamicLayout>
           }
         />
