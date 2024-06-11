@@ -1,5 +1,5 @@
 import React from "react";
-import { vcn, VariantProps, Slot, AsChild } from "../shared";
+import { vcn, VariantProps, Slot, AsChild } from "../lib/shared@1.0.0";
 
 const colors = {
   outline: {
@@ -118,7 +118,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     return <Comp ref={ref} {...compProps} />;
-  }
+  },
 );
 
 export { Button };

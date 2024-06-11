@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { Slot, VariantProps, vcn } from "../shared";
+import { Slot, VariantProps, vcn } from "../lib/shared@1.0.0";
 import ReactDOM from "react-dom";
 
 /**
@@ -20,7 +20,7 @@ const DialogContext = React.createContext<
   () => {
     if (process.env.NODE_ENV && process.env.NODE_ENV === "development") {
       console.warn(
-        "It seems like you're using DialogContext outside of a provider."
+        "It seems like you're using DialogContext outside of a provider.",
       );
     }
   },
@@ -135,11 +135,11 @@ const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlay>(
           >
             {children}
           </div>,
-          document.body
+          document.body,
         )}
       </>
     );
-  }
+  },
 );
 
 /**
@@ -210,7 +210,7 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContent>(
         {children}
       </div>
     );
-  }
+  },
 );
 
 /**
@@ -273,7 +273,7 @@ const DialogHeader = React.forwardRef<HTMLElement, DialogHeaderProps>(
         {children}
       </header>
     );
-  }
+  },
 );
 
 /**
@@ -348,7 +348,7 @@ const DialogTitle = React.forwardRef<HTMLHeadingElement, DialogTitleProps>(
         {children}
       </h1>
     );
-  }
+  },
 );
 
 const DialogSubtitle = React.forwardRef<
@@ -407,7 +407,7 @@ const DialogFooter = React.forwardRef<HTMLDivElement, DialogFooterProps>(
         {children}
       </div>
     );
-  }
+  },
 );
 
 export {

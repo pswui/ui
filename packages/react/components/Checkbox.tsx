@@ -1,5 +1,5 @@
 import React from "react";
-import { VariantProps, vcn } from "../shared";
+import { VariantProps, vcn } from "../lib/shared@1.0.0";
 
 const checkboxColors = {
   background: {
@@ -107,7 +107,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         </label>
       </>
     );
-  }
+  },
 );
 
 export { Checkbox };

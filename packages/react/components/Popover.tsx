@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { AsChild, Slot, VariantProps, vcn } from "../shared";
+import { AsChild, Slot, VariantProps, vcn } from "../lib/shared@1.0.0";
 
 interface IPopoverContext {
   opened: boolean;
@@ -14,7 +14,7 @@ const PopoverContext = React.createContext<
   () => {
     if (process.env.NODE_ENV && process.env.NODE_ENV === "development") {
       console.warn(
-        "It seems like you're using PopoverContext outside of a provider."
+        "It seems like you're using PopoverContext outside of a provider.",
       );
     }
   },
@@ -133,7 +133,7 @@ const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
         {children}
       </div>
     );
-  }
+  },
 );
 
 export { Popover, PopoverTrigger, PopoverContent };

@@ -1,6 +1,6 @@
 import React, { useEffect, useId, useRef } from "react";
 import ReactDOM from "react-dom";
-import { VariantProps, vcn } from "../shared";
+import { VariantProps, vcn } from "../lib/shared@1.0.0";
 
 interface ToastOption {
   closeButton: boolean;
@@ -79,7 +79,7 @@ function subscribeSingle(id: `${number}`) {
     toasts[id].subscribers.push(callback);
     return () => {
       toasts[id].subscribers = toasts[id].subscribers.filter(
-        (subscriber) => subscriber !== callback
+        (subscriber) => subscriber !== callback,
       );
     };
   };
@@ -111,7 +111,7 @@ function close(id: `${number}`) {
 
 function update(
   id: `${number}`,
-  toast: Partial<Omit<ToastBody, "life"> & Partial<ToastOption>>
+  toast: Partial<Omit<ToastBody, "life"> & Partial<ToastOption>>,
 ) {
   toasts[id] = {
     ...toasts[id],
@@ -153,7 +153,7 @@ const ToastTemplate = ({
   globalOption: ToastOption;
 }) => {
   const [toast, setToast] = React.useState<(typeof toasts)[`${number}`]>(
-    toasts[id]
+    toasts[id],
   );
   const ref = React.useRef<HTMLDivElement | null>(null);
 
@@ -199,7 +199,7 @@ const ToastTemplate = ({
           .get("transition-duration") as { value: number; unit: string };
       } else {
         const style = /(\d+(\.\d+)?)(.+)/.exec(
-          window.getComputedStyle(ref.current).transitionDuration
+          window.getComputedStyle(ref.current).transitionDuration,
         );
         transitionDuration = style
           ? {
@@ -297,7 +297,7 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>((props, ref) => {
   if (toasterInstance && id !== toasterInstance.id) {
     if (process.env.NODE_ENV === "development" && !muteDuplicationWarning) {
       console.warn(
-        `Multiple Toaster instances detected. Only one Toaster is allowed.`
+        `Multiple Toaster instances detected. Only one Toaster is allowed.`,
       );
     }
     return null;
@@ -328,7 +328,7 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>((props, ref) => {
             />
           ))}
         </div>,
-        document.body
+        document.body,
       )}
     </>
   );

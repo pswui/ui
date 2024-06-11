@@ -1,5 +1,5 @@
 import React from "react";
-import { VariantProps, vcn } from "../shared";
+import { VariantProps, vcn } from "../lib/shared@1.0.0";
 
 const inputColors = {
   background: {
@@ -61,7 +61,7 @@ const InputFrame = React.forwardRef<HTMLLabelElement, InputFrameProps>(
         {children}
       </label>
     );
-  }
+  },
 );
 
 interface InputProps

@@ -1,4 +1,4 @@
-import { AsChild, Slot, VariantProps, vcn } from "../shared";
+import { AsChild, Slot, VariantProps, vcn } from "../lib/shared@1.0.0";
 import React from "react";
 
 interface Tab {
@@ -20,7 +20,7 @@ const TabContext = React.createContext<
   () => {
     if (process.env.NODE_ENV && process.env.NODE_ENV === "development") {
       console.warn(
-        "It seems like you're using TabContext outside of provider."
+        "It seems like you're using TabContext outside of provider.",
       );
     }
   },
@@ -60,7 +60,7 @@ const useTabState = () => {
           console.error(
             `Invalid index passed to setActiveTab: ${param}, valid indices are 0 to ${
               state.tabs.length - 1
-            }`
+            }`,
           );
         }
         return;
@@ -79,7 +79,7 @@ const useTabState = () => {
           console.error(
             `Invalid name passed to setActiveTab: ${param}, valid names are ${state.tabs
               .map((tab) => tab.name)
-              .join(", ")}`
+              .join(", ")}`,
           );
         }
         return;

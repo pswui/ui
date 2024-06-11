@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { AsChild, Slot, VariantProps, vcn } from "../shared";
+import { AsChild, Slot, VariantProps, vcn } from "../lib/shared@1.0.0";
 import { createPortal } from "react-dom";
 
 interface IDrawerContext {
@@ -31,7 +31,7 @@ const DrawerContext = React.createContext<
   () => {
     if (process.env.NODE_ENV && process.env.NODE_ENV === "development") {
       console.warn(
-        "It seems like you're using DrawerContext outside of a provider."
+        "It seems like you're using DrawerContext outside of a provider.",
       );
     }
   },
@@ -114,8 +114,8 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
       state.isDragging
         ? state.movePercentage + DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS
         : state.opened
-        ? DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS
-        : 1
+          ? DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS
+          : 1
     })`;
 
     return createPortal(
@@ -133,9 +133,9 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
         }}
         ref={ref}
       />,
-      document.body
+      document.body,
     );
-  }
+  },
 );
 
 const drawerContentColors = {
@@ -250,8 +250,8 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
                 ? e.movementY
                 : e.touches[0].pageY - prev.prevTouch.y
               : "movementX" in e
-              ? e.movementX
-              : e.touches[0].pageX - prev.prevTouch.x;
+                ? e.movementX
+                : e.touches[0].pageX - prev.prevTouch.x;
             if (
               (["top", "left"].includes(position) &&
                 dragState.delta >= 0 &&
@@ -261,7 +261,8 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
                 movement < 0)
             ) {
               movement =
-                movement / Math.abs(dragState.delta === 0 ? 1 : dragState.delta);
+                movement /
+                Math.abs(dragState.delta === 0 ? 1 : dragState.delta);
             }
             return {
               ...prev,
@@ -370,7 +371,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
         />
       </div>
     );
-  }
+  },
 );
 
 const DrawerClose = forwardRef<
@@ -410,7 +411,7 @@ const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
         ref={ref}
       />
     );
-  }
+  },
 );
 
 const [drawerBodyVariant, resolveDrawerBodyVariantProps] = vcn({
@@ -460,7 +461,7 @@ const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
         ref={ref}
       />
     );
-  }
+  },
 );
 
 export {
