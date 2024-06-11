@@ -18,7 +18,6 @@ import {SearchBox} from '../components/SearchBox.js'
 import {getComponentsInstalled} from '../helpers/path.js'
 import {Choice} from '../components/Choice.js'
 import {colorize} from '@oclif/core/ux'
-import {Registry} from '../const.js'
 
 function Generator() {
   let complete: boolean = false
@@ -224,8 +223,8 @@ export default class Add extends Command {
         return
       }
       const componentFileContent = (await componentFileContentResponse.text()).replaceAll(
-        /import\s+{[^}]*}\s+from\s+"..\/shared"/g,
-        (match) => match.replace(/..\/shared/, resolvedConfig.import.lib),
+        /import\s+{[^}]*}\s+from\s+"@pswui-lib\/shared@[0-9.]+"/g,
+        (match) => match.replace(/@pswui-lib\/(shared@[0-9.]+)/, `${resolvedConfig.import.lib}/$1`),
       )
       await writeFile(componentFile, componentFileContent)
       componentFileOra.succeed('Component is successfully installed!')
