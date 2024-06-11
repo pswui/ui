@@ -13,7 +13,6 @@ export interface Registry {
     components: string
     lib: string
   }
-  lib: string[]
   components: Record<string, RegistryComponent>
 }
 
