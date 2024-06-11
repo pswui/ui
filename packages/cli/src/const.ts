@@ -5,7 +5,7 @@ export const CONFIG_DEFAULT_PATH = 'pswui.config.js'
 
 export interface Registry {
   base: string
-  shared: string
+  lib: Record<string, string>
   components: Record<string, string>
 }
 
