@@ -30,3 +30,18 @@ export async function getComponentRealname(
 ): Promise<string> {
   return registry.components[componentName].name
 }
+
+export async function getComponentLibVersion(
+  registry: Registry,
+  componentName: keyof (typeof registry)['components'],
+): Promise<string | null> {
+  const libVersion = registry.components[componentName].libVersion
+  if (!registry.lib.includes(libVersion)) {
+    return null
+  }
+  return libVersion
+}
+
+export async function getLibURL(registry: Registry, version: string): Promise<string> {
+  return registry.base + registry.paths.lib.replace('{version}', version)
+}
