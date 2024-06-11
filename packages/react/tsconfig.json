@@ -24,9 +24,10 @@
     "baseUrl": "./",
     "paths": {
       "@components/*": ["components/*"],
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@pswui-lib/*": ["lib/*"]
     }
   },
-  "include": ["components", "src"],
+  "include": ["components", "src", "lib"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
