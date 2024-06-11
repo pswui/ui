@@ -1,80 +1,36 @@
+import {TabProvider, TabContent, TabList, TabTrigger} from "@components/Tabs";
+import {Code} from "@/components/LoadedCode";
+
 # Installation
 
-## Main Dependency
-
-you have to install [TailwindCSS](https://tailwindcss.com/docs/installation) and [tailwind-merge](https://github.com/dhiwise/tailwind-merge) and configure it yourself.
-
-## Configuration
-
-Every PSWUI component uses `shared.tsx` core utility file. So, you have to care about import of `shared.tsx`.
-
-All component file uses `../shared.tsx` to import `shared.tsx`.
-You can simply put `shared.tsx` at the same level as component folder, but you can also change import path to yours.
-
-## CLI
-
-Now, we have our [CLI](https://www.npmjs.com/package/@psw-ui/cli) to automatically install component and shared core utility.
-
-You can simply type this:
-
-```shell
-$ [packageManager] install @psw-ui/cli
-
-$ pswui [COMMAND] ...
-```
-
-### `pswui list`
-
-`List` command prints the component registry, so you can check available or installed components.
-
-### `pswui add`
-
-`Add` command install component provided to your project.
-
-It adds:
-* `shared.tsx` core utility
-* `[component].tsx` component file
-
-You can configure the installation path and import path by configuration file.
-
-### Configuration
-
-#### Naming
-
-Basically, name of config file can be one of this:
-* `pswui.config.js`
-* `pswui.config.mjs`
-* `pswui.config.cjs`
-
-CLI takes default export, so you should make it export as default.
-
-If you want to make CLi to take different config file, you can provide the configuration file name via flag:
-
-```shell
-$ pswui [COMMAND] -p pswui-config.js
-$ pswui [COMMAND] --config=pswui-config.js
-```
-
-#### Type
-
-There is export of `Config` type and `buildConfig` function in `@psw-ui/cli`.
-
-You can leverage your IDE's intellisense with those.
-
-```ts
-import { Config } from "@psw-ui/cli"
-
-const config: Config = {
-  /* ... */
-}
-
-export default config
-```
-
-```ts
-import { buildConfig } from "@psw-ui/cli"
-
-export default buildConfig({
-  /* ... */
-})
-```
+<TabProvider defaultName="cli">
+  <TabList>
+    <TabTrigger name="cli">Using CLI</TabTrigger>
+    <TabTrigger name="manual">Manual Install</TabTrigger>
+  </TabList>
+  <TabContent name="cli">
+    1. Install [TailwindCSS](https://tailwindcss.com/docs/installation) and [tailwind-merge](https://github.com/dhiwise/tailwind-merge) and configure it yourself.
+    2. Add import alias for `@pswui-lib` in your `tsconfig.json` file.
+       <Code language={"json"}>
+         {`{\n  "compilerOptions": {\n    "paths": {\n      "@pswui-lib": ["./pswui/lib.tsx"]\n    }\n  }\n}`}
+       </Code>
+    3. Install [@psw-ui/cli](https://www.npmjs.com/package/@psw-ui/cli).
+       <Code language={"plaintext"}>
+         {`$ npm install \@psw-ui/cli\n$ yarn add @psw-ui/cli\n$ pnpm add @psw-ui/cli`}
+       </Code>
+    4. Run CLI to add components
+       <Code language={"plaintext"}>
+         {`$ npx pswui add <component>\n$ yarn pswui add <component>\n$ pnpm pswui add <component>`}
+       </Code>
+    5. Import component, and use it.
+  </TabContent>
+  <TabContent name="manual">
+    1. Install [TailwindCSS](https://tailwindcss.com/docs/installation) and [tailwind-merge](https://github.com/dhiwise/tailwind-merge) and configure it yourself.
+    2. Add import alias for `@pswui-lib` in your `tsconfig.json` file.
+       <Code language={"json"}>
+         {`{\n  "compilerOptions": {\n    "paths": {\n      "@pswui-lib": ["<your library file>"]\n    }\n  }\n}`}
+       </Code>
+    3. Grab the library file from [here](https://raw.githubusercontent.com/pswui/ui/main/packages/react/lib.tsx) and put it in the library file path in the tsconfig.
+    4. Now you can copy & paste your component in your project.
+  </TabContent>
+</TabProvider>
