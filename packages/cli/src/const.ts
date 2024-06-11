@@ -3,6 +3,11 @@ import z from 'zod'
 export const REGISTRY_URL = 'https://ui.psw.kr/registry.json'
 export const CONFIG_DEFAULT_PATH = 'pswui.config.js'
 
+interface RegistryComponent {
+  name: string
+  libVersion: string
+}
+
 export interface Registry {
   base: string
   paths: {
@@ -10,7 +15,7 @@ export interface Registry {
     lib: string
   }
   lib: string[]
-  components: Record<string, string>
+  components: Record<string, RegistryComponent>
 }
 
 export interface Config {
