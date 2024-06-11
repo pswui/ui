@@ -60,7 +60,7 @@ const tooltipContentColors = {
 };
 
 const [tooltipContentVariant, resolveTooltipContentVariantProps] = vcn({
-  base: `absolute py-1 px-3 ${tooltipContentColors.background} border ${tooltipContentColors.border} [--tooltip-offset:2px] opacity-0 group-hover/tooltip:opacity-100 select-none pointer-events-none group-hover/tooltip:select-auto group-hover/tooltip:pointer-events-auto transition-all delay-0 rounded-md`,
+  base: `absolute py-1 px-3 ${tooltipContentColors.background} border ${tooltipContentColors.border} [--tooltip-offset:2px] opacity-0 transition-all group-hover/tooltip:opacity-100 select-none pointer-events-none group-hover/tooltip:select-auto group-hover/tooltip:pointer-events-auto group-hover/tooltip:[transition:transform_150ms_ease-out_var(--delay),opacity_150ms_ease-out_var(--delay),background-color_150ms_ease-in-out,color_150ms_ease-in-out,border-color_150ms_ease-in-out] rounded-md`,
   variants: {
     position: {
       top: "bottom-[calc(100%+var(--tooltip-offset))] left-1/2 -translate-x-1/2 group-hover/tooltip:translate-y-0 translate-y-[10px]",
@@ -71,10 +71,10 @@ const [tooltipContentVariant, resolveTooltipContentVariantProps] = vcn({
         "left-[calc(100%+var(--tooltip-offset))] top-1/2 -translate-y-1/2 group-hover/tooltip:translate-x-0 translate-x-[-10px]",
     },
     delay: {
-      none: "group-hover/tooltip:delay-0",
-      early: "group-hover/tooltip:delay-150",
-      normal: "group-hover/tooltip:delay-500",
-      late: "group-hover/tooltip:delay-1000",
+      none: "[--delay:0ms]",
+      early: "[--delay:150ms]",
+      normal: "[--delay:500ms]",
+      late: "[--delay:1000ms]",
     },
     offset: {
       sm: "[--tooltip-offset:2px]",
