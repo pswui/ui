@@ -2,15 +2,8 @@ import {Args, Command, Flags} from '@oclif/core'
 import {loadConfig, validateConfig} from '../helpers/config.js'
 import {existsSync} from 'node:fs'
 import {mkdir, writeFile} from 'node:fs/promises'
-import {join} from 'node:path'
-import {
-  getAvailableComponentNames,
-  getComponentLibVersion,
-  getComponentRealname,
-  getComponentURL,
-  getLibURL,
-  getRegistry,
-} from '../helpers/registry.js'
+import {join, dirname} from 'node:path'
+import {getAvailableComponentNames, getComponentRealname, getComponentURL, getRegistry} from '../helpers/registry.js'
 import ora from 'ora'
 import React, {ComponentPropsWithoutRef} from 'react'
 import {render, Box} from 'ink'
@@ -106,13 +99,12 @@ export default class Add extends Command {
 
     const resolvedConfig = await validateConfig((message: string) => this.log(message), await loadConfig(flags.config))
     const componentFolder = join(process.cwd(), resolvedConfig.paths.components)
-    const libFolder = join(process.cwd(), resolvedConfig.paths.lib)
-    const sharedFileBeforeResolve = join(libFolder, 'shared@version.tsx')
+    const libFile = join(process.cwd(), resolvedConfig.paths.lib)
     if (!existsSync(componentFolder)) {
       await mkdir(componentFolder, {recursive: true})
     }
-    if (!existsSync(libFolder)) {
-      await mkdir(libFolder, {recursive: true})
+    if (!existsSync(dirname(libFile))) {
+      await mkdir(dirname(libFile), {recursive: true})
     }
 
     const loadRegistryOra = ora('Fetching registry...').start()
@@ -186,28 +178,20 @@ export default class Add extends Command {
       this.error('Component name is not provided, or not selected.')
     }
 
-    const resolvedName: keyof typeof registry.components = name
-
-    const sharedFileOra = ora('Installing required module...').start()
-    const requiredVersion = await getComponentLibVersion(registry, resolvedName)
-    if (!requiredVersion.ok) {
-      sharedFileOra.fail(`Registry error: there is no lib version ${requiredVersion.libVersion}`)
-      return
-    }
-    const sharedFile = sharedFileBeforeResolve.replace('version', requiredVersion.libVersion)
-    if (!existsSync(sharedFile)) {
-      const sharedFileContentResponse = await fetch(await getLibURL(registry, requiredVersion.libVersion))
-      if (!sharedFileContentResponse.ok) {
-        sharedFileOra.fail(
-          `Error while fetching shared module content: ${sharedFileContentResponse.status} ${sharedFileContentResponse.statusText}`,
+    const libFileOra = ora('Installing required library...').start()
+    if (!existsSync(libFile)) {
+      const libFileContentResponse = await fetch(registry.base + registry.paths.lib)
+      if (!libFileContentResponse.ok) {
+        libFileOra.fail(
+          `Error while fetching library content: ${libFileContentResponse.status} ${libFileContentResponse.statusText}`,
         )
         return
       }
-      const sharedFileContent = await sharedFileContentResponse.text()
-      await writeFile(sharedFile, sharedFileContent)
-      sharedFileOra.succeed('Shared module is successfully installed!')
+      const libFileContent = await libFileContentResponse.text()
+      await writeFile(libFile, libFileContent)
+      libFileOra.succeed('Library is successfully installed!')
     } else {
-      sharedFileOra.succeed('Shared module is already installed!')
+      libFileOra.succeed('Library is already installed!')
     }
 
     const componentFileOra = ora(`Installing ${name} component...`).start()
@@ -223,8 +207,8 @@ export default class Add extends Command {
         return
       }
       const componentFileContent = (await componentFileContentResponse.text()).replaceAll(
-        /import\s+{[^}]*}\s+from\s+"@pswui-lib\/shared@[0-9.]+"/g,
-        (match) => match.replace(/@pswui-lib\/(shared@[0-9.]+)/, `${resolvedConfig.import.lib}/$1`),
+        /import\s+{[^}]*}\s+from\s+"@pswui-lib"/g,
+        (match) => match.replace(/@pswui-lib/, resolvedConfig.import.lib),
       )
       await writeFile(componentFile, componentFileContent)
       componentFileOra.succeed('Component is successfully installed!')
