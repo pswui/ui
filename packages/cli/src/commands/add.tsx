@@ -3,7 +3,14 @@ import {loadConfig, validateConfig} from '../helpers/config.js'
 import {existsSync} from 'node:fs'
 import {mkdir, writeFile} from 'node:fs/promises'
 import {join} from 'node:path'
-import {getAvailableComponentNames, getComponentRealname, getComponentURL, getRegistry} from '../helpers/registry.js'
+import {
+  getAvailableComponentNames,
+  getComponentLibVersion,
+  getComponentRealname,
+  getComponentURL,
+  getLibURL,
+  getRegistry,
+} from '../helpers/registry.js'
 import ora from 'ora'
 import React, {ComponentPropsWithoutRef} from 'react'
 import {render, Box} from 'ink'
@@ -11,6 +18,7 @@ import {SearchBox} from '../components/SearchBox.js'
 import {getComponentsInstalled} from '../helpers/path.js'
 import {Choice} from '../components/Choice.js'
 import {colorize} from '@oclif/core/ux'
+import {Registry} from '../const.js'
 
 function Generator() {
   let complete: boolean = false
@@ -86,8 +94,6 @@ export default class Add extends Command {
 
   static override flags = {
     force: Flags.boolean({char: 'f', description: 'override the existing file'}),
-    // WARNING: forceShared could break your components!
-    forceShared: Flags.boolean({char: 'F', description: 'override the existing shared.ts and update it to latest'}),
     config: Flags.string({char: 'p', description: 'path to config'}),
     shared: Flags.string({char: 's', description: 'place for installation of shared.ts'}),
     components: Flags.string({char: 'c', description: 'place for installation of components'}),
@@ -101,9 +107,13 @@ export default class Add extends Command {
 
     const resolvedConfig = await validateConfig((message: string) => this.log(message), await loadConfig(flags.config))
     const componentFolder = join(process.cwd(), resolvedConfig.paths.components)
-    const sharedFile = join(process.cwd(), resolvedConfig.paths.shared)
+    const libFolder = join(process.cwd(), resolvedConfig.paths.lib)
+    const sharedFileBeforeResolve = join(libFolder, 'shared@version.tsx')
     if (!existsSync(componentFolder)) {
       await mkdir(componentFolder, {recursive: true})
+    }
+    if (!existsSync(libFolder)) {
+      await mkdir(libFolder, {recursive: true})
     }
 
     const loadRegistryOra = ora('Fetching registry...').start()
@@ -173,13 +183,21 @@ export default class Add extends Command {
       }
     }
 
-    if (!name) {
+    if (!name || !componentNames.includes(name.toLowerCase())) {
       this.error('Component name is not provided, or not selected.')
     }
 
-    const sharedFileOra = ora('Installing shared module...').start()
-    if (!existsSync(sharedFile) || flags.forceShared) {
-      const sharedFileContentResponse = await fetch(registry.shared)
+    const resolvedName: keyof typeof registry.components = name
+
+    const sharedFileOra = ora('Installing required module...').start()
+    const requiredVersion = await getComponentLibVersion(registry, resolvedName)
+    if (!requiredVersion.ok) {
+      sharedFileOra.fail(`Registry error: there is no lib version ${requiredVersion.libVersion}`)
+      return
+    }
+    const sharedFile = sharedFileBeforeResolve.replace('version', requiredVersion.libVersion)
+    if (!existsSync(sharedFile)) {
+      const sharedFileContentResponse = await fetch(await getLibURL(registry, requiredVersion.libVersion))
       if (!sharedFileContentResponse.ok) {
         sharedFileOra.fail(
           `Error while fetching shared module content: ${sharedFileContentResponse.status} ${sharedFileContentResponse.statusText}`,
@@ -194,7 +212,7 @@ export default class Add extends Command {
     }
 
     const componentFileOra = ora(`Installing ${name} component...`).start()
-    const componentFile = join(componentFolder, registry.components[name])
+    const componentFile = join(componentFolder, registry.components[name].name)
     if (existsSync(componentFile) && !force) {
       componentFileOra.succeed(`Component is already installed! (${componentFile})`)
     } else {
@@ -207,7 +225,7 @@ export default class Add extends Command {
       }
       const componentFileContent = (await componentFileContentResponse.text()).replaceAll(
         /import\s+{[^}]*}\s+from\s+"..\/shared"/g,
-        (match) => match.replace(/..\/shared/, resolvedConfig.import.shared),
+        (match) => match.replace(/..\/shared/, resolvedConfig.import.lib),
       )
       await writeFile(componentFile, componentFileContent)
       componentFileOra.succeed('Component is successfully installed!')
