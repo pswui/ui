@@ -8,16 +8,16 @@
     "1.0.0"
   ],
   "components": {
-    "button": "Button.tsx",
-    "checkbox": "Checkbox.tsx",
-    "dialog": "Dialog.tsx",
-    "drawer": "Drawer.tsx",
-    "input": "Input.tsx",
-    "label": "Label.tsx",
-    "popover": "Popover.tsx",
-    "switch": "Switch.tsx",
-    "tabs": "Tabs.tsx",
-    "toast": "Toast.tsx",
-    "tooltip": "Tooltip.tsx"
+    "button": { "name": "Button.tsx", "libVersion": "1.0.0" },
+    "checkbox": { "name": "Checkbox.tsx", "libVersion": "1.0.0" },
+    "dialog": { "name": "Dialog.tsx", "libVersion": "1.0.0" },
+    "drawer": { "name": "Drawer.tsx", "libVersion": "1.0.0" },
+    "input": { "name": "Input.tsx", "libVersion": "1.0.0" },
+    "label": { "name": "Label.tsx", "libVersion": "1.0.0" },
+    "popover": { "name": "Popover.tsx", "libVersion": "1.0.0" },
+    "switch": { "name": "Switch.tsx", "libVersion": "1.0.0" },
+    "tabs": { "name": "Tabs.tsx", "libVersion": "1.0.0" },
+    "toast": { "name": "Toast.tsx", "libVersion": "1.0.0" },
+    "tooltip": {"name": "Tooltip.tsx", "libVersion": "1.0.0" }
   }
 }
