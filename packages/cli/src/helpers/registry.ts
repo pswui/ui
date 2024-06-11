@@ -28,5 +28,5 @@ export async function getComponentRealname(
   registry: Registry,
   componentName: keyof Registry['components'],
 ): Promise<string> {
-  return registry.components[componentName].split('/').pop() ?? ''
+  return registry.components[componentName]
 }
