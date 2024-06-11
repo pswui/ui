@@ -28,6 +28,6 @@
       "@pswui-lib": ["lib.tsx"]
     }
   },
-  "include": ["components", "src", "lib"],
+  "include": ["components", "src", "./lib.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
