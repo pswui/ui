@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { VariantProps, vcn } from "@pswui-lib";
+import { AsChild, Slot, VariantProps, vcn } from "@pswui-lib";
 
 interface TooltipContextBody {
   position: "top" | "bottom" | "left" | "right";
@@ -48,18 +48,26 @@ const [tooltipVariant, resolveTooltipVariantProps] = vcn({
 
 interface TooltipProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof tooltipVariant> {}
+    VariantProps<typeof tooltipVariant>,
+    AsChild {}
 
 const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
   const [variantProps, rest] = resolveTooltipVariantProps(props);
+  const { asChild, ...extractedRest } = rest;
   const contextState = useState<TooltipContextBody>({
     ...tooltipContextInitial,
     ...variantProps,
   });
 
+  const Comp = asChild ? Slot : "div";
+
   return (
     <TooltipContext.Provider value={contextState}>
-      <div ref={ref} className={tooltipVariant(variantProps)} {...rest} />
+      <Comp
+        ref={ref}
+        className={tooltipVariant(variantProps)}
+        {...extractedRest}
+      />
     </TooltipContext.Provider>
   );
 });
