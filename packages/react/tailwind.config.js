@@ -1,14 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./{components,stories,src}/**/*.{js,jsx,ts,tsx,css,mdx}"],
-  darkMode: ["variant", [
-    '@media (prefers-color-scheme: dark) { &:is(.system *) }',
-    '&:is(.dark *)'
-  ]],
+  darkMode: [
+    "variant",
+    [
+      "@media (prefers-color-scheme: dark) { &:is(.system *) }",
+      "&:is(.dark *)",
+    ],
+  ],
   theme: {
     extend: {},
   },
-  plugins: [
-    require('@tailwindcss/typography')
-  ],
+  plugins: [require("@tailwindcss/typography"), require("tailwind-scrollbar")],
 };
