@@ -15,13 +15,13 @@ export interface Config {
    */
   paths?: {
     components?: 'src/pswui/components' | string
-    shared?: 'src/pswui/shared.tsx' | string
+    lib?: 'src/pswui/lib' | string
   }
   /**
    * Absolute path that will used for import in component
    */
   import?: {
-    shared?: '@pswui-shared' | string
+    lib?: '@pswui-lib' | string
   }
 }
 export type ResolvedConfig<T = Config> = {
@@ -31,23 +31,23 @@ export type ResolvedConfig<T = Config> = {
 export const DEFAULT_CONFIG = {
   paths: {
     components: 'src/pswui/components',
-    shared: 'src/pswui/shared.tsx',
+    lib: 'src/pswui/lib',
   },
   import: {
-    shared: '@pswui-shared',
+    lib: '@pswui-lib',
   },
 }
 export const configZod = z.object({
   paths: z
     .object({
       components: z.string().optional().default(DEFAULT_CONFIG.paths.components),
-      shared: z.string().optional().default(DEFAULT_CONFIG.paths.shared),
+      lib: z.string().optional().default(DEFAULT_CONFIG.paths.lib),
     })
     .optional()
     .default(DEFAULT_CONFIG.paths),
   import: z
     .object({
-      shared: z.string().optional().default(DEFAULT_CONFIG.import.shared),
+      lib: z.string().optional().default(DEFAULT_CONFIG.import.lib),
     })
     .optional()
     .default(DEFAULT_CONFIG.import),
