@@ -65,12 +65,17 @@ const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
 });
 
 const tooltipContentColors = {
-  background: "bg-white dark:bg-black",
-  border: "border-neutral-200 dark:border-neutral-700",
+  variants: {
+    default:
+      "bg-white dark:bg-black border-neutral-200 dark:border-neutral-700",
+    error: "bg-red-400 dark:bg-red-800 border-red-500 text-white",
+    success: "bg-green-400 dark:bg-green-800 border-green-500 text-white",
+    warning: "bg-yellow-400 dark:bg-yellow-800 border-yellow-500",
+  },
 };
 
 const [tooltipContentVariant, resolveTooltipContentVariantProps] = vcn({
-  base: `absolute py-1 px-3 rounded-md ${tooltipContentColors.background} border ${tooltipContentColors.border} opacity-0 transition-all 
+  base: `absolute py-1 px-3 rounded-md border opacity-0 transition-all 
   group-[:not(.controlled):hover]/tooltip:opacity-100 group-[.opened]/tooltip:opacity-100 
   select-none pointer-events-none 
   group-[:not(.controlled):hover]/tooltip:select-auto group-[.opened]/tooltip:select-auto group-[:not(.controlled):hover]/tooltip:pointer-events-auto group-[.opened]/tooltip:pointer-events-auto  
@@ -95,11 +100,18 @@ const [tooltipContentVariant, resolveTooltipContentVariantProps] = vcn({
       md: "[--tooltip-offset:4px]",
       lg: "[--tooltip-offset:8px]",
     },
+    status: {
+      normal: tooltipContentColors.variants.default,
+      error: tooltipContentColors.variants.error,
+      success: tooltipContentColors.variants.success,
+      warning: tooltipContentColors.variants.warning,
+    },
   },
   defaults: {
     position: "top",
     offset: "md",
     delay: "normal",
+    status: "normal",
   },
 });
 
