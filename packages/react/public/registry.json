@@ -1,8 +1,12 @@
 {
-  "base": "https://raw.githubusercontent.com/pswui/ui/main/packages/react/components/{componentName}",
-  "lib": {
-    "1.0.0": "https://raw.githubusercontent.com/pswui/ui/main/packages/react/lib/shared@1.0.0.tsx"
+  "base": "https://raw.githubusercontent.com/pswui/ui/main/packages/react/componeonts/{componentName}",
+  "paths": {
+    "components": "/main/packages/react/components/{componentName}",
+    "lib": "/main/packages/react/lib/shared@{version}.tsx"
   },
+  "lib": [
+    "1.0.0"
+  ],
   "components": {
     "button": "Button.tsx",
     "checkbox": "Checkbox.tsx",
