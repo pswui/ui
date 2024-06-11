@@ -184,3 +184,20 @@ import { Tooltip, TooltipContent } from "@components/Tooltip";
     <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/TooltipBlocks/Examples/LateDelay.tsx`} />
   </TabContent>
 </TabProvider>
+
+### Controlled
+
+<TabProvider defaultName="preview">
+  <TabList>
+    <TabTrigger name={"preview"}>Preview</TabTrigger>
+    <TabTrigger name={"code"}>Code</TabTrigger>
+  </TabList>
+  <TabContent name={"preview"}>
+    <Story layout={"centered"}>
+      <Examples.Controlled />
+    </Story>
+  </TabContent>
+  <TabContent name={"code"}>
+    <LoadedCode from={`${GITHUB}/packages/react/src/docs/components/TooltipBlocks/Examples/Controlled.tsx`} />
+  </TabContent>
+</TabProvider>
