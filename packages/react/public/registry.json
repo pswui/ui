@@ -2,11 +2,8 @@
   "base": "https://raw.githubusercontent.com/pswui/ui",
   "paths": {
     "components": "/main/packages/react/components/{componentName}",
-    "lib": "/main/packages/react/lib/shared@{version}.tsx"
+    "lib": "/main/packages/react/lib/tsx"
   },
-  "lib": [
-    "1.0.0"
-  ],
   "components": {
     "button": { "name": "Button.tsx" },
     "checkbox": { "name": "Checkbox.tsx" },
