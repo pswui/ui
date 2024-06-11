@@ -30,9 +30,19 @@ const [tooltipVariant, resolveTooltipVariantProps] = vcn({
       left: "",
       right: "",
     },
+    controlled: {
+      true: "controlled",
+      false: "",
+    },
+    opened: {
+      true: "opened",
+      false: "",
+    },
   },
   defaults: {
     position: "top",
+    controlled: false,
+    opened: false,
   },
 });
 
@@ -60,15 +70,19 @@ const tooltipContentColors = {
 };
 
 const [tooltipContentVariant, resolveTooltipContentVariantProps] = vcn({
-  base: `absolute py-1 px-3 ${tooltipContentColors.background} border ${tooltipContentColors.border} [--tooltip-offset:2px] opacity-0 transition-all group-hover/tooltip:opacity-100 select-none pointer-events-none group-hover/tooltip:select-auto group-hover/tooltip:pointer-events-auto group-hover/tooltip:[transition:transform_150ms_ease-out_var(--delay),opacity_150ms_ease-out_var(--delay),background-color_150ms_ease-in-out,color_150ms_ease-in-out,border-color_150ms_ease-in-out] rounded-md`,
+  base: `absolute py-1 px-3 rounded-md ${tooltipContentColors.background} border ${tooltipContentColors.border} opacity-0 transition-all 
+  group-[:not(.controlled):hover]/tooltip:opacity-100 group-[.opened]/tooltip:opacity-100 
+  select-none pointer-events-none 
+  group-[:not(.controlled):hover]/tooltip:select-auto group-[.opened]/tooltip:select-auto group-[:not(.controlled):hover]/tooltip:pointer-events-auto group-[.opened]/tooltip:pointer-events-auto  
+  group-[:not(.controlled):hover]/tooltip:[transition:transform_150ms_ease-out_var(--delay),opacity_150ms_ease-out_var(--delay),background-color_150ms_ease-in-out,color_150ms_ease-in-out,border-color_150ms_ease-in-out]`,
   variants: {
     position: {
-      top: "bottom-[calc(100%+var(--tooltip-offset))] left-1/2 -translate-x-1/2 group-hover/tooltip:translate-y-0 translate-y-[10px]",
+      top: "bottom-[calc(100%+var(--tooltip-offset))] left-1/2 -translate-x-1/2 group-[:not(.controlled):hover]/tooltip:translate-y-0 group-[.opened]/tooltip:translate-y-0 translate-y-[10px]",
       bottom:
-        "top-[calc(100%+var(--tooltip-offset))] left-1/2 -translate-x-1/2 group-hover/tooltip:translate-y-0 translate-y-[-10px]",
-      left: "right-[calc(100%+var(--tooltip-offset))] top-1/2 -translate-y-1/2 group-hover/tooltip:translate-x-0 translate-x-[10px]",
+        "top-[calc(100%+var(--tooltip-offset))] left-1/2 -translate-x-1/2 group-[:not(.controlled):hover]/tooltip:translate-y-0 group-[.opened]/tooltip:translate-y-0 translate-y-[-10px]",
+      left: "right-[calc(100%+var(--tooltip-offset))] top-1/2 -translate-y-1/2 group-[:not(.controlled):hover]/tooltip:translate-x-0 group-[.opened]/tooltip:translate-x-0 translate-x-[10px]",
       right:
-        "left-[calc(100%+var(--tooltip-offset))] top-1/2 -translate-y-1/2 group-hover/tooltip:translate-x-0 translate-x-[-10px]",
+        "left-[calc(100%+var(--tooltip-offset))] top-1/2 -translate-y-1/2 group-[:not(.controlled):hover]/tooltip:translate-x-0 group-[.opened]/tooltip:translate-x-0 translate-x-[-10px]",
     },
     delay: {
       none: "[--delay:0ms]",
