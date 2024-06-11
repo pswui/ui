@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { AsChild, Slot, VariantProps, vcn } from "../lib/shared@1.0.0";
+import { AsChild, Slot, VariantProps, vcn } from "@pswui-lib/shared@1.0.0";
 import { createPortal } from "react-dom";
 
 interface IDrawerContext {

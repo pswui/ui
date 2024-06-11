@@ -1,4 +1,4 @@
-import { AsChild, Slot, VariantProps, vcn } from "../lib/shared@1.0.0";
+import { AsChild, Slot, VariantProps, vcn } from "@pswui-lib/shared@1.0.0";
 import React from "react";
 
 interface Tab {

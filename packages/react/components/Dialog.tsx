@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { Slot, VariantProps, vcn } from "../lib/shared@1.0.0";
+import { Slot, VariantProps, vcn } from "@pswui-lib/shared@1.0.0";
 import ReactDOM from "react-dom";
 
 /**

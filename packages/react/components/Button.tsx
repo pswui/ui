@@ -1,5 +1,5 @@
 import React from "react";
-import { vcn, VariantProps, Slot, AsChild } from "../lib/shared@1.0.0";
+import { vcn, VariantProps, Slot, AsChild } from "@pswui-lib/shared@1.0.0";
 
 const colors = {
   outline: {

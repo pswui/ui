@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { VariantProps, vcn } from "../lib/shared@1.0.0";
+import { VariantProps, vcn } from "@pswui-lib/shared@1.0.0";
 
 interface TooltipContextBody {
   position: "top" | "bottom" | "left" | "right";
