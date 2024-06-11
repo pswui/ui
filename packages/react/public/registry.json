@@ -1,5 +1,5 @@
 {
-  "base": "https://raw.githubusercontent.com/pswui/ui/main/packages/react/componeonts/{componentName}",
+  "base": "https://raw.githubusercontent.com/pswui/ui",
   "paths": {
     "components": "/main/packages/react/components/{componentName}",
     "lib": "/main/packages/react/lib/shared@{version}.tsx"
