@@ -5,7 +5,6 @@ export const CONFIG_DEFAULT_PATH = 'pswui.config.js'
 
 interface RegistryComponent {
   name: string
-  libVersion: string
 }
 
 export interface Registry {
@@ -24,7 +23,7 @@ export interface Config {
    */
   paths?: {
     components?: 'src/pswui/components' | string
-    lib?: 'src/pswui/lib' | string
+    lib?: 'src/pswui/lib.tsx' | string
   }
   /**
    * Absolute path that will used for import in component
@@ -40,7 +39,7 @@ export type ResolvedConfig<T = Config> = {
 export const DEFAULT_CONFIG = {
   paths: {
     components: 'src/pswui/components',
-    lib: 'src/pswui/lib',
+    lib: 'src/pswui/lib.tsx',
   },
   import: {
     lib: '@pswui-lib',
