@@ -34,7 +34,7 @@ export async function loadConfig(config?: string): Promise<unknown> {
 export async function validateConfig(log: (message: string) => void, config?: unknown): Promise<ResolvedConfig> {
   const parsedConfig: ResolvedConfig = await configZod.parseAsync(config)
   log(colorize('gray', `Install component to: ${join(process.cwd(), parsedConfig.paths.components)}`))
-  log(colorize('gray', `Install shared module to: ${join(process.cwd(), parsedConfig.paths.shared)}`))
-  log(colorize('gray', `Import shared with: ${parsedConfig.import.shared}`))
+  log(colorize('gray', `Install shared module to: ${join(process.cwd(), parsedConfig.paths.lib)}`))
+  log(colorize('gray', `Import shared with: ${parsedConfig.import.lib}`))
   return parsedConfig
 }
