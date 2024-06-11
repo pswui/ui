@@ -2,7 +2,7 @@
   "base": "https://raw.githubusercontent.com/pswui/ui",
   "paths": {
     "components": "/main/packages/react/components/{componentName}",
-    "lib": "/main/packages/react/lib/tsx"
+    "lib": "/main/packages/react/lib.tsx"
   },
   "components": {
     "button": { "name": "Button.tsx" },
