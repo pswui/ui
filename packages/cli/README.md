@@ -48,6 +48,7 @@ FLAGS
   -c, --components=<value>  place for installation of components
   -f, --force               override the existing file
   -p, --config=<value>      path to config
+  -r, --registry=<value>    override registry ur
   -s, --shared=<value>      place for installation of shared.ts
 
 DESCRIPTION
@@ -89,6 +90,7 @@ USAGE
 
 FLAGS
   -p, --config=<value>  path to config
+  -r, --registry=<value>  override registry url
   -u, --url             include component file URL
 
 DESCRIPTION
@@ -112,6 +114,9 @@ USAGE
 
 ARGUMENTS
   QUERY  search query
+
+FLAGS
+  -r, --registry=<value>  override registry url
 
 DESCRIPTION
   Search components.
