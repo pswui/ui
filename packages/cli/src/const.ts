@@ -1,6 +1,6 @@
 import z from 'zod'
 
-export const REGISTRY_URL = 'https://ui.psw.kr/registry.json'
+export const REGISTRY_URL = 'https://raw.githubusercontent.com/pswui/ui/main/registry.json'
 export const CONFIG_DEFAULT_PATH = 'pswui.config.js'
 
 interface RegistryComponent {
