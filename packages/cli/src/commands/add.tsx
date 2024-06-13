@@ -85,6 +85,7 @@ export default class Add extends Command {
   static override examples = ['<%= config.bin %> <%= command.id %>']
 
   static override flags = {
+    registry: Flags.string({char: 'r', description: 'override registry url'}),
     force: Flags.boolean({char: 'f', description: 'override the existing file'}),
     config: Flags.string({char: 'p', description: 'path to config'}),
     shared: Flags.string({char: 's', description: 'place for installation of shared.ts'}),
@@ -108,7 +109,10 @@ export default class Add extends Command {
     }
 
     const loadRegistryOra = ora('Fetching registry...').start()
-    const unsafeRegistry = await getRegistry()
+    if (flags.registry) {
+      this.log(`Using ${flags.registry} for registry.`)
+    }
+    const unsafeRegistry = await getRegistry(flags.registry)
     if (!unsafeRegistry.ok) {
       loadRegistryOra.fail(unsafeRegistry.message)
       return

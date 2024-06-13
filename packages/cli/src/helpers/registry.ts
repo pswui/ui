@@ -1,7 +1,7 @@
 import {REGISTRY_URL, Registry} from '../const.js'
 
-export async function getRegistry(): Promise<{ok: true; registry: Registry} | {ok: false; message: string}> {
-  const registryResponse = await fetch(REGISTRY_URL)
+export async function getRegistry(REGISTRY_OVERRIDE_URL?: string): Promise<{ok: true; registry: Registry} | {ok: false; message: string}> {
+  const registryResponse = await fetch(REGISTRY_OVERRIDE_URL ?? REGISTRY_URL)
 
   if (registryResponse.ok) {
     return {

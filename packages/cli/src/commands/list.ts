@@ -2,7 +2,6 @@ import {Command, Flags} from '@oclif/core'
 import {getAvailableComponentNames, getRegistry, getComponentURL, getComponentRealname} from '../helpers/registry.js'
 import ora from 'ora'
 import treeify from 'treeify'
-import {CONFIG_DEFAULT_PATH} from '../const.js'
 import {loadConfig, validateConfig} from '../helpers/config.js'
 import {getComponentsInstalled} from '../helpers/path.js'
 
@@ -12,6 +11,7 @@ export default class List extends Command {
   static override examples = ['<%= config.bin %> <%= command.id %>']
 
   static override flags = {
+    registry: Flags.string({char: 'r', description: 'override registry url'}),
     url: Flags.boolean({char: 'u', description: 'include component file URL'}),
     config: Flags.string({char: 'p', description: 'path to config'}),
   }
@@ -25,7 +25,10 @@ export default class List extends Command {
     const loadedConfig = await validateConfig((message: string) => this.log(message), await loadConfig(flags.config))
 
     registrySpinner.start()
-    const unsafeRegistry = await getRegistry()
+    if (flags.registry) {
+      this.log(`Using ${flags.registry} for registry.`)
+    }
+    const unsafeRegistry = await getRegistry(flags.registry)
     if (!unsafeRegistry.ok) {
       registrySpinner.fail(unsafeRegistry.message)
       return

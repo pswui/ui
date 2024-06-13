@@ -1,4 +1,4 @@
-import {Command, Args} from '@oclif/core'
+import {Command, Args, Flags} from '@oclif/core'
 import {render} from 'ink'
 import {SearchBox} from '../components/SearchBox.js'
 import {getAvailableComponentNames, getRegistry} from '../helpers/registry.js'
@@ -9,14 +9,21 @@ export default class Search extends Command {
     query: Args.string({description: 'search query'}),
   }
 
+  static override flags = {
+    registry: Flags.string({char: 'r', description: 'override registry url'})
+  }
+
   static override description = 'Search components.'
 
   static override examples = ['<%= config.bin %> <%= command.id %>']
 
   public async run(): Promise<void> {
-    const {args} = await this.parse(Search)
+    const {args, flags} = await this.parse(Search)
 
-    const registryResult = await getRegistry()
+    if (flags.registry) {
+      this.log(`Using ${flags.registry} for registry.`)
+    }
+    const registryResult = await getRegistry(flags.registry)
     if (!registryResult.ok) {
       this.error(registryResult.message)
     }
