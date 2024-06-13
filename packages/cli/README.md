@@ -32,6 +32,7 @@ USAGE
 * [`pswui add [NAME]`](#pswui-add-name)
 * [`pswui help [COMMAND]`](#pswui-help-command)
 * [`pswui list`](#pswui-list)
+* [`pswui search`](#pswui-search)
 
 ## `pswui add [NAME]`
 
@@ -58,7 +59,7 @@ EXAMPLES
   $ pswui add
 ```
 
-_See code: [packages/cli/src/commands/add.tsx](https://github.com/pswui/ui/blob/cli@0.4.0/packages/cli/src/commands/add.tsx)_
+_See code: [packages/cli/src/commands/add.tsx](https://github.com/pswui/ui/blob/cli@0.4.1/packages/cli/src/commands/add.tsx)_
 
 ## `pswui help [COMMAND]`
 
@@ -100,7 +101,7 @@ EXAMPLES
   $ pswui list
 ```
 
-_See code: [packages/cli/src/commands/list.ts](https://github.com/pswui/ui/blob/cli@0.4.0/packages/cli/src/commands/list.ts)_
+_See code: [packages/cli/src/commands/list.ts](https://github.com/pswui/ui/blob/cli@0.4.1/packages/cli/src/commands/list.ts)_
 
 ## `pswui search`
 
@@ -125,5 +126,5 @@ EXAMPLES
   $ pswui search
 ```
 
-_See code: [packages/cli/src/commands/search.tsx](https://github.com/pswui/ui/blob/cli@0.4.0/packages/cli/src/commands/search.tsx)_
+_See code: [packages/cli/src/commands/search.tsx](https://github.com/pswui/ui/blob/cli@0.4.1/packages/cli/src/commands/search.tsx)_
 <!-- commandsstop -->
