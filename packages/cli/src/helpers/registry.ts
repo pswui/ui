@@ -30,8 +30,8 @@ export async function getDirComponentURL(
   registry: Registry,
   component: RegistryComponent & {type: 'dir'},
   files?: string[],
-): Promise<string[]> {
+): Promise<[string, string][]> {
   const base = registry.base + registry.paths.components.replace('{componentName}', component.name)
 
-  return (files ?? component.files).map((filename) => base + '/' + filename)
+  return (files ?? component.files).map((filename) => [filename, base + '/' + filename])
 }
