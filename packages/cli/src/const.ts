@@ -3,7 +3,7 @@ import {z} from 'zod'
 export const REGISTRY_URL = (branch: string) => `https://raw.githubusercontent.com/pswui/ui/${branch}/registry.json`
 export const CONFIG_DEFAULT_PATH = 'pswui.config.js'
 
-type RegistryComponent =
+export type RegistryComponent =
   | {
       type: 'file'
       name: string
