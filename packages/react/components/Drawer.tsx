@@ -404,8 +404,11 @@ const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
     const [variantProps, restPropsCompressed] =
       resolveDrawerHeaderVariantProps(props);
     const { asChild, ...restPropsExtracted } = restPropsCompressed;
+
+    const Comp = asChild ? Slot : "div";
+
     return (
-      <div
+      <Comp
         {...restPropsExtracted}
         className={drawerHeaderVariant(variantProps)}
         ref={ref}
@@ -429,8 +432,11 @@ const DrawerBody = forwardRef<HTMLDivElement, DrawerBodyProps>((props, ref) => {
   const [variantProps, restPropsCompressed] =
     resolveDrawerBodyVariantProps(props);
   const { asChild, ...restPropsExtracted } = restPropsCompressed;
+
+  const Comp = asChild ? Slot : "div";
+
   return (
-    <div
+    <Comp
       {...restPropsExtracted}
       className={drawerBodyVariant(variantProps)}
       ref={ref}
@@ -454,8 +460,11 @@ const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
     const [variantProps, restPropsCompressed] =
       resolveDrawerFooterVariantProps(props);
     const { asChild, ...restPropsExtracted } = restPropsCompressed;
+
+    const Comp = asChild ? Slot : "div";
+
     return (
-      <div
+      <Comp
         {...restPropsExtracted}
         className={drawerFooterVariant(variantProps)}
         ref={ref}
