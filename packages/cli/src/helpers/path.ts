@@ -4,7 +4,7 @@ import path from 'node:path'
 
 import {RegistryComponent, ResolvedConfig} from '../const.js'
 
-export async function getDirComponentRequiredFiles<T extends RegistryComponent & {type: 'dir'}>(
+export async function getDirComponentRequiredFiles<T extends {type: 'dir'} & RegistryComponent>(
   componentObject: T,
   config: ResolvedConfig,
 ) {
@@ -25,12 +25,12 @@ export async function checkComponentInstalled(component: RegistryComponent, conf
   if (component.type === 'file') {
     const dir = await readdir(componentDirRoot)
     return dir.includes(component.name)
-  } else {
-    const componentDir = path.join(componentDirRoot, component.name)
-    if (!existsSync(componentDir)) return false
-    const dir = await readdir(componentDir)
-    return component.files.filter((filename) => !dir.includes(filename)).length === 0
   }
+
+  const componentDir = path.join(componentDirRoot, component.name)
+  if (!existsSync(componentDir)) return false
+  const dir = await readdir(componentDir)
+  return component.files.filter((filename) => !dir.includes(filename)).length === 0
 }
 
 export async function changeExtension(_path: string, extension: string): Promise<string> {

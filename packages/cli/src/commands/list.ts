@@ -52,6 +52,7 @@ export default class List extends Command {
         } else if (componentObject.type === 'dir') {
           url = Object.fromEntries(await getDirComponentURL(registry, componentObject))
         }
+
         final = {...final, [name]: {URL: url, installed}}
       } else {
         final = {...final, [name]: {installed}}

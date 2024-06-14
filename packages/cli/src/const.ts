@@ -1,27 +1,27 @@
 import {z} from 'zod'
 
-export const REGISTRY_URL = (branch: string) => `https://raw.githubusercontent.com/pswui/ui/${branch}/registry.json`
+export const registryURL = (branch: string) => `https://raw.githubusercontent.com/pswui/ui/${branch}/registry.json`
 export const CONFIG_DEFAULT_PATH = 'pswui.config.js'
 
 export type RegistryComponent =
   | {
-      type: 'file'
+      files: string[]
       name: string
+      type: 'dir'
     }
   | {
-      type: 'dir'
       name: string
-      files: string[]
+      type: 'file'
     }
 
 export interface Registry {
   base: string
   components: Record<string, RegistryComponent>
+  lib: string[]
   paths: {
     components: string
     lib: string
   }
-  lib: string[]
 }
 
 export interface Config {

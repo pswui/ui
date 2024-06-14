@@ -11,7 +11,7 @@ import {SearchBox} from '../components/SearchBox.js'
 import {getDirComponentRequiredFiles, checkComponentInstalled} from '../helpers/path.js'
 import {Choice} from '../components/Choice.js'
 import {colorize} from '@oclif/core/ux'
-import {safeFetch} from '../helpers/safeFetcher.js'
+import {safeFetch} from '../helpers/safe-fetcher.js'
 
 function Generator() {
   let complete: boolean = false
