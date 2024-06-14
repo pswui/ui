@@ -1,4 +1,4 @@
-import {REGISTRY_URL, Registry} from '../const.js'
+import {Registry, REGISTRY_URL, RegistryComponent} from '../const.js'
 import {safeFetch} from './safeFetcher.js'
 
 export async function getRegistry(
@@ -19,15 +19,6 @@ export async function getRegistry(
   return registryResponse
 }
 
-export async function getComponentURL(
-  registry: Registry,
-  componentName: string,
-  dirComponentFile?: string,
-): Promise<string> {
-  let base =
-    registry.base + registry.paths.components.replace('{componentName}', registry.components[componentName].name)
-  if (dirComponentFile) {
-    base += '/' + dirComponentFile
-  }
-  return base
+export async function getComponentURL(registry: Registry, component: RegistryComponent): Promise<string> {
+  return registry.base + registry.paths.components.replace('{componentName}', component.name)
 }
