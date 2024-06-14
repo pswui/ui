@@ -19,10 +19,6 @@ export async function getRegistry(
   return registryResponse
 }
 
-export async function getAvailableComponentNames(registry: Registry): Promise<string[]> {
-  return Object.keys(registry.components)
-}
-
 export async function getComponentURL(
   registry: Registry,
   componentName: string,
@@ -34,11 +30,4 @@ export async function getComponentURL(
     base += '/' + dirComponentFile
   }
   return base
-}
-
-export async function getComponentRealname(
-  registry: Registry,
-  componentName: keyof Registry['components'],
-): Promise<string> {
-  return registry.components[componentName].name
 }
