@@ -6,19 +6,19 @@ import {RegistryComponent, ResolvedConfig} from '../const.js'
 
 export async function getComponentsInstalled(components: string[], config: ResolvedConfig) {
   const componentPath = path.join(process.cwd(), config.paths.components)
-  if (existsSync(componentPath)) {
-    const dir = await readdir(componentPath)
-    const dirOnlyContainsComponent = []
-    for (const fileName of dir) {
-      if (components.includes(fileName)) {
-        dirOnlyContainsComponent.push(fileName)
-      }
-    }
-
-    return dirOnlyContainsComponent
+  if (!existsSync(componentPath)) {
+    return []
   }
 
-  return []
+  const dir = await readdir(componentPath)
+  const dirOnlyContainsComponent = []
+  for (const fileName of dir) {
+    if (components.includes(fileName)) {
+      dirOnlyContainsComponent.push(fileName)
+    }
+  }
+
+  return dirOnlyContainsComponent
 }
 
 export async function getDirComponentRequiredFiles<T extends RegistryComponent & {type: 'dir'}>(
