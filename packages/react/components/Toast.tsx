@@ -51,7 +51,7 @@ interface ToastBody extends Omit<VariantProps<typeof toastVariant>, "preset"> {
 }
 
 let index = 0;
-let toasts: Record<
+const toasts: Record<
   `${number}`,
   ToastBody & Partial<ToastOption> & { subscribers: (() => void)[] }
 > = {};
@@ -161,7 +161,7 @@ const ToastTemplate = ({
     subscribeSingle(id)(() => {
       setToast(getSingleSnapshot(id)());
     });
-  }, []);
+  }, [id]);
 
   const toastData = {
     ...globalOption,
@@ -225,7 +225,7 @@ const ToastTemplate = ({
       }, calculatedTransitionDuration);
       return () => clearTimeout(timeout);
     }
-  }, [toastData.life, toastData.closeTimeout, toastData.closeButton]);
+  }, [id, toastData.life, toastData.closeTimeout, toastData.closeButton]);
 
   return (
     <div
@@ -280,10 +280,9 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>((props, ref) => {
   const internalRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const unsubscribe = subscribe(() => {
+    return subscribe(() => {
       setToastList(getSnapshot());
     });
-    return unsubscribe;
   }, []);
 
   const option = React.useMemo(() => {
