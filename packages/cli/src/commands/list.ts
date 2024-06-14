@@ -1,6 +1,6 @@
 import {Command, Flags} from '@oclif/core'
 import ora from 'ora'
-import {asTree} from 'treeify'
+import treeify from 'treeify'
 
 import {loadConfig, validateConfig} from '../helpers/config.js'
 import {getComponentsInstalled} from '../helpers/path.js'
@@ -48,11 +48,20 @@ export default class List extends Command {
     )
     getInstalledSpinner.succeed(`Got ${installedNames.length} installed components.`)
 
-    let final: Record<string, {URL?: string; installed: 'no' | 'yes'}> = {}
+    let final: Record<string, {URL?: Record<string, string>; installed: 'no' | 'yes'}> = {}
     for await (const name of names) {
+      const componentObject = registry.components[name]
       const installed = installedNames.includes(await getComponentRealname(registry, name)) ? 'yes' : 'no'
       if (flags.url) {
-        const url = await getComponentURL(registry, name)
+        let url: Record<string, string> = {}
+
+        if (componentObject.type === 'file') {
+          url[name] = await getComponentURL(registry, name)
+        } else if (componentObject.type === 'dir') {
+          for await (const file of componentObject.files) {
+            url[file] = await getComponentURL(registry, name, file)
+          }
+        }
         final = {...final, [name]: {URL: url, installed}}
       } else {
         final = {...final, [name]: {installed}}
@@ -60,6 +69,6 @@ export default class List extends Command {
     }
 
     this.log('AVAILABLE COMPONENTS')
-    this.log(asTree(final, true, true))
+    this.log(treeify.asTree(final, true, true))
   }
 }
