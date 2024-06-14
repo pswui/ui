@@ -3,9 +3,16 @@ import {z} from 'zod'
 export const REGISTRY_URL = 'https://raw.githubusercontent.com/pswui/ui/main/registry.json'
 export const CONFIG_DEFAULT_PATH = 'pswui.config.js'
 
-interface RegistryComponent {
-  name: string
-}
+type RegistryComponent =
+  | {
+      type: 'file'
+      name: string
+    }
+  | {
+      type: 'dir'
+      name: string
+      files: string[]
+    }
 
 export interface Registry {
   base: string
@@ -14,6 +21,7 @@ export interface Registry {
     components: string
     lib: string
   }
+  lib: string[]
 }
 
 export interface Config {
