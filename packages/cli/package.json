@@ -1,7 +1,7 @@
 {
   "name": "@psw-ui/cli",
   "description": "CLI for PSW/UI",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "author": "p-sw",
   "bin": {
     "pswui": "./bin/run.js"

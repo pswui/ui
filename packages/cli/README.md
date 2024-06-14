@@ -20,7 +20,7 @@ $ npm install -g @psw-ui/cli
 $ pswui COMMAND
 running command...
 $ pswui (--version)
-@psw-ui/cli/0.2.0 linux-x64 node-v20.13.1
+@psw-ui/cli/0.5.0 linux-x64 node-v20.13.1
 $ pswui --help [COMMAND]
 USAGE
   $ pswui COMMAND
@@ -49,7 +49,7 @@ FLAGS
   -c, --components=<value>  place for installation of components
   -f, --force               override the existing file
   -p, --config=<value>      path to config
-  -r, --registry=<value>    override registry ur
+  -r, --branch=<value>      use other branch instead of main
   -s, --shared=<value>      place for installation of shared.ts
 
 DESCRIPTION
@@ -59,7 +59,7 @@ EXAMPLES
   $ pswui add
 ```
 
-_See code: [packages/cli/src/commands/add.tsx](https://github.com/pswui/ui/blob/cli@0.4.1/packages/cli/src/commands/add.tsx)_
+_See code: [packages/cli/src/commands/add.tsx](https://github.com/pswui/ui/blob/cli@0.5.0/packages/cli/src/commands/add.tsx)_
 
 ## `pswui help [COMMAND]`
 
@@ -91,7 +91,7 @@ USAGE
 
 FLAGS
   -p, --config=<value>  path to config
-  -r, --registry=<value>  override registry url
+  -r, --branch=<value>  use other branch instead of main
   -u, --url             include component file URL
 
 DESCRIPTION
@@ -101,7 +101,7 @@ EXAMPLES
   $ pswui list
 ```
 
-_See code: [packages/cli/src/commands/list.ts](https://github.com/pswui/ui/blob/cli@0.4.1/packages/cli/src/commands/list.ts)_
+_See code: [packages/cli/src/commands/list.ts](https://github.com/pswui/ui/blob/cli@0.5.0/packages/cli/src/commands/list.ts)_
 
 ## `pswui search`
 
@@ -117,7 +117,7 @@ ARGUMENTS
   QUERY  search query
 
 FLAGS
-  -r, --registry=<value>  override registry url
+  -r, --branch=<value>  use other branch instead of main
 
 DESCRIPTION
   Search components.
@@ -126,5 +126,5 @@ EXAMPLES
   $ pswui search
 ```
 
-_See code: [packages/cli/src/commands/search.tsx](https://github.com/pswui/ui/blob/cli@0.4.1/packages/cli/src/commands/search.tsx)_
+_See code: [packages/cli/src/commands/search.tsx](https://github.com/pswui/ui/blob/cli@0.5.0/packages/cli/src/commands/search.tsx)_
 <!-- commandsstop -->

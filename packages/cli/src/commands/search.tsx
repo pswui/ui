@@ -1,7 +1,7 @@
 import {Command, Args, Flags} from '@oclif/core'
 import {render} from 'ink'
 import {SearchBox} from '../components/SearchBox.js'
-import {getAvailableComponentNames, getRegistry} from '../helpers/registry.js'
+import {getRegistry} from '../helpers/registry.js'
 import React from 'react'
 
 export default class Search extends Command {
@@ -10,7 +10,7 @@ export default class Search extends Command {
   }
 
   static override flags = {
-    registry: Flags.string({char: 'r', description: 'override registry url'})
+    branch: Flags.string({char: 'r', description: 'use other branch instead of main'}),
   }
 
   static override description = 'Search components.'
@@ -20,15 +20,15 @@ export default class Search extends Command {
   public async run(): Promise<void> {
     const {args, flags} = await this.parse(Search)
 
-    if (flags.registry) {
-      this.log(`Using ${flags.registry} for registry.`)
+    if (flags.branch) {
+      this.log(`Using ${flags.branch} for registry.`)
     }
-    const registryResult = await getRegistry(flags.registry)
+    const registryResult = await getRegistry(flags.branch)
     if (!registryResult.ok) {
       this.error(registryResult.message)
     }
     const registry = registryResult.registry
-    const componentNames = await getAvailableComponentNames(registry)
+    const componentNames = Object.keys(registry.components)
 
     await render(
       <SearchBox

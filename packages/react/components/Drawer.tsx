@@ -349,7 +349,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
             transitionDuration: dragState.isDragging ? "0s" : undefined,
             userSelect: dragState.isDragging ? "none" : undefined,
           }}
-          ref={(el) => {
+          ref={(el: HTMLDivElement | null) => {
             internalRef.current = el;
             if (typeof ref === "function") {
               ref(el);

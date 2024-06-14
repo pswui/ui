@@ -1,36 +1,37 @@
-import fetch from 'node-fetch'
-
-import {REGISTRY_URL, Registry} from '../const.js'
+import {Registry, RegistryComponent, registryURL} from '../const.js'
+import {safeFetch} from './safe-fetcher.js'
 
 export async function getRegistry(
-  REGISTRY_OVERRIDE_URL?: string,
+  branch?: string,
 ): Promise<{message: string; ok: false} | {ok: true; registry: Registry}> {
-  const registryResponse = await fetch(REGISTRY_OVERRIDE_URL ?? REGISTRY_URL)
+  const registryResponse = await safeFetch(registryURL(branch ?? 'main'))
 
   if (registryResponse.ok) {
+    const registryJson = (await registryResponse.response.json()) as Registry
+    registryJson.base = registryJson.base.replace('{branch}', branch ?? 'main')
+
     return {
       ok: true,
-      registry: (await registryResponse.json()) as Registry,
+      registry: registryJson,
     }
   }
 
-  return {
-    message: `Error while fetching registry: ${registryResponse.status} ${registryResponse.statusText}`,
-    ok: false,
-  }
+  return registryResponse
 }
 
-export async function getAvailableComponentNames(registry: Registry): Promise<string[]> {
-  return Object.keys(registry.components)
-}
-
-export async function getComponentURL(registry: Registry, componentName: string): Promise<string> {
-  return registry.base + registry.paths.components.replace('{componentName}', registry.components[componentName].name)
-}
-
-export async function getComponentRealname(
+export async function getComponentURL(
   registry: Registry,
-  componentName: keyof Registry['components'],
+  component: {type: 'file'} & RegistryComponent,
 ): Promise<string> {
-  return registry.components[componentName].name
+  return registry.base + registry.paths.components.replace('{componentName}', component.name)
+}
+
+export async function getDirComponentURL(
+  registry: Registry,
+  component: {type: 'dir'} & RegistryComponent,
+  files?: string[],
+): Promise<[string, string][]> {
+  const base = registry.base + registry.paths.components.replace('{componentName}', component.name)
+
+  return (files ?? component.files).map((filename) => [filename, base + '/' + filename])
 }

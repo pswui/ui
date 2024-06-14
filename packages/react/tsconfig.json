@@ -5,6 +5,7 @@
     "lib": ["ES2021", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "esModuleInterop": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -25,9 +26,9 @@
     "paths": {
       "@components/*": ["components/*"],
       "@/*": ["src/*"],
-      "@pswui-lib": ["lib.tsx"]
+      "@pswui-lib": ["lib/index.ts"]
     }
   },
-  "include": ["components", "src", "./lib.tsx"],
+  "include": ["components", "src", "lib"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

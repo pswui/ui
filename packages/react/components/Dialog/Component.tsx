@@ -1,32 +1,13 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
 import { Slot, VariantProps, vcn } from "@pswui-lib";
 import ReactDOM from "react-dom";
 
-/**
- * =========================
- * DialogContext
- * =========================
- */
-
-interface DialogContext {
-  opened: boolean;
-}
-
-const initialDialogContext: DialogContext = { opened: false };
-const DialogContext = React.createContext<
-  [DialogContext, Dispatch<SetStateAction<DialogContext>>]
->([
+import {
+  DialogContext,
   initialDialogContext,
-  () => {
-    if (process.env.NODE_ENV && process.env.NODE_ENV === "development") {
-      console.warn(
-        "It seems like you're using DialogContext outside of a provider.",
-      );
-    }
-  },
-]);
-
-const useDialogContext = () => React.useContext(DialogContext);
+  useDialogContext,
+  IDialogContext,
+} from "./Context";
 
 /**
  * =========================
@@ -39,7 +20,7 @@ interface DialogRootProps {
 }
 
 const DialogRoot = ({ children }: DialogRootProps) => {
-  const state = useState<DialogContext>(initialDialogContext);
+  const state = useState<IDialogContext>(initialDialogContext);
   return (
     <DialogContext.Provider value={state}>{children}</DialogContext.Provider>
   );
@@ -411,7 +392,6 @@ const DialogFooter = React.forwardRef<HTMLDivElement, DialogFooterProps>(
 );
 
 export {
-  useDialogContext,
   DialogRoot,
   DialogTrigger,
   DialogOverlay,

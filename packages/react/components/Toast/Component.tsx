@@ -2,148 +2,19 @@ import React, { useEffect, useId, useRef } from "react";
 import ReactDOM from "react-dom";
 import { VariantProps, vcn } from "@pswui-lib";
 
-interface ToastOption {
-  closeButton: boolean;
-  closeTimeout: number | null;
-}
-
-const defaultToastOption: ToastOption = {
-  closeButton: true,
-  closeTimeout: 3000,
-};
-
-const toastColors = {
-  background: "bg-white dark:bg-black",
-  borders: {
-    default: "border-black/10 dark:border-white/20",
-    error: "border-red-500/80",
-    success: "border-green-500/80",
-    warning: "border-yellow-500/80",
-    loading: "border-black/50 dark:border-white/50 animate-pulse",
-  },
-};
-
-const [toastVariant] = vcn({
-  base: `flex flex-col gap-2 border p-4 rounded-lg pr-8 pointer-events-auto ${toastColors.background} relative transition-all duration-150`,
-  variants: {
-    status: {
-      default: toastColors.borders.default,
-      error: toastColors.borders.error,
-      success: toastColors.borders.success,
-      warning: toastColors.borders.warning,
-      loading: toastColors.borders.loading,
-    },
-    life: {
-      born: "-translate-y-full md:translate-y-full scale-90 ease-[cubic-bezier(0,.6,.7,1)]",
-      normal: "translate-y-0 scale-100 ease-[cubic-bezier(0,.6,.7,1)]",
-      dead: "-translate-y-full md:translate-y-full scale-90 ease-[cubic-bezier(.6,0,1,.7)]",
-    },
-  },
-  defaults: {
-    status: "default",
-    life: "born",
-  },
-});
-
-interface ToastBody extends Omit<VariantProps<typeof toastVariant>, "preset"> {
-  title: string;
-  description: string;
-}
-
-let index = 0;
-const toasts: Record<
-  `${number}`,
-  ToastBody & Partial<ToastOption> & { subscribers: (() => void)[] }
-> = {};
-let subscribers: (() => void)[] = [];
-
-/**
- * ====
- * Controls
- * ====
- */
-
-function subscribe(callback: () => void) {
-  subscribers.push(callback);
-  return () => {
-    subscribers = subscribers.filter((subscriber) => subscriber !== callback);
-  };
-}
-
-function getSnapshot() {
-  return { ...toasts };
-}
-
-function subscribeSingle(id: `${number}`) {
-  return (callback: () => void) => {
-    toasts[id].subscribers.push(callback);
-    return () => {
-      toasts[id].subscribers = toasts[id].subscribers.filter(
-        (subscriber) => subscriber !== callback,
-      );
-    };
-  };
-}
-
-function getSingleSnapshot(id: `${number}`) {
-  return () => {
-    return {
-      ...toasts[id],
-    };
-  };
-}
-
-function notify() {
-  subscribers.forEach((subscriber) => subscriber());
-}
-
-function notifySingle(id: `${number}`) {
-  toasts[id].subscribers.forEach((subscriber) => subscriber());
-}
-
-function close(id: `${number}`) {
-  toasts[id] = {
-    ...toasts[id],
-    life: "dead",
-  };
-  notifySingle(id);
-}
-
-function update(
-  id: `${number}`,
-  toast: Partial<Omit<ToastBody, "life"> & Partial<ToastOption>>,
-) {
-  toasts[id] = {
-    ...toasts[id],
-    ...toast,
-  };
-  notifySingle(id);
-}
-
-function addToast(toast: Omit<ToastBody, "life"> & Partial<ToastOption>) {
-  const id: `${number}` = `${index}`;
-  toasts[id] = {
-    ...toast,
-    subscribers: [],
-    life: "born",
-  };
-  index += 1;
-  notify();
-
-  return {
-    update: (toast: Partial<Omit<ToastBody, "life"> & Partial<ToastOption>>) =>
-      update(id, toast),
-    close: () => close(id),
-  };
-}
-
-function useToast() {
-  return {
-    toast: addToast,
-    update,
-    close,
-  };
-}
+import { toastVariant } from "./Variant";
+import {
+  ToastOption,
+  toasts,
+  subscribeSingle,
+  getSingleSnapshot,
+  notifySingle,
+  close,
+  notify,
+  defaultToastOption,
+  subscribe,
+  getSnapshot,
+} from "./Store";
 
 const ToastTemplate = ({
   id,
@@ -307,7 +178,7 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>((props, ref) => {
       {ReactDOM.createPortal(
         <div
           {...otherPropsExtracted}
-          data-toaster-root
+          data-toaster-root={true}
           className={toasterVariant(variantProps)}
           ref={(el) => {
             internalRef.current = el;
@@ -333,4 +204,4 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>((props, ref) => {
   );
 });
 
-export { Toaster, useToast };
+export { Toaster };

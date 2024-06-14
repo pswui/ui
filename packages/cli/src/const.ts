@@ -1,15 +1,23 @@
 import {z} from 'zod'
 
-export const REGISTRY_URL = 'https://raw.githubusercontent.com/pswui/ui/main/registry.json'
+export const registryURL = (branch: string) => `https://raw.githubusercontent.com/pswui/ui/${branch}/registry.json`
 export const CONFIG_DEFAULT_PATH = 'pswui.config.js'
 
-interface RegistryComponent {
-  name: string
-}
+export type RegistryComponent =
+  | {
+      files: string[]
+      name: string
+      type: 'dir'
+    }
+  | {
+      name: string
+      type: 'file'
+    }
 
 export interface Registry {
   base: string
   components: Record<string, RegistryComponent>
+  lib: string[]
   paths: {
     components: string
     lib: string
@@ -28,7 +36,7 @@ export interface Config {
    */
   paths?: {
     components?: 'src/pswui/components' | string
-    lib?: 'src/pswui/lib.tsx' | string
+    lib?: 'src/pswui/lib' | string
   }
 }
 export type ResolvedConfig<T = Config> = {
@@ -41,7 +49,7 @@ export const DEFAULT_CONFIG = {
   },
   paths: {
     components: 'src/pswui/components',
-    lib: 'src/pswui/lib.tsx',
+    lib: 'src/pswui/lib',
   },
 }
 export const configZod = z.object({
