@@ -4,41 +4,18 @@ import path from 'node:path'
 
 import {RegistryComponent, ResolvedConfig} from '../const.js'
 
-export async function getComponentsInstalled(components: string[], config: ResolvedConfig) {
-  const componentPath = path.join(process.cwd(), config.paths.components)
-  if (!existsSync(componentPath)) {
-    return []
-  }
-
-  const dir = await readdir(componentPath)
-  const dirOnlyContainsComponent = []
-  for (const fileName of dir) {
-    if (components.includes(fileName)) {
-      dirOnlyContainsComponent.push(fileName)
-    }
-  }
-
-  return dirOnlyContainsComponent
-}
-
-export async function getDirComponentInstalledFiles<T extends RegistryComponent & {type: 'dir'}>(
+export async function getDirComponentRequiredFiles<T extends RegistryComponent & {type: 'dir'}>(
   componentObject: T,
   config: ResolvedConfig,
 ) {
   const componentPath = path.join(process.cwd(), config.paths.components, componentObject.name)
   if (!existsSync(componentPath)) {
-    return []
+    return componentObject.files
   }
 
-  const dir = await readdir(componentPath)
-  const dirOnlyContainsComponentFile = []
-  for (const fileName of dir) {
-    if (componentObject.files.includes(fileName)) {
-      dirOnlyContainsComponentFile.push(fileName)
-    }
-  }
+  const dir = await readdir(componentPath):w
 
-  return dirOnlyContainsComponentFile
+  return componentObject.files.map((filename) => !dir.includes(filename))
 }
 
 export async function checkComponentInstalled(component: RegistryComponent, config: ResolvedConfig): Promise<boolean> {
