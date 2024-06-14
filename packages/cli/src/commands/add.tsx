@@ -188,7 +188,7 @@ export default class Add extends Command {
     for await (const libFile of registry.lib) {
       const filePath = join(libFolder, libFile)
       if (!existsSync(filePath)) {
-        const libFileContentResponse = await safeFetch(registry.base + registry.paths.lib.replace('libName', libFile))
+        const libFileContentResponse = await safeFetch(registry.base + registry.paths.lib.replace('{libName}', libFile))
         if (!libFileContentResponse.ok) {
           libFileOra.fail(libFileContentResponse.message)
           return
@@ -229,10 +229,10 @@ export default class Add extends Command {
         await mkdir(componentDir, {recursive: true})
       }
       const installed = await getDirComponentInstalledFiles(componentObject, resolvedConfig)
-      if (installed.length === 0 && !force) {
+      const files = componentObject.files.filter((filename) => !installed.includes(filename))
+      if (files.length === 0 && !force) {
         componentFileOra.succeed(`Component is already installed! (${componentDir})`)
       } else {
-        const files = componentObject.files.filter((filename) => !installed.includes(filename))
         for await (const filename of files) {
           const componentFile = join(componentDir, filename)
           if (!existsSync(componentFile) || force) {
