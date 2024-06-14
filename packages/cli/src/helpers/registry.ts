@@ -3,14 +3,17 @@ import fetch from 'node-fetch'
 import {REGISTRY_URL, Registry} from '../const.js'
 
 export async function getRegistry(
-  REGISTRY_OVERRIDE_URL?: string,
+  branch?: string,
 ): Promise<{message: string; ok: false} | {ok: true; registry: Registry}> {
-  const registryResponse = await fetch(REGISTRY_OVERRIDE_URL ?? REGISTRY_URL)
+  const registryResponse = await fetch(REGISTRY_URL(branch ?? 'main'))
 
   if (registryResponse.ok) {
+    const registryJson = (await registryResponse.json()) as Registry
+    registryJson.base = registryJson.base.replace('{branch}', branch ?? 'main')
+
     return {
       ok: true,
-      registry: (await registryResponse.json()) as Registry,
+      registry: registryJson,
     }
   }
 
