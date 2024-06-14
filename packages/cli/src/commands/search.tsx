@@ -1,7 +1,7 @@
 import {Command, Args, Flags} from '@oclif/core'
 import {render} from 'ink'
 import {SearchBox} from '../components/SearchBox.js'
-import {getAvailableComponentNames, getRegistry} from '../helpers/registry.js'
+import {getRegistry} from '../helpers/registry.js'
 import React from 'react'
 
 export default class Search extends Command {
@@ -28,7 +28,7 @@ export default class Search extends Command {
       this.error(registryResult.message)
     }
     const registry = registryResult.registry
-    const componentNames = await getAvailableComponentNames(registry)
+    const componentNames = Object.keys(registry.components)
 
     await render(
       <SearchBox
