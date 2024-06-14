@@ -108,7 +108,8 @@ export function vcn<V extends VariantType>(param: {
   /**
    * Any Props -> Variant Props, Other Props
    */
-  <AnyPropBeforeResolve extends Record<string, unknown>>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  <AnyPropBeforeResolve extends Record<string, any>>(
     anyProps: AnyPropBeforeResolve,
   ) => [
     Partial<VariantKV<V>> & {
@@ -138,7 +139,8 @@ export function vcn<V extends VariantType, P extends PresetType<V>>(param: {
   /**
    * Any Props -> Variant Props, Other Props
    */
-  <AnyPropBeforeResolve extends Record<string, unknown>>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  <AnyPropBeforeResolve extends Record<string, any>>(
     anyProps: AnyPropBeforeResolve,
   ) => [
     Partial<VariantKV<V>> & {
@@ -267,8 +269,5 @@ export function vcn<
  * }
  * ```
  */
-export type VariantProps<F extends (props: unknown) => string> = F extends (
-  props: infer P,
-) => string
-  ? P
-  : never;
+export type VariantProps<F extends (props: Record<string, unknown>) => string> =
+  F extends (props: infer P) => string ? { [key in keyof P]: P[key] } : never;
