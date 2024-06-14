@@ -107,8 +107,11 @@ const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
     const internalRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-      function handleOutsideClick(e: any) {
-        if (internalRef.current && !internalRef.current.contains(e.target)) {
+      function handleOutsideClick(e: MouseEvent) {
+        if (
+          internalRef.current &&
+          !internalRef.current.contains(e.target as Node | null)
+        ) {
           setState((prev) => ({ ...prev, opened: false }));
         }
       }
