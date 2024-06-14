@@ -12,8 +12,8 @@ export default class List extends Command {
   static override examples = ['<%= config.bin %> <%= command.id %>']
 
   static override flags = {
+    branch: Flags.string({char: 'r', description: 'use other branch instead of main'}),
     config: Flags.string({char: 'p', description: 'path to config'}),
-    registry: Flags.string({char: 'r', description: 'override registry url'}),
     url: Flags.boolean({char: 'u', description: 'include component file URL'}),
   }
 
@@ -26,11 +26,11 @@ export default class List extends Command {
     const loadedConfig = await validateConfig((message: string) => this.log(message), await loadConfig(flags.config))
 
     registrySpinner.start()
-    if (flags.registry) {
-      this.log(`Using ${flags.registry} for registry.`)
+    if (flags.branch) {
+      this.log(`Using ${flags.branch} for registry.`)
     }
 
-    const unsafeRegistry = await getRegistry(flags.registry)
+    const unsafeRegistry = await getRegistry(flags.branch)
     if (!unsafeRegistry.ok) {
       registrySpinner.fail(unsafeRegistry.message)
       return
