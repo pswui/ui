@@ -4,7 +4,7 @@ import treeify from 'treeify'
 
 import {loadConfig, validateConfig} from '../helpers/config.js'
 import {getComponentsInstalled} from '../helpers/path.js'
-import {getAvailableComponentNames, getComponentRealname, getComponentURL, getRegistry} from '../helpers/registry.js'
+import {getComponentRealname, getComponentURL, getRegistry} from '../helpers/registry.js'
 
 export default class List extends Command {
   static override description = 'Prints all available components in registry and components installed in this project.'
@@ -37,9 +37,9 @@ export default class List extends Command {
     }
 
     const {registry} = unsafeRegistry
-    registrySpinner.succeed(`Fetched ${Object.keys(registry.components).length} components.`)
+    const names = Object.keys(registry.components)
 
-    const names = await getAvailableComponentNames(registry)
+    registrySpinner.succeed(`Fetched ${names.length} components.`)
 
     getInstalledSpinner.start()
     const installedNames = await getComponentsInstalled(
