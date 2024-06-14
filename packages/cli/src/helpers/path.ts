@@ -21,7 +21,7 @@ export async function getComponentsInstalled(components: string[], config: Resol
   return dirOnlyContainsComponent
 }
 
-export async function getDirComponentRequiredFiles<T extends RegistryComponent & {type: 'dir'}>(
+export async function getDirComponentInstalledFiles<T extends RegistryComponent & {type: 'dir'}>(
   componentObject: T,
   config: ResolvedConfig,
 ) {
