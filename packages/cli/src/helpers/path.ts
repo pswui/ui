@@ -15,7 +15,7 @@ export async function getDirComponentRequiredFiles<T extends RegistryComponent &
 
   const dir = await readdir(componentPath)
 
-  return componentObject.files.map((filename) => !dir.includes(filename))
+  return componentObject.files.filter((filename) => !dir.includes(filename))
 }
 
 export async function checkComponentInstalled(component: RegistryComponent, config: ResolvedConfig): Promise<boolean> {
