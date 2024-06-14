@@ -211,7 +211,7 @@ export default class Add extends Command {
       if (existsSync(componentFile) && !force) {
         componentFileOra.succeed(`Component is already installed! (${componentFile})`)
       } else {
-        const componentFileContentResponse = await safeFetch(await getComponentURL(registry, name))
+        const componentFileContentResponse = await safeFetch(await getComponentURL(registry, componentObject))
         if (!componentFileContentResponse.ok) {
           componentFileOra.fail(componentFileContentResponse.message)
           return
@@ -232,12 +232,11 @@ export default class Add extends Command {
       if (requiredFiles.length === 0 && !force) {
         componentFileOra.succeed(`Component is already installed! (${componentDir})`)
       } else {
-        for await (const filename of requiredFiles) {
+        const requiredFilesURLs = await getDirComponentURL(registry, componentObject, requiredFiles)
+        for await (const [filename, url] of requiredFilesURLs) {
           const componentFile = join(componentDir, filename)
           if (!existsSync(componentFile) || force) {
-            const componentFileContentResponse = await safeFetch(
-              await getComponentURL(registry, componentObject.name, filename),
-            )
+            const componentFileContentResponse = await safeFetch(url)
             if (!componentFileContentResponse.ok) {
               componentFileOra.fail(componentFileContentResponse.message)
               return
