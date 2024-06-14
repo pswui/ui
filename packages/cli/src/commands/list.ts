@@ -3,8 +3,8 @@ import ora from 'ora'
 import treeify from 'treeify'
 
 import {loadConfig, validateConfig} from '../helpers/config.js'
-import {getComponentsInstalled} from '../helpers/path.js'
-import {getComponentRealname, getComponentURL, getRegistry} from '../helpers/registry.js'
+import {checkComponentInstalled} from '../helpers/path.js'
+import {getComponentURL, getDirComponentURL, getRegistry} from '../helpers/registry.js'
 
 export default class List extends Command {
   static override description = 'Prints all available components in registry and components installed in this project.'
@@ -21,7 +21,6 @@ export default class List extends Command {
     const {flags} = await this.parse(List)
 
     const registrySpinner = ora('Fetching registry...')
-    const getInstalledSpinner = ora('Getting installed components...')
 
     const loadedConfig = await validateConfig((message: string) => this.log(message), await loadConfig(flags.config))
 
@@ -41,26 +40,17 @@ export default class List extends Command {
 
     registrySpinner.succeed(`Fetched ${names.length} components.`)
 
-    getInstalledSpinner.start()
-    const installedNames = await getComponentsInstalled(
-      await Promise.all(names.map(async (name) => getComponentRealname(registry, name))),
-      loadedConfig,
-    )
-    getInstalledSpinner.succeed(`Got ${installedNames.length} installed components.`)
-
     let final: Record<string, {URL?: Record<string, string>; installed: 'no' | 'yes'}> = {}
     for await (const name of names) {
       const componentObject = registry.components[name]
-      const installed = installedNames.includes(await getComponentRealname(registry, name)) ? 'yes' : 'no'
+      const installed = (await checkComponentInstalled(componentObject, loadedConfig)) ? 'yes' : 'no'
       if (flags.url) {
         let url: Record<string, string> = {}
 
         if (componentObject.type === 'file') {
-          url[name] = await getComponentURL(registry, name)
+          url[name] = await getComponentURL(registry, componentObject)
         } else if (componentObject.type === 'dir') {
-          for await (const file of componentObject.files) {
-            url[file] = await getComponentURL(registry, name, file)
-          }
+          url = Object.fromEntries(await getDirComponentURL(registry, componentObject))
         }
         final = {...final, [name]: {URL: url, installed}}
       } else {
