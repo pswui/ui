@@ -3,7 +3,7 @@ import {loadConfig, validateConfig} from '../helpers/config.js'
 import {existsSync} from 'node:fs'
 import {mkdir, writeFile} from 'node:fs/promises'
 import {join} from 'node:path'
-import {getAvailableComponentNames, getComponentURL, getRegistry} from '../helpers/registry.js'
+import {getComponentURL, getDirComponentURL, getRegistry} from '../helpers/registry.js'
 import ora from 'ora'
 import React, {ComponentPropsWithoutRef} from 'react'
 import {render, Box} from 'ink'
@@ -119,7 +119,7 @@ export default class Add extends Command {
       return
     }
     const registry = unsafeRegistry.registry
-    const componentNames = await getAvailableComponentNames(registry)
+    const componentNames = Object.keys(registry.components)
     loadRegistryOra.succeed(`Successfully fetched registry! (${componentNames.length} components)`)
     const searchBoxComponent: {displayName: string; key: string; installed: boolean}[] = []
     for await (const name of componentNames) {
