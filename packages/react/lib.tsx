@@ -109,7 +109,7 @@ export function vcn<V extends VariantType>(param: {
   /**
    * Any Props -> Variant Props, Other Props
    */
-  <AnyPropBeforeResolve extends Record<string, any>>(
+  <AnyPropBeforeResolve extends Record<string, unknown>>(
     anyProps: AnyPropBeforeResolve,
   ) => [
     Partial<VariantKV<V>> & {
@@ -139,7 +139,7 @@ export function vcn<V extends VariantType, P extends PresetType<V>>(param: {
   /**
    * Any Props -> Variant Props, Other Props
    */
-  <AnyPropBeforeResolve extends Record<string, any>>(
+  <AnyPropBeforeResolve extends Record<string, unknown>>(
     anyProps: AnyPropBeforeResolve,
   ) => [
     Partial<VariantKV<V>> & {
@@ -223,7 +223,7 @@ export function vcn<
      * @param anyProps - Any props that have passed to the component.
      * @returns [variantProps, otherProps]
      */
-    <AnyPropBeforeResolve extends Record<string, any>>(
+    <AnyPropBeforeResolve extends Record<string, unknown>>(
       anyProps: AnyPropBeforeResolve,
     ) => {
       const variantKeys = Object.keys(variants) as (keyof V)[];
@@ -268,7 +268,7 @@ export function vcn<
  * }
  * ```
  */
-export type VariantProps<F extends (props: any) => string> = F extends (
+export type VariantProps<F extends (props: unknown) => string> = F extends (
   props: infer P,
 ) => string
   ? P
@@ -284,8 +284,8 @@ export type VariantProps<F extends (props: any) => string> = F extends (
  * @returns The merged props.
  */
 function mergeReactProps(
-  parentProps: Record<string, any>,
-  childProps: Record<string, any>,
+  parentProps: Record<string, unknown>,
+  childProps: Record<string, unknown>,
 ) {
   const overrideProps = { ...childProps };
 
@@ -295,7 +295,12 @@ function mergeReactProps(
 
     const isHandler = /^on[A-Z]/.test(propName);
     if (isHandler) {
-      if (childPropValue && parentPropValue) {
+      if (
+        childPropValue &&
+        parentPropValue &&
+        typeof childPropValue === "function" &&
+        typeof parentPropValue === "function"
+      ) {
         overrideProps[propName] = (...args: unknown[]) => {
           childPropValue?.(...args);
           parentPropValue?.(...args);
@@ -303,9 +308,17 @@ function mergeReactProps(
       } else if (parentPropValue) {
         overrideProps[propName] = parentPropValue;
       }
-    } else if (propName === "style") {
+    } else if (
+      propName === "style" &&
+      typeof parentPropValue === "object" &&
+      typeof childPropValue === "object"
+    ) {
       overrideProps[propName] = { ...parentPropValue, ...childPropValue };
-    } else if (propName === "className") {
+    } else if (
+      propName === "className" &&
+      typeof parentPropValue === "string" &&
+      typeof childPropValue === "string"
+    ) {
       overrideProps[propName] = twMerge(parentPropValue, childPropValue);
     }
   }
@@ -324,7 +337,7 @@ function combinedRef<I>(refs: React.Ref<I | null>[]) {
     refs.forEach((ref) => {
       if (ref instanceof Function) {
         ref(instance);
-      } else if (!!ref) {
+      } else if (ref) {
         (ref as React.MutableRefObject<I | null>).current = instance;
       }
     });
@@ -333,20 +346,24 @@ function combinedRef<I>(refs: React.Ref<I | null>[]) {
 interface SlotProps {
   children?: React.ReactNode;
 }
-export const Slot = React.forwardRef<any, SlotProps & Record<string, any>>(
-  (props, ref) => {
-    const { children, ...slotProps } = props;
-    const { asChild: _1, ...safeSlotProps } = slotProps;
-    if (!React.isValidElement(children)) {
-      console.warn(`given children "${children}" is not valid for asChild`);
-      return null;
-    }
-    return React.cloneElement(children, {
-      ...mergeReactProps(safeSlotProps, children.props),
-      ref: combinedRef([ref, (children as any).ref]),
-    } as any);
-  },
-);
+export const Slot = React.forwardRef<
+  HTMLElement,
+  SlotProps & Record<string, unknown>
+>((props, ref) => {
+  const { children, ...slotProps } = props;
+  const { asChild: _1, ...safeSlotProps } = slotProps;
+  if (!React.isValidElement(children)) {
+    console.warn(`given children "${children}" is not valid for asChild`);
+    return null;
+  }
+  return React.cloneElement(children, {
+    ...mergeReactProps(safeSlotProps, children.props),
+    ref: combinedRef([
+      ref,
+      (children as unknown as { ref: React.Ref<HTMLElement> }).ref,
+    ]),
+  } as never);
+});
 
 export interface AsChild {
   asChild?: boolean;
