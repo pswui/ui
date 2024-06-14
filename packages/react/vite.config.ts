@@ -5,9 +5,7 @@ import { resolve } from "node:path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react()
-  ],
+  plugins: [react()],
   css: {
     postcss: {
       plugins: [tailwindcss()],
@@ -17,7 +15,7 @@ export default defineConfig({
     alias: {
       "@components": resolve(__dirname, "./components"),
       "@": resolve(__dirname, "./src"),
-      "@pswui-lib": resolve(__dirname, "./lib.tsx"),
+      "@pswui-lib": resolve(__dirname, "./vcn.ts"),
     },
   },
 });
