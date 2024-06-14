@@ -1,14 +1,13 @@
-import fetch from 'node-fetch'
-
 import {REGISTRY_URL, Registry} from '../const.js'
+import {safeFetch} from './safeFetcher.js'
 
 export async function getRegistry(
   branch?: string,
 ): Promise<{message: string; ok: false} | {ok: true; registry: Registry}> {
-  const registryResponse = await fetch(REGISTRY_URL(branch ?? 'main'))
+  const registryResponse = await safeFetch(REGISTRY_URL(branch ?? 'main'))
 
   if (registryResponse.ok) {
-    const registryJson = (await registryResponse.json()) as Registry
+    const registryJson = registryResponse.json as Registry
     registryJson.base = registryJson.base.replace('{branch}', branch ?? 'main')
 
     return {
@@ -17,10 +16,7 @@ export async function getRegistry(
     }
   }
 
-  return {
-    message: `Error while fetching registry from ${registryResponse.url}: ${registryResponse.status} ${registryResponse.statusText}`,
-    ok: false,
-  }
+  return registryResponse
 }
 
 export async function getAvailableComponentNames(registry: Registry): Promise<string[]> {
