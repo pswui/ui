@@ -18,7 +18,7 @@ export async function getRegistry(
   }
 
   return {
-    message: `Error while fetching registry: ${registryResponse.status} ${registryResponse.statusText}`,
+    message: `Error while fetching registry from ${registryResponse.url}: ${registryResponse.status} ${registryResponse.statusText}`,
     ok: false,
   }
 }
