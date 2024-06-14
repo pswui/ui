@@ -169,6 +169,7 @@ const TabTrigger = (props: TabTriggerProps) => {
         };
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name]);
 
   const Comp = props.asChild ? Slot : "button";
