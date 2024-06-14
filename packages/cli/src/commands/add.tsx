@@ -229,11 +229,11 @@ export default class Add extends Command {
         await mkdir(componentDir, {recursive: true})
       }
       const installed = await getDirComponentInstalledFiles(componentObject, resolvedConfig)
-      const files = componentObject.files.filter((filename) => !installed.includes(filename))
-      if (files.length === 0 && !force) {
+      const requiredFiles = componentObject.files.filter((filename) => !installed.includes(filename))
+      if (requiredFiles.length === 0 && !force) {
         componentFileOra.succeed(`Component is already installed! (${componentDir})`)
       } else {
-        for await (const filename of files) {
+        for await (const filename of requiredFiles) {
           const componentFile = join(componentDir, filename)
           if (!existsSync(componentFile) || force) {
             const componentFileContentResponse = await safeFetch(
