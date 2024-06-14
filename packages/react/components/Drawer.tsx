@@ -49,13 +49,15 @@ const DrawerRoot = ({ children, closeThreshold, opened }: DrawerRootProps) => {
     opened: opened ?? DrawerContextInitial.opened,
     closeThreshold: closeThreshold ?? DrawerContextInitial.closeThreshold,
   });
+  const setState = state[1];
 
   useEffect(() => {
-    state[1]((prev) => ({
+    setState((prev) => ({
       ...prev,
       opened: opened ?? prev.opened,
       closeThreshold: closeThreshold ?? prev.closeThreshold,
     }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [closeThreshold, opened]);
 
   return (
@@ -300,7 +302,8 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
         window.removeEventListener("touchmove", onMouseMove);
         window.removeEventListener("touchend", onMouseUp);
       };
-    }, [state, dragState]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [state, dragState, position]);
 
     return (
       <div
