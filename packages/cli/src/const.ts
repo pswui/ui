@@ -36,7 +36,7 @@ export interface Config {
    */
   paths?: {
     components?: 'src/pswui/components' | string
-    lib?: 'src/pswui/lib.tsx' | string
+    lib?: 'src/pswui/lib' | string
   }
 }
 export type ResolvedConfig<T = Config> = {
@@ -49,7 +49,7 @@ export const DEFAULT_CONFIG = {
   },
   paths: {
     components: 'src/pswui/components',
-    lib: 'src/pswui/lib.tsx',
+    lib: 'src/pswui/lib',
   },
 }
 export const configZod = z.object({
