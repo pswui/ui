@@ -1,9 +1,10 @@
 import {Command, Flags} from '@oclif/core'
-import {getAvailableComponentNames, getRegistry, getComponentURL, getComponentRealname} from '../helpers/registry.js'
 import ora from 'ora'
-import treeify from 'treeify'
+import {asTree} from 'treeify'
+
 import {loadConfig, validateConfig} from '../helpers/config.js'
 import {getComponentsInstalled} from '../helpers/path.js'
+import {getAvailableComponentNames, getComponentRealname, getComponentURL, getRegistry} from '../helpers/registry.js'
 
 export default class List extends Command {
   static override description = 'Prints all available components in registry and components installed in this project.'
@@ -11,9 +12,9 @@ export default class List extends Command {
   static override examples = ['<%= config.bin %> <%= command.id %>']
 
   static override flags = {
+    config: Flags.string({char: 'p', description: 'path to config'}),
     registry: Flags.string({char: 'r', description: 'override registry url'}),
     url: Flags.boolean({char: 'u', description: 'include component file URL'}),
-    config: Flags.string({char: 'p', description: 'path to config'}),
   }
 
   public async run(): Promise<void> {
@@ -28,25 +29,27 @@ export default class List extends Command {
     if (flags.registry) {
       this.log(`Using ${flags.registry} for registry.`)
     }
+
     const unsafeRegistry = await getRegistry(flags.registry)
     if (!unsafeRegistry.ok) {
       registrySpinner.fail(unsafeRegistry.message)
       return
     }
-    const registry = unsafeRegistry.registry
+
+    const {registry} = unsafeRegistry
     registrySpinner.succeed(`Fetched ${Object.keys(registry.components).length} components.`)
 
     const names = await getAvailableComponentNames(registry)
 
     getInstalledSpinner.start()
     const installedNames = await getComponentsInstalled(
-      await Promise.all(names.map(async (name) => await getComponentRealname(registry, name))),
+      await Promise.all(names.map(async (name) => getComponentRealname(registry, name))),
       loadedConfig,
     )
     getInstalledSpinner.succeed(`Got ${installedNames.length} installed components.`)
 
-    let final: Record<string, {URL?: string; installed: 'yes' | 'no'}> = {}
-    for (const name of names) {
+    let final: Record<string, {URL?: string; installed: 'no' | 'yes'}> = {}
+    for await (const name of names) {
       const installed = installedNames.includes(await getComponentRealname(registry, name)) ? 'yes' : 'no'
       if (flags.url) {
         const url = await getComponentURL(registry, name)
@@ -57,6 +60,6 @@ export default class List extends Command {
     }
 
     this.log('AVAILABLE COMPONENTS')
-    this.log(treeify.asTree(final, true, true))
+    this.log(asTree(final, true, true))
   }
 }

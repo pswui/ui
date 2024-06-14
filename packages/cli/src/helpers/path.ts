@@ -1,18 +1,26 @@
-import {ResolvedConfig} from '../const.js'
-import {readdir} from 'node:fs/promises'
 import {existsSync} from 'node:fs'
-import {basename, dirname, extname, join} from 'node:path'
+import {readdir} from 'node:fs/promises'
+import path from 'node:path'
+
+import {ResolvedConfig} from '../const.js'
 
 export async function getComponentsInstalled(components: string[], config: ResolvedConfig) {
-  const componentPath = join(process.cwd(), config.paths.components)
+  const componentPath = path.join(process.cwd(), config.paths.components)
   if (existsSync(componentPath)) {
     const dir = await readdir(componentPath)
-    return dir.reduce((prev, current) => (components.includes(current) ? [...prev, current] : prev), [] as string[])
-  } else {
-    return []
+    const dirOnlyContainsComponent = []
+    for (const fileName of dir) {
+      if (components.includes(fileName)) {
+        dirOnlyContainsComponent.push(fileName)
+      }
+    }
+
+    return dirOnlyContainsComponent
   }
+
+  return []
 }
 
-export async function changeExtension(path: string, extension: string): Promise<string> {
-  return join(dirname(path), basename(path, extname(path)) + extension)
+export async function changeExtension(_path: string, extension: string): Promise<string> {
+  return path.join(path.dirname(_path), path.basename(_path, path.extname(_path)) + extension)
 }

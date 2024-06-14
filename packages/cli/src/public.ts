@@ -4,4 +4,6 @@ function buildConfig(config: Config): Config {
   return config
 }
 
-export {Config, buildConfig}
+export {buildConfig}
+
+export {Config} from './const.js'

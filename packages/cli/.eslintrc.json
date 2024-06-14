@@ -1,3 +1,92 @@
 {
-  "extends": ["oclif", "oclif-typescript", "prettier"]
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "xo-space",
+    "plugin:n/recommended",
+    "plugin:unicorn/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "plugin:perfectionist/recommended-natural",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "n",
+    "unicorn",
+    "import"
+  ],
+  "rules": {
+    "capitalized-comments": 0,
+    "comma-dangle": ["error", "always-multiline"],
+    "default-case": 0,
+    "no-multi-spaces": 0,
+    "n/shebang": 0,
+    "curly": 0,
+    "quotes": ["error","single",{
+      "avoidEscape": true
+    }],
+    "semi": ["error","never"],
+    "unicorn/prevent-abbreviations": "off",
+    "unicorn/no-await-expression-member": "off",
+    "unicorn/no-null": "off",
+    "unicorn/prefer-module": "warn",
+    "logical-assignment-operators": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "@typescript-eslint/no-useless-constructor": "error",
+    "@typescript-eslint/no-var-requires": "off",
+    "import/no-unresolved": "error",
+    "import/default": "warn",
+    "n/no-missing-import": "off",
+    "n/no-unsupported-features/es-syntax": "off",
+    "no-unused-expressions": "off",
+    "no-useless-constructor":  "off",
+    "perfectionist/sort-classes": [
+      "error",
+      {
+        "groups": [
+          "index-signature",
+          "static-property",
+          "property",
+          "private-property",
+          "constructor",
+          "static-method",
+          "static-private-method",
+          ["get-method", "set-method"],
+          "method",
+          "private-method",
+          "unknown"
+        ],
+        "order": "asc",
+        "type": "alphabetical"
+      }
+    ],
+    "valid-jsdoc": ["warn", {
+      "requireParamType": false,
+      "requireReturnType": false
+    }]
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [
+        ".ts", ".tsx"
+      ]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
+  },
+  "globals": {
+    "describe": true,
+    "it": true
+  }
 }

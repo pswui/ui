@@ -1,6 +1,10 @@
+import fetch from 'node-fetch'
+
 import {REGISTRY_URL, Registry} from '../const.js'
 
-export async function getRegistry(REGISTRY_OVERRIDE_URL?: string): Promise<{ok: true; registry: Registry} | {ok: false; message: string}> {
+export async function getRegistry(
+  REGISTRY_OVERRIDE_URL?: string,
+): Promise<{message: string; ok: false} | {ok: true; registry: Registry}> {
   const registryResponse = await fetch(REGISTRY_OVERRIDE_URL ?? REGISTRY_URL)
 
   if (registryResponse.ok) {
@@ -8,11 +12,11 @@ export async function getRegistry(REGISTRY_OVERRIDE_URL?: string): Promise<{ok: 
       ok: true,
       registry: (await registryResponse.json()) as Registry,
     }
-  } else {
-    return {
-      ok: false,
-      message: `Error while fetching registry: ${registryResponse.status} ${registryResponse.statusText}`,
-    }
+  }
+
+  return {
+    message: `Error while fetching registry: ${registryResponse.status} ${registryResponse.statusText}`,
+    ok: false,
   }
 }
 
