@@ -19,6 +19,18 @@ export async function getRegistry(
   return registryResponse
 }
 
-export async function getComponentURL(registry: Registry, component: RegistryComponent): Promise<string> {
+export async function getComponentURL(
+  registry: Registry,
+  component: RegistryComponent & {type: 'file'},
+): Promise<string> {
   return registry.base + registry.paths.components.replace('{componentName}', component.name)
+}
+
+export async function getDirComponentURL(
+  registry: Registry,
+  component: RegistryComponent & {type: 'dir'},
+): Promise<string[]> {
+  const base = registry.base + registry.paths.components.replace('{componentName}', component.name)
+
+  return component.files.map((filename) => base + '/' + filename)
 }
