@@ -2,15 +2,16 @@ import {Args, Command, Flags} from '@oclif/core'
 import {loadConfig, validateConfig} from '../helpers/config.js'
 import {existsSync} from 'node:fs'
 import {mkdir, writeFile} from 'node:fs/promises'
-import {join, dirname} from 'node:path'
+import {join} from 'node:path'
 import {getAvailableComponentNames, getComponentRealname, getComponentURL, getRegistry} from '../helpers/registry.js'
 import ora from 'ora'
 import React, {ComponentPropsWithoutRef} from 'react'
 import {render, Box} from 'ink'
 import {SearchBox} from '../components/SearchBox.js'
-import {getComponentsInstalled} from '../helpers/path.js'
+import {getComponentsInstalled, getDirComponentInstalledFiles} from '../helpers/path.js'
 import {Choice} from '../components/Choice.js'
 import {colorize} from '@oclif/core/ux'
+import {safeFetch} from '../helpers/safeFetcher.js'
 
 function Generator() {
   let complete: boolean = false
@@ -100,12 +101,12 @@ export default class Add extends Command {
 
     const resolvedConfig = await validateConfig((message: string) => this.log(message), await loadConfig(flags.config))
     const componentFolder = join(process.cwd(), resolvedConfig.paths.components)
-    const libFile = join(process.cwd(), resolvedConfig.paths.lib)
+    const libFolder = join(process.cwd(), resolvedConfig.paths.lib)
     if (!existsSync(componentFolder)) {
       await mkdir(componentFolder, {recursive: true})
     }
-    if (!existsSync(dirname(libFile))) {
-      await mkdir(dirname(libFile), {recursive: true})
+    if (!existsSync(libFolder)) {
+      await mkdir(libFolder, {recursive: true})
     }
 
     const loadRegistryOra = ora('Fetching registry...').start()
@@ -183,39 +184,74 @@ export default class Add extends Command {
     }
 
     const libFileOra = ora('Installing required library...').start()
-    if (!existsSync(libFile)) {
-      const libFileContentResponse = await fetch(registry.base + registry.paths.lib)
-      if (!libFileContentResponse.ok) {
-        libFileOra.fail(
-          `Error while fetching library content: ${libFileContentResponse.status} ${libFileContentResponse.statusText}`,
-        )
-        return
+    let successCount = 0
+    for await (const libFile of registry.lib) {
+      const filePath = join(libFolder, libFile)
+      if (!existsSync(filePath)) {
+        const libFileContentResponse = await safeFetch(registry.base + registry.paths.lib.replace('libName', libFile))
+        if (!libFileContentResponse.ok) {
+          libFileOra.fail(libFileContentResponse.message)
+          return
+        }
+        const libFileContent = await libFileContentResponse.response.text()
+        await writeFile(filePath, libFileContent)
+        successCount++
       }
-      const libFileContent = await libFileContentResponse.text()
-      await writeFile(libFile, libFileContent)
-      libFileOra.succeed('Library is successfully installed!')
+    }
+    if (successCount > 1) {
+      libFileOra.succeed('Successfully installed library files!')
     } else {
-      libFileOra.succeed('Library is already installed!')
+      libFileOra.succeed('Library files are already installed!')
     }
 
     const componentFileOra = ora(`Installing ${name} component...`).start()
-    const componentFile = join(componentFolder, registry.components[name].name)
-    if (existsSync(componentFile) && !force) {
-      componentFileOra.succeed(`Component is already installed! (${componentFile})`)
-    } else {
-      const componentFileContentResponse = await fetch(await getComponentURL(registry, name))
-      if (!componentFileContentResponse.ok) {
-        componentFileOra.fail(
-          `Error while fetching component file content: ${componentFileContentResponse.status} ${componentFileContentResponse.statusText}`,
+    const componentObject = registry.components[name]
+    if (componentObject.type === 'file') {
+      const componentFile = join(componentFolder, registry.components[name].name)
+      if (existsSync(componentFile) && !force) {
+        componentFileOra.succeed(`Component is already installed! (${componentFile})`)
+      } else {
+        const componentFileContentResponse = await safeFetch(await getComponentURL(registry, name))
+        if (!componentFileContentResponse.ok) {
+          componentFileOra.fail(componentFileContentResponse.message)
+          return
+        }
+        const componentFileContent = (await componentFileContentResponse.response.text()).replaceAll(
+          /import\s+{[^}]*}\s+from\s+"@pswui-lib"/g,
+          (match) => match.replace(/@pswui-lib/, resolvedConfig.import.lib),
         )
-        return
+        await writeFile(componentFile, componentFileContent)
+        componentFileOra.succeed('Component is successfully installed!')
       }
-      const componentFileContent = (await componentFileContentResponse.text()).replaceAll(
-        /import\s+{[^}]*}\s+from\s+"@pswui-lib"/g,
-        (match) => match.replace(/@pswui-lib/, resolvedConfig.import.lib),
-      )
-      await writeFile(componentFile, componentFileContent)
-      componentFileOra.succeed('Component is successfully installed!')
+    } else if (componentObject.type === 'dir') {
+      const componentDir = join(componentFolder, componentObject.name)
+      if (!existsSync(componentDir)) {
+        await mkdir(componentDir, {recursive: true})
+      }
+      const installed = await getDirComponentInstalledFiles(componentObject, resolvedConfig)
+      if (installed.length === 0 && !force) {
+        componentFileOra.succeed(`Component is already installed! (${componentDir})`)
+      } else {
+        const files = componentObject.files.filter((filename) => !installed.includes(filename))
+        for await (const filename of files) {
+          const componentFile = join(componentDir, filename)
+          if (!existsSync(componentFile) || force) {
+            const componentFileContentResponse = await safeFetch(
+              await getComponentURL(registry, componentObject.name, filename),
+            )
+            if (!componentFileContentResponse.ok) {
+              componentFileOra.fail(componentFileContentResponse.message)
+              return
+            }
+            const componentFileContent = (await componentFileContentResponse.response.text()).replaceAll(
+              /import\s+{[^}]*}\s+from\s+"@pswui-lib"/g,
+              (match) => match.replace(/@pswui-lib/, resolvedConfig.import.lib),
+            )
+            await writeFile(componentFile, componentFileContent)
+          }
+        }
+        componentFileOra.succeed('Component is successfully installed!')
+      }
     }
 
     this.log('Now you can import the component.')
