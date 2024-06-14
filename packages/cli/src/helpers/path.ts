@@ -13,7 +13,7 @@ export async function getDirComponentRequiredFiles<T extends RegistryComponent &
     return componentObject.files
   }
 
-  const dir = await readdir(componentPath):w
+  const dir = await readdir(componentPath)
 
   return componentObject.files.map((filename) => !dir.includes(filename))
 }
