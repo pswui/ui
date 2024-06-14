@@ -3,12 +3,12 @@ import {loadConfig, validateConfig} from '../helpers/config.js'
 import {existsSync} from 'node:fs'
 import {mkdir, writeFile} from 'node:fs/promises'
 import {join} from 'node:path'
-import {getAvailableComponentNames, getComponentRealname, getComponentURL, getRegistry} from '../helpers/registry.js'
+import {getAvailableComponentNames, getComponentURL, getRegistry} from '../helpers/registry.js'
 import ora from 'ora'
 import React, {ComponentPropsWithoutRef} from 'react'
 import {render, Box} from 'ink'
 import {SearchBox} from '../components/SearchBox.js'
-import {getComponentsInstalled, getDirComponentInstalledFiles} from '../helpers/path.js'
+import {getDirComponentRequiredFiles, checkComponentInstalled} from '../helpers/path.js'
 import {Choice} from '../components/Choice.js'
 import {colorize} from '@oclif/core/ux'
 import {safeFetch} from '../helpers/safeFetcher.js'
@@ -121,15 +121,15 @@ export default class Add extends Command {
     const registry = unsafeRegistry.registry
     const componentNames = await getAvailableComponentNames(registry)
     loadRegistryOra.succeed(`Successfully fetched registry! (${componentNames.length} components)`)
-    const componentRealNames = await Promise.all(
-      componentNames.map(async (name) => await getComponentRealname(registry, name)),
-    )
-    const installed = await getComponentsInstalled(componentRealNames, resolvedConfig)
-    const searchBoxComponent = componentNames.map((name, index) => ({
-      displayName: installed.includes(componentRealNames[index]) ? `${name} (installed)` : name,
-      key: name,
-      installed: installed.includes(componentRealNames[index]),
-    }))
+    const searchBoxComponent: {displayName: string; key: string; installed: boolean}[] = []
+    for await (const name of componentNames) {
+      const installed = await checkComponentInstalled(registry.components[name], resolvedConfig)
+      searchBoxComponent.push({
+        displayName: installed ? `${name} (installed)` : name,
+        key: name,
+        installed,
+      })
+    }
 
     let name: string | undefined = args.name?.toLowerCase?.()
     let requireForce: boolean =
@@ -228,8 +228,7 @@ export default class Add extends Command {
       if (!existsSync(componentDir)) {
         await mkdir(componentDir, {recursive: true})
       }
-      const installed = await getDirComponentInstalledFiles(componentObject, resolvedConfig)
-      const requiredFiles = componentObject.files.filter((filename) => !installed.includes(filename))
+      const requiredFiles = await getDirComponentRequiredFiles(componentObject, resolvedConfig)
       if (requiredFiles.length === 0 && !force) {
         componentFileOra.succeed(`Component is already installed! (${componentDir})`)
       } else {
