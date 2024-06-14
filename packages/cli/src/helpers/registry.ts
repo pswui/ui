@@ -7,7 +7,7 @@ export async function getRegistry(
   const registryResponse = await safeFetch(REGISTRY_URL(branch ?? 'main'))
 
   if (registryResponse.ok) {
-    const registryJson = registryResponse.json as Registry
+    const registryJson = (await registryResponse.response.json()) as Registry
     registryJson.base = registryJson.base.replace('{branch}', branch ?? 'main')
 
     return {
