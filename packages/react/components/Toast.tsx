@@ -307,7 +307,7 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>((props, ref) => {
       {ReactDOM.createPortal(
         <div
           {...otherPropsExtracted}
-          data-toaster-root
+          data-toaster-root={true}
           className={toasterVariant(variantProps)}
           ref={(el) => {
             internalRef.current = el;
