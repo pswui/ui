@@ -79,7 +79,7 @@ const [drawerOverlayVariant, resolveDrawerOverlayVariantProps] = vcn({
   base: "fixed inset-0 transition-[backdrop-filter] duration-75",
   variants: {
     opened: {
-      true: "pointer-events-auto select-auto",
+      true: "pointer-events-auto select-auto touch-none", // touch-none to prevent outside scrolling
       false: "pointer-events-none select-none",
     },
   },
