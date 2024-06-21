@@ -146,7 +146,7 @@ const drawerContentColors = {
 };
 
 const [drawerContentVariant, resolveDrawerContentVariantProps] = vcn({
-  base: `fixed ${drawerContentColors.background} ${drawerContentColors.border} transition-all p-4 flex flex-col justify-between gap-8`,
+  base: `fixed ${drawerContentColors.background} ${drawerContentColors.border} transition-all p-4 flex flex-col justify-between gap-8 overflow-auto`,
   variants: {
     position: {
       top: "top-0 inset-x-0 w-full max-w-screen rounded-t-lg border-b-2",
