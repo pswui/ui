@@ -184,12 +184,16 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
       ...props,
       opened,
     });
-    const { children, ...otherPropsExtracted } = otherPropsCompressed;
+    const { children, onClick, ...otherPropsExtracted } = otherPropsCompressed;
     return (
       <div
         {...otherPropsExtracted}
         ref={ref}
         className={dialogContentVariant(variantProps)}
+        onClick={(e) => {
+          e.stopPropagation()
+          onClick?.(e)
+        }}
       >
         {children}
       </div>
