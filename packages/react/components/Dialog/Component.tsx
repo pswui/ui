@@ -170,11 +170,11 @@ const [dialogContentVariant, resolveDialogContentVariant] = vcn({
   },
 });
 
-interface DialogContent
+interface DialogContentProps
   extends React.ComponentPropsWithoutRef<"div">,
     Omit<VariantProps<typeof dialogContentVariant>, "opened"> {}
 
-const DialogContent = React.forwardRef<HTMLDivElement, DialogContent>(
+const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
   (props, ref) => {
     const [{ opened }] = useDialogContext();
     const [variantProps, otherPropsCompressed] = resolveDialogContentVariant({
