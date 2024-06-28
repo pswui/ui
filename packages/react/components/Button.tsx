@@ -26,7 +26,7 @@ const colors = {
 };
 
 const [buttonVariants, resolveVariants] = vcn({
-  base: `w-fit flex flex-row items-center justify-between rounded-md outline outline-1 outline-transparent outline-offset-2 ${colors.outline.focus} transition-all`,
+  base: `w-fit flex flex-row items-center justify-between rounded-md outline outline-1 outline-transparent outline-offset-2 ${colors.outline.focus} transition-all cursor-pointer`,
   variants: {
     size: {
       link: "p-0 text-base",
