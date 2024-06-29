@@ -10,6 +10,7 @@
     "components"
   ],
   "scripts": {
+    "postinstall": "lefthook install",
     "react": "yarn workspace react",
     "cli": "yarn workspace @psw-ui/cli",
     "react:build": "yarn workspace react build",
@@ -17,5 +18,9 @@
     "cli:build": "yarn workspace @psw-ui/cli build"
   },
   "private": true,
-  "packageManager": "yarn@4.2.2+sha512.c44e283c54e02de9d1da8687025b030078c1b9648d2895a65aab8e64225bfb7becba87e1809fc0b4b6778bbd47a1e2ab6ac647de4c5e383a53a7c17db6c3ff4b"
+  "packageManager": "yarn@4.2.2+sha512.c44e283c54e02de9d1da8687025b030078c1b9648d2895a65aab8e64225bfb7becba87e1809fc0b4b6778bbd47a1e2ab6ac647de4c5e383a53a7c17db6c3ff4b",
+  "devDependencies": {
+    "@biomejs/biome": "1.8.3",
+    "lefthook": "^1.6.18"
+  }
 }
