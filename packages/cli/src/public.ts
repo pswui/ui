@@ -1,9 +1,9 @@
-import {Config} from './const.js'
+import type { Config } from "./const.js";
 
 function buildConfig(config: Config): Config {
-  return config
+  return config;
 }
 
-export {buildConfig}
+export { buildConfig };
 
-export {Config} from './const.js'
+export { Config } from "./const.js";
