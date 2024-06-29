@@ -216,6 +216,22 @@ export function vcn<
      * Takes any props (including className), and returns the class name.
      * If there is no variant specified in props, then it will fallback to preset, and then default.
      *
+     *
+     * Process priority of variant will be:
+     *
+     * --- Processed as string
+     * 1. Base
+     *
+     * --- Processed as object (it will ignore rest of "not duplicated classname" in lower priority)
+     * 2. Default
+     * 3. Preset (overriding default)
+     * 4. Variant props via component (overriding preset)
+     *
+     * --- Processed as string
+     * 5. Dynamic classNames using variant props
+     * 6. User's className (overriding dynamic)
+     *
+     *
      * @param variantProps - The variant props including className.
      * @returns The class name.
      */
