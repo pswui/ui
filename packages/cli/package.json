@@ -35,15 +35,9 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "files": [
-    "/bin",
-    "/dist",
-    "/oclif.manifest.json"
-  ],
+  "files": ["/bin", "/dist", "/oclif.manifest.json"],
   "homepage": "https://ui.psw.kr",
-  "keywords": [
-    "oclif"
-  ],
+  "keywords": ["oclif"],
   "license": "MIT",
   "main": "dist/index.js",
   "type": "module",
@@ -51,9 +45,7 @@
     "bin": "pswui",
     "dirname": "pswui",
     "commands": "./dist/commands",
-    "plugins": [
-      "@oclif/plugin-help"
-    ],
+    "plugins": ["@oclif/plugin-help"],
     "topicSeparator": " ",
     "topics": {
       "hello": {
@@ -64,7 +56,7 @@
   "repository": "pswui/ui",
   "scripts": {
     "build": "shx rm -rf dist && tsc",
-    "lint": "eslint . --ext .ts",
+    "lint": "biome check --no-errors-on-unmatched",
     "prepack": "yarn build"
   },
   "types": "dist/index.d.ts"
