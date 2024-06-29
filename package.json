@@ -5,10 +5,7 @@
   "repository": "https://github.com/pswui/ui",
   "author": "p-sw <shinwoo.park@psw.kr>",
   "license": "MIT",
-  "workspaces": [
-    "packages/*",
-    "components"
-  ],
+  "workspaces": ["packages/*", "components"],
   "scripts": {
     "postinstall": "lefthook install",
     "react": "yarn workspace react",
