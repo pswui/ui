@@ -26,5 +26,5 @@ dist-ssr
 *storybook.log
 
 src
-!src/main.tsx
+src/main.tsx
 !src/tailwind.css
