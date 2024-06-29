@@ -63,6 +63,21 @@ type VariantKV<V extends VariantType> = {
 type VariantKVEntry<V extends VariantType> = [keyof V, BooleanString<keyof V[keyof V] & string>][]
 
 /**
+ * Takes VariantKV as parameter, return className string.
+ *
+ * @example
+ * vcn({
+ *   /* ... *\/
+ *   dynamics: [
+ *     ({ a, b }) => {
+ *       return a === "something" ? "asdf" : b
+ *     },
+ *   ]
+ * })
+ */
+type DynamicClassName<V extends VariantType> = (variantProps: VariantKV<V>) => string
+
+/**
  * Takes VariantType, and returns a type that represents the preset object.
  *
  * @example
@@ -99,6 +114,7 @@ export function vcn<V extends VariantType>(param: {
    */
   base?: string | undefined;
   variants: V;
+  dynamics?: DynamicClassName<V>[];
   defaults: VariantKV<V>;
   presets?: undefined;
 }): [
@@ -129,6 +145,7 @@ export function vcn<V extends VariantType, P extends PresetType<V>>(param: {
    */
   base?: string | undefined;
   variants: V /* VariantType */;
+  dynamics?: DynamicClassName<V>[];
   defaults: VariantKV<V>;
   presets: P;
 }): [
@@ -164,11 +181,13 @@ export function vcn<
 >({
   base,
   variants,
+  dynamics = [],
   defaults,
   presets,
 }: {
   base?: string | undefined;
   variants: V;
+  dynamics?: DynamicClassName<V>[];
   defaults: VariantKV<V>;
   presets?: P;
 }) {
@@ -227,6 +246,10 @@ export function vcn<
 
       // make dynamics result
       const dynamicClasses: string[] = []
+      for (const dynamicFunction of dynamics) {
+        dynamicClasses.push(dynamicFunction(kv));
+      }
+
       return __transformer__(kv, dynamicClasses, className);
     },
 
