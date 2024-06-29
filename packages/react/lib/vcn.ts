@@ -58,6 +58,11 @@ type VariantKV<V extends VariantType> = {
 };
 
 /**
+ * Used for safely casting `Object.entries(<VariantKV>)`
+ */
+type VariantKVEntry<V extends VariantType> = [keyof V, BooleanString<keyof V[keyof V] & string>][]
+
+/**
  * Takes VariantType, and returns a type that represents the preset object.
  *
  * @example
@@ -167,6 +172,26 @@ export function vcn<
   defaults: VariantKV<V>;
   presets?: P;
 }) {
+  /**
+   * --Internal utility function--
+   * After transforming props to final version (which means "after overriding default, preset, and variant props sent via component props")
+   * It turns final version of variant props to className
+   */
+  function __transformer__(final: VariantKV<V>, dynamics: string[], propClassName?: string): string {
+    const classNames: string[] = [];
+
+    for (const [variantName, variantKey] of (Object.entries(final) as VariantKVEntry<V>)) {
+      classNames.push(variants[variantName][variantKey.toString()])
+    }
+
+    return twMerge(
+      base,
+      ...classNames,
+      ...dynamics,
+      propClassName,
+    )
+  }
+
   return [
     /**
      * Takes any props (including className), and returns the class name.
@@ -180,42 +205,31 @@ export function vcn<
         VariantKV<V>
       >,
     ) => {
-      const { className, preset, ...otherVariantProps } = variantProps;
+      const { className, preset, ..._otherVariantProps } = variantProps;
 
-      const currentPreset: P[keyof P] | null =
-        presets && preset ? (presets as NonNullable<P>)[preset] ?? null : null;
-      const presetVariantKeys: (keyof V)[] = Object.keys(currentPreset ?? {});
-      return twMerge(
-        base,
-        ...(
-          Object.entries(defaults) as [keyof V, keyof V[keyof V] & string][]
-        ).map<string>(([variantKey, defaultValue]) => {
-          // Omit<Partial<VariantKV<V>> & { className; preset; }, className | preset> = Partial<VariantKV<V>> (safe to cast)
-          // Partial<VariantKV<V>>[keyof V] => { [k in keyof V]?: BooleanString<keyof V[keyof V] & string> } => BooleanString<keyof V[keyof V]>
+      // Omit<Partial<VariantKV<V>> & { className; preset; }, className | preset> = Partial<VariantKV<V>> (safe to cast)
+      // We all know `keyof V` = string, right? (but typescript says it's not, so.. attacking typescript with unknown lol)
+      const otherVariantProps = _otherVariantProps as unknown as Partial<VariantKV<V>>
 
-          const directVariantValue: (keyof V[keyof V] & string) | undefined = (
-            otherVariantProps as unknown as Partial<VariantKV<V>>
-          )[variantKey]?.toString?.(); // BooleanString<> -> string (safe to index V[keyof V])
+      const kv: VariantKV<V> = { ...defaults };
 
-          const currentPresetVariantValue:
-            | (keyof V[keyof V] & string)
-            | undefined =
-            !!currentPreset && presetVariantKeys.includes(variantKey)
-              ? (currentPreset as Partial<VariantKV<V>>)[
-                  variantKey
-                ]?.toString?.()
-              : undefined;
+      // Preset Processing
+      if (presets && preset && preset in presets) {
+        for (const [variantName, variantKey] of (Object.entries((presets)[preset]) as VariantKVEntry<V>)) {
+          kv[variantName] = variantKey
+        }
+      }
 
-          const variantValue: keyof V[keyof V] & string =
-            directVariantValue ?? currentPresetVariantValue ?? defaultValue;
-          return variants[variantKey][variantValue];
-        }),
-        (
-          currentPreset as Partial<VariantKV<V>> | null
-        )?.className?.toString?.(), // preset's classname comes after user's variant props? huh..
-        className,
-      );
+      // VariantProps Processing
+      for (const [variantName, variantKey] of (Object.entries(otherVariantProps) as VariantKVEntry<V>)) {
+        kv[variantName] = variantKey
+      }
+
+      // make dynamics result
+      const dynamicClasses: string[] = []
+      return __transformer__(kv, dynamicClasses, className);
     },
+
     /**
      * Takes any props, parse variant props and other props.
      * If `options.excludeA` is true, then it will parse `A` as "other" props.
