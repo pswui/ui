@@ -60,7 +60,10 @@ type VariantKV<V extends VariantType> = {
 /**
  * Used for safely casting `Object.entries(<VariantKV>)`
  */
-type VariantKVEntry<V extends VariantType> = [keyof V, BooleanString<keyof V[keyof V] & string>][]
+type VariantKVEntry<V extends VariantType> = [
+  keyof V,
+  BooleanString<keyof V[keyof V] & string>,
+][];
 
 /**
  * Takes VariantKV as parameter, return className string.
@@ -75,7 +78,9 @@ type VariantKVEntry<V extends VariantType> = [keyof V, BooleanString<keyof V[key
  *   ]
  * })
  */
-type DynamicClassName<V extends VariantType> = (variantProps: VariantKV<V>) => string
+type DynamicClassName<V extends VariantType> = (
+  variantProps: VariantKV<V>,
+) => string;
 
 /**
  * Takes VariantType, and returns a type that represents the preset object.
@@ -129,7 +134,7 @@ export function vcn<V extends VariantType>(param: {
   /**
    * Any Props -> Variant Props, Other Props
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: using unknown causes error `Index signature for type 'string' is missing in type --Props`.
   <AnyPropBeforeResolve extends Record<string, any>>(
     anyProps: AnyPropBeforeResolve,
   ) => [
@@ -161,7 +166,7 @@ export function vcn<V extends VariantType, P extends PresetType<V>>(param: {
   /**
    * Any Props -> Variant Props, Other Props
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: using unknown causes error `Index signature for type 'string' is missing in type --Props`.
   <AnyPropBeforeResolve extends Record<string, any>>(
     anyProps: AnyPropBeforeResolve,
   ) => [
@@ -196,19 +201,20 @@ export function vcn<
    * After transforming props to final version (which means "after overriding default, preset, and variant props sent via component props")
    * It turns final version of variant props to className
    */
-  function __transformer__(final: VariantKV<V>, dynamics: string[], propClassName?: string): string {
+  function __transformer__(
+    final: VariantKV<V>,
+    dynamics: string[],
+    propClassName?: string,
+  ): string {
     const classNames: string[] = [];
 
-    for (const [variantName, variantKey] of (Object.entries(final) as VariantKVEntry<V>)) {
-      classNames.push(variants[variantName][variantKey.toString()])
+    for (const [variantName, variantKey] of Object.entries(
+      final,
+    ) as VariantKVEntry<V>) {
+      classNames.push(variants[variantName][variantKey.toString()]);
     }
 
-    return twMerge(
-      base,
-      ...classNames,
-      ...dynamics,
-      propClassName,
-    )
+    return twMerge(base, ...classNames, ...dynamics, propClassName);
   }
 
   return [
@@ -244,24 +250,31 @@ export function vcn<
 
       // Omit<Partial<VariantKV<V>> & { className; preset; }, className | preset> = Partial<VariantKV<V>> (safe to cast)
       // We all know `keyof V` = string, right? (but typescript says it's not, so.. attacking typescript with unknown lol)
-      const otherVariantProps = _otherVariantProps as unknown as Partial<VariantKV<V>>
+      const otherVariantProps = _otherVariantProps as unknown as Partial<
+        VariantKV<V>
+      >;
 
       const kv: VariantKV<V> = { ...defaults };
 
       // Preset Processing
       if (presets && preset && preset in presets) {
-        for (const [variantName, variantKey] of (Object.entries((presets)[preset]) as VariantKVEntry<V>)) {
-          kv[variantName] = variantKey
+        for (const [variantName, variantKey] of Object.entries(
+          // typescript bug (casting to NonNullable<P> required)
+          (presets as NonNullable<P>)[preset],
+        ) as VariantKVEntry<V>) {
+          kv[variantName] = variantKey;
         }
       }
 
       // VariantProps Processing
-      for (const [variantName, variantKey] of (Object.entries(otherVariantProps) as VariantKVEntry<V>)) {
-        kv[variantName] = variantKey
+      for (const [variantName, variantKey] of Object.entries(
+        otherVariantProps,
+      ) as VariantKVEntry<V>) {
+        kv[variantName] = variantKey;
       }
 
       // make dynamics result
-      const dynamicClasses: string[] = []
+      const dynamicClasses: string[] = [];
       for (const dynamicFunction of dynamics) {
         dynamicClasses.push(dynamicFunction(kv));
       }

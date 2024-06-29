@@ -1,5 +1,5 @@
+import { type VariantProps, vcn } from "@pswui-lib";
 import React from "react";
-import { VariantProps, vcn } from "@pswui-lib";
 
 const switchColors = {
   background: {

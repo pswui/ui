@@ -1,5 +1,5 @@
+import { type AsChild, Slot, type VariantProps, vcn } from "@pswui-lib";
 import React, { useContext, useEffect, useRef } from "react";
-import { AsChild, Slot, VariantProps, vcn } from "@pswui-lib";
 
 interface IPopoverContext {
   opened: boolean;
@@ -119,7 +119,7 @@ const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
       return () => {
         document.removeEventListener("mousedown", handleOutsideClick);
       };
-    }, [internalRef, setState]);
+    }, [setState]);
 
     return (
       <div
@@ -130,7 +130,11 @@ const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
         })}
         ref={(el) => {
           internalRef.current = el;
-          typeof ref === "function" ? ref(el) : ref && (ref.current = el);
+          if (typeof ref === "function") {
+            ref(el);
+          } else if (ref) {
+            ref.current = el;
+          }
         }}
       >
         {children}

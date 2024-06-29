@@ -1,4 +1,4 @@
-import { VariantProps, vcn } from "@pswui-lib";
+import { type VariantProps, vcn } from "@pswui-lib";
 
 const toastColors = {
   background: "bg-white dark:bg-black",

@@ -1,8 +1,9 @@
+import { type AsChild, Slot, type VariantProps, vcn } from "@pswui-lib";
 import React from "react";
-import { vcn, VariantProps, Slot, AsChild } from "@pswui-lib";
 
 const colors = {
-  disabled: "disabled:brightness-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:saturate-50",
+  disabled:
+    "disabled:brightness-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:saturate-50",
   outline: {
     focus: "dark:focus-visible:outline-white/20 focus-visible:outline-black/10",
   },
@@ -118,7 +119,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       className: buttonVariants(variantProps),
     };
 
-    return <Comp ref={ref} {...compProps} />;
+    return (
+      <Comp
+        ref={ref}
+        {...compProps}
+      />
+    );
   },
 );
 

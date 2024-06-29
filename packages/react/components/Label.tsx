@@ -1,5 +1,5 @@
+import { type VariantProps, vcn } from "@pswui-lib";
 import React from "react";
-import { VariantProps, vcn } from "@pswui-lib";
 
 const [labelVariant, resolveLabelVariantProps] = vcn({
   base: "has-[input[disabled]]:brightness-75 has-[input[disabled]]:cursor-not-allowed has-[input:invalid]:text-red-500",

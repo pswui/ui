@@ -1,12 +1,12 @@
+import { Slot, type VariantProps, vcn } from "@pswui-lib";
 import React, { useState } from "react";
-import { Slot, VariantProps, vcn } from "@pswui-lib";
 import ReactDOM from "react-dom";
 
 import {
   DialogContext,
+  type IDialogContext,
   initialDialogContext,
   useDialogContext,
-  IDialogContext,
 } from "./Context";
 
 /**
@@ -114,7 +114,11 @@ const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlay>(
               onClick?.(e);
             }}
           >
-            <div className={"w-screen max-w-full min-h-screen flex flex-col justify-center items-center"}>
+            <div
+              className={
+                "w-screen max-w-full min-h-screen flex flex-col justify-center items-center"
+              }
+            >
               {/* Layer for overflow positioning */}
               {children}
             </div>
@@ -191,8 +195,8 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
         ref={ref}
         className={dialogContentVariant(variantProps)}
         onClick={(e) => {
-          e.stopPropagation()
-          onClick?.(e)
+          e.stopPropagation();
+          onClick?.(e);
         }}
       >
         {children}

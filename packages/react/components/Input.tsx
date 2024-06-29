@@ -1,5 +1,5 @@
+import { type VariantProps, vcn } from "@pswui-lib";
 import React from "react";
-import { VariantProps, vcn } from "@pswui-lib";
 
 const inputColors = {
   background: {
@@ -92,7 +92,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const innerRef = React.useRef<HTMLInputElement | null>(null);
 
   React.useEffect(() => {
-    if (innerRef && innerRef.current) {
+    if (innerRef?.current) {
       innerRef.current.setCustomValidity(invalid ?? "");
     }
   }, [invalid]);

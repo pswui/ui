@@ -1,5 +1,5 @@
-import { twMerge } from "tailwind-merge";
 import React from "react";
+import { twMerge } from "tailwind-merge";
 
 /**
  * Merges the react props.
@@ -60,14 +60,15 @@ function mergeReactProps(
  * @returns The single ref.
  */
 function combinedRef<I>(refs: React.Ref<I | null>[]) {
-  return (instance: I | null) =>
-    refs.forEach((ref) => {
+  return (instance: I | null) => {
+    for (const ref of refs) {
       if (ref instanceof Function) {
         ref(instance);
       } else if (ref) {
         (ref as React.MutableRefObject<I | null>).current = instance;
       }
-    });
+    }
+  };
 }
 
 interface SlotProps {

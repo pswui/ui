@@ -1,20 +1,20 @@
+import { type VariantProps, vcn } from "@pswui-lib";
 import React, { useEffect, useId, useRef } from "react";
 import ReactDOM from "react-dom";
-import { VariantProps, vcn } from "@pswui-lib";
 
-import { toastVariant } from "./Variant";
 import {
-  ToastOption,
-  toasts,
-  subscribeSingle,
-  getSingleSnapshot,
-  notifySingle,
+  type ToastOption,
   close,
-  notify,
   defaultToastOption,
-  subscribe,
+  getSingleSnapshot,
   getSnapshot,
+  notify,
+  notifySingle,
+  subscribe,
+  subscribeSingle,
+  toasts,
 } from "./Store";
+import { toastVariant } from "./Variant";
 
 const ToastTemplate = ({
   id,
@@ -74,7 +74,7 @@ const ToastTemplate = ({
         );
         transitionDuration = style
           ? {
-              value: parseFloat(style[1] ?? "0"),
+              value: Number.parseFloat(style[1] ?? "0"),
               unit: style[3] ?? style[2] ?? "s",
             }
           : null;
@@ -96,7 +96,7 @@ const ToastTemplate = ({
       }, calculatedTransitionDuration);
       return () => clearTimeout(timeout);
     }
-  }, [id, toastData.life, toastData.closeTimeout, toastData.closeButton]);
+  }, [id, toastData.life, toastData.closeTimeout]);
 
   return (
     <div
@@ -107,13 +107,18 @@ const ToastTemplate = ({
       ref={ref}
     >
       {toastData.closeButton && (
-        <button className="absolute top-2 right-2" onClick={() => close(id)}>
+        <button
+          className="absolute top-2 right-2"
+          onClick={() => close(id)}
+          type={"button"}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="1.2rem"
             height="1.2rem"
             viewBox="0 0 24 24"
           >
+            <title>Close</title>
             <path
               fill="currentColor"
               d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"
@@ -167,7 +172,7 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>((props, ref) => {
   if (toasterInstance && id !== toasterInstance.id) {
     if (process.env.NODE_ENV === "development" && !muteDuplicationWarning) {
       console.warn(
-        `Multiple Toaster instances detected. Only one Toaster is allowed.`,
+        "Multiple Toaster instances detected. Only one Toaster is allowed.",
       );
     }
     return null;

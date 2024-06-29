@@ -1,7 +1,7 @@
-import { AsChild, Slot, VariantProps, vcn } from "@pswui-lib";
+import { type AsChild, Slot, type VariantProps, vcn } from "@pswui-lib";
 import React from "react";
 
-import { TabContextBody, TabContext, Tab } from "./Context";
+import { type Tab, TabContext, type TabContextBody } from "./Context";
 
 interface TabProviderProps {
   defaultName: string;
@@ -30,7 +30,12 @@ interface TabListProps
 const TabList = (props: TabListProps) => {
   const [variantProps, restProps] = resolveTabListVariantProps(props);
 
-  return <div className={TabListVariant(variantProps)} {...restProps} />;
+  return (
+    <div
+      className={TabListVariant(variantProps)}
+      {...restProps}
+    />
+  );
 };
 
 const [TabTriggerVariant, resolveTabTriggerVariantProps] = vcn({
@@ -76,7 +81,7 @@ const TabTrigger = (props: TabTriggerProps) => {
       });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name]);
+  }, [name, setContext]);
 
   const Comp = props.asChild ? Slot : "button";
 
@@ -119,18 +124,18 @@ const TabContent = (props: TabContentProps) => {
   const { name, ...restProps } = restPropsBeforeParse;
   const [context] = React.useContext(TabContext);
 
-  if (context.active[1] === name) {
-    return (
-      <Slot
-        className={tabContentVariant({
-          ...variantProps,
-        })}
-        {...restProps}
-      />
-    );
-  } else {
+  if (context.active[1] !== name) {
     return null;
   }
+
+  return (
+    <Slot
+      className={tabContentVariant({
+        ...variantProps,
+      })}
+      {...restProps}
+    />
+  );
 };
 
 export { TabProvider, TabList, TabTrigger, TabContent };

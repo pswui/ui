@@ -1,4 +1,4 @@
-import { addToast, update, close } from "./Store";
+import { addToast, close, update } from "./Store";
 
 export function useToast() {
   return {

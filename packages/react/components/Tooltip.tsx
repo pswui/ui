@@ -1,5 +1,5 @@
+import { type AsChild, Slot, type VariantProps, vcn } from "@pswui-lib";
 import React, { useState } from "react";
-import { AsChild, Slot, VariantProps, vcn } from "@pswui-lib";
 
 interface TooltipContextBody {
   position: "top" | "bottom" | "left" | "right";

@@ -1,4 +1,4 @@
-import { ToastBody } from "./Variant";
+import type { ToastBody } from "./Variant";
 
 export interface ToastOption {
   closeButton: boolean;
@@ -54,11 +54,11 @@ export function getSingleSnapshot(id: `${number}`) {
 }
 
 export function notify() {
-  subscribers.forEach((subscriber) => subscriber());
+  for (const subscriber of subscribers) subscriber();
 }
 
 export function notifySingle(id: `${number}`) {
-  toasts[id].subscribers.forEach((subscriber) => subscriber());
+  for (const subscriber of toasts[id].subscribers) subscriber();
 }
 
 export function close(id: `${number}`) {

@@ -1,13 +1,13 @@
+import { type AsChild, Slot, type VariantProps, vcn } from "@pswui-lib";
 import React, {
-  ComponentPropsWithoutRef,
-  TouchEvent as ReactTouchEvent,
+  type ComponentPropsWithoutRef,
+  type TouchEvent as ReactTouchEvent,
   forwardRef,
   useContext,
   useEffect,
   useRef,
   useState,
 } from "react";
-import { AsChild, Slot, VariantProps, vcn } from "@pswui-lib";
 import { createPortal } from "react-dom";
 
 interface IDrawerContext {
@@ -57,8 +57,7 @@ const DrawerRoot = ({ children, closeThreshold, opened }: DrawerRootProps) => {
       opened: opened ?? prev.opened,
       closeThreshold: closeThreshold ?? prev.closeThreshold,
     }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [closeThreshold, opened]);
+  }, [closeThreshold, opened, setState]);
 
   return (
     <DrawerContext.Provider value={state}>{children}</DrawerContext.Provider>
@@ -302,8 +301,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
         window.removeEventListener("touchmove", onMouseMove);
         window.removeEventListener("touchend", onMouseUp);
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [state, dragState, position]);
+    }, [state, setState, dragState, position]);
 
     return (
       <div

@@ -1,5 +1,5 @@
+import { type VariantProps, vcn } from "@pswui-lib";
 import React from "react";
-import { VariantProps, vcn } from "@pswui-lib";
 
 const checkboxColors = {
   background: {
@@ -99,10 +99,11 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             viewBox="0 0 24 24"
             className={`${checked ? "opacity-100" : "opacity-0"} transition-opacity duration-75 ease-in-out`}
           >
+            <title>checked</title>
             <path
               fill="currentColor"
               d="M21 7L9 19l-5.5-5.5l1.41-1.41L9 16.17L19.59 5.59z"
-            ></path>
+            />
           </svg>
         </label>
       </>
