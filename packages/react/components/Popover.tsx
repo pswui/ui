@@ -26,14 +26,20 @@ interface PopoverProps extends AsChild {
 }
 
 const Popover = ({ children, opened, asChild }: PopoverProps) => {
-  const state = React.useState<IPopoverContext>({
+  const [state, setState] = React.useState<IPopoverContext>({
     opened: opened ?? false,
   });
+
+  useEffect(() => {
+    if (opened !== undefined) {
+      setState((p) => ({ ...p, opened: opened }));
+    }
+  }, [opened]);
 
   const Comp = asChild ? Slot : "div";
 
   return (
-    <PopoverContext.Provider value={state}>
+    <PopoverContext.Provider value={[state, setState]}>
       <Comp className="relative">{children}</Comp>
     </PopoverContext.Provider>
   );
