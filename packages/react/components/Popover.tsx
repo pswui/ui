@@ -56,24 +56,23 @@ const popoverColors = {
 const [popoverContentVariant, resolvePopoverContentVariantProps] = vcn({
   base: `absolute transition-all duration-150 border rounded-lg p-0.5 [&>*]:w-full ${popoverColors.background} ${popoverColors.border}`,
   variants: {
+    direction: {
+      row: "",
+      col: "",
+    },
     anchor: {
-      topLeft:
-        "bottom-[calc(100%+var(--popover-offset))] right-[calc(100%+var(--popover-offset))] origin-bottom-right",
-      topCenter:
-        "bottom-[calc(100%+var(--popover-offset))] left-1/2 -translate-x-1/2 origin-bottom-center",
-      topRight:
-        "bottom-[calc(100%+var(--popover-offset))] left-[calc(100%+var(--popover-offset))] origin-bottom-left",
-      middleLeft: "top-1/2 translate-y-1/2 right-full origin-right",
-      middleCenter:
-        "top-1/2 translate-y-1/2 left-1/2 -translate-x-1/2 origin-center",
-      middleRight:
-        "top-1/2 translate-y-1/2 left-[calc(100%+var(--popover-offset))] origin-left",
-      bottomLeft:
-        "top-[calc(100%+var(--popover-offset))] right-[calc(100%+var(--popover-offset))] origin-top-right",
-      bottomCenter:
-        "top-[calc(100%+var(--popover-offset))] left-1/2 -translate-x-1/2 origin-top-center",
-      bottomRight:
-        "top-[calc(100%+var(--popover-offset))] left-[calc(100%+var(--popover-offset))] origin-top-left",
+      start: "",
+      middle: "",
+      end: "",
+    },
+    align: {
+      start: "",
+      middle: "",
+      end: "",
+    },
+    position: {
+      start: "",
+      end: "",
     },
     offset: {
       sm: "[--popover-offset:2px]",
@@ -81,15 +80,104 @@ const [popoverContentVariant, resolvePopoverContentVariantProps] = vcn({
       lg: "[--popover-offset:8px]",
     },
     opened: {
-      true: "opacity-1 scale-100",
+      true: "opacity-1 scale-100", // TODO: add pointer event disable
       false: "opacity-0 scale-75",
     },
   },
   defaults: {
-    anchor: "bottomCenter",
+    direction: "col",
+    anchor: "middle",
+    align: "middle",
+    position: "end",
     opened: false,
     offset: "md",
   },
+  dynamics: [
+    function originClass({ direction, anchor, position }) {
+      switch (`${direction} ${position} ${anchor}` as const) {
+        // left
+        case "row start start":
+          return "origin-top-right";
+        case "row start middle":
+          return "origin-right";
+        case "row start end":
+          return "origin-bottom-right";
+        // right
+        case "row end start":
+          return "origin-top-left";
+        case "row end middle":
+          return "origin-left";
+        case "row end end":
+          return "origin-bottom-left";
+        // top
+        case "col start start":
+          return "origin-bottom-left";
+        case "col start middle":
+          return "origin-bottom";
+        case "col start end":
+          return "origin-bottom-right";
+        // bottom
+        case "col end start":
+          return "origin-top-left";
+        case "col end middle":
+          return "origin-top";
+        case "col end end":
+          return "origin-top-right";
+      }
+    },
+    function basePositionClass({ position, direction }) {
+      switch (`${direction} ${position}` as const) {
+        case "col start":
+          return "bottom-[calc(100%+var(--popover-offset))]";
+        case "col end":
+          return "top-[calc(100%+var(--popover-offset))]";
+        case "row start":
+          return "right-[calc(100%+var(--popover-offset))]";
+        case "row end":
+          return "left-[calc(100%+var(--popover-offset))]";
+      }
+    },
+    function directionPositionClass({ direction, anchor, align }) {
+      switch (`${direction} ${anchor} ${align}` as const) {
+        case "col start start":
+          return "left-0";
+        case "col start middle":
+          return "left-1/2";
+        case "col start end":
+          return "left-full";
+        case "col middle start":
+          return "left-0 -translate-x-1/2";
+        case "col middle middle":
+          return "left-1/2 -translate-x-1/2";
+        case "col middle end":
+          return "right-0 translate-x-1/2";
+        case "col end start":
+          return "right-full";
+        case "col end middle":
+          return "right-1/2";
+        case "col end end":
+          return "right-0";
+        case "row start start":
+          return "top-0";
+        case "row start middle":
+          return "top-1/2";
+        case "row start end":
+          return "top-full";
+        case "row middle start":
+          return "top-0 -translate-y-1/2";
+        case "row middle middle":
+          return "top-1/2 -translate-y-1/2";
+        case "row middle end":
+          return "bottom-0 translate-y-1/2";
+        case "row end start":
+          return "bottom-full";
+        case "row end middle":
+          return "bottom-1/2";
+        case "row end end":
+          return "bottom-0";
+      }
+    },
+  ],
 });
 
 interface PopoverContentProps
