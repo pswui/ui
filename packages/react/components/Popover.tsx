@@ -2,6 +2,7 @@ import { type AsChild, Slot, type VariantProps, vcn } from "@pswui-lib";
 import React, { useContext, useEffect, useRef } from "react";
 
 interface IPopoverContext {
+  controlled: boolean;
   opened: boolean;
 }
 
@@ -10,6 +11,7 @@ const PopoverContext = React.createContext<
 >([
   {
     opened: false,
+    controlled: false,
   },
   () => {
     if (process.env.NODE_ENV && process.env.NODE_ENV === "development") {
@@ -28,12 +30,15 @@ interface PopoverProps extends AsChild {
 const Popover = ({ children, opened, asChild }: PopoverProps) => {
   const [state, setState] = React.useState<IPopoverContext>({
     opened: opened ?? false,
+    controlled: opened !== undefined,
   });
 
   useEffect(() => {
-    if (opened !== undefined) {
-      setState((p) => ({ ...p, opened: opened }));
-    }
+    setState((p) => ({
+      ...p,
+      controlled: opened !== undefined,
+      opened: opened !== undefined ? opened : p.opened,
+    }));
   }, [opened]);
 
   const Comp = asChild ? Slot : "div";
@@ -209,11 +214,12 @@ const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
           setState((prev) => ({ ...prev, opened: false }));
         }
       }
-      document.addEventListener("mousedown", handleOutsideClick);
+      !state.controlled &&
+        document.addEventListener("mousedown", handleOutsideClick);
       return () => {
         document.removeEventListener("mousedown", handleOutsideClick);
       };
-    }, [setState]);
+    }, [state.controlled, setState]);
 
     return (
       <div
