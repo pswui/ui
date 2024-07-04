@@ -309,7 +309,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
           ...variantProps,
           opened: true,
           className: dragState.isDragging
-            ? "transition-[width_0ms]"
+            ? "transition-[width] duration-0"
             : variantProps.className,
         })}
         style={
