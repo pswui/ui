@@ -230,7 +230,7 @@ const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
           ...variantProps,
           opened: state.opened,
         })}
-        ref={(el) => {
+        ref={(el: HTMLDivElement) => {
           internalRef.current = el;
           if (typeof ref === "function") {
             ref(el);
