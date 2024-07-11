@@ -129,6 +129,7 @@ const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlay>(
     );
   },
 );
+DialogOverlay.displayName = "DialogOverlay";
 
 /**
  * =========================
@@ -204,6 +205,7 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
     );
   },
 );
+DialogContent.displayName = "DialogContent";
 
 /**
  * =========================
@@ -267,6 +269,8 @@ const DialogHeader = React.forwardRef<HTMLElement, DialogHeaderProps>(
     );
   },
 );
+
+DialogHeader.displayName = "DialogHeader";
 
 /**
  * =========================
@@ -342,6 +346,7 @@ const DialogTitle = React.forwardRef<HTMLHeadingElement, DialogTitleProps>(
     );
   },
 );
+DialogTitle.displayName = "DialogTitle";
 
 const DialogSubtitle = React.forwardRef<
   HTMLHeadingElement,
@@ -360,6 +365,7 @@ const DialogSubtitle = React.forwardRef<
     </h2>
   );
 });
+DialogSubtitle.displayName = "DialogSubtitle";
 
 /**
  * =========================
@@ -401,6 +407,7 @@ const DialogFooter = React.forwardRef<HTMLDivElement, DialogFooterProps>(
     );
   },
 );
+DialogFooter.displayName = "DialogFooter";
 
 interface DialogControllers {
   context: IDialogContext;
