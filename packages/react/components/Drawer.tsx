@@ -138,6 +138,7 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
     );
   },
 );
+DrawerOverlay.displayName = "DrawerOverlay";
 
 const drawerContentColors = {
   background: "bg-white dark:bg-black",
@@ -374,6 +375,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
     );
   },
 );
+DrawerContent.displayName = "DrawerContent";
 
 const DrawerClose = forwardRef<
   HTMLButtonElement,
@@ -388,6 +390,7 @@ const DrawerClose = forwardRef<
     />
   );
 });
+DrawerClose.displayName = "DrawerClose";
 
 const [drawerHeaderVariant, resolveDrawerHeaderVariantProps] = vcn({
   base: "flex flex-col gap-2",
@@ -417,6 +420,7 @@ const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
     );
   },
 );
+DrawerHeader.displayName = "DrawerHeader";
 
 const [drawerBodyVariant, resolveDrawerBodyVariantProps] = vcn({
   base: "flex-grow",
@@ -444,6 +448,7 @@ const DrawerBody = forwardRef<HTMLDivElement, DrawerBodyProps>((props, ref) => {
     />
   );
 });
+DrawerBody.displayName = "DrawerBody";
 
 const [drawerFooterVariant, resolveDrawerFooterVariantProps] = vcn({
   base: "flex flex-row justify-end gap-2",
@@ -473,6 +478,7 @@ const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
     );
   },
 );
+DrawerFooter.displayName = "DrawerFooter";
 
 export {
   DrawerRoot,
