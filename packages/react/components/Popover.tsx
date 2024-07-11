@@ -200,7 +200,7 @@ const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
   (props, ref) => {
     const [variantProps, otherPropsCompressed] =
       resolvePopoverContentVariantProps(props);
-    const { children, ...otherPropsExtracted } = otherPropsCompressed;
+    const { children, asChild, ...otherPropsExtracted } = otherPropsCompressed;
     const [state, setState] = useContext(PopoverContext);
 
     const internalRef = useRef<HTMLDivElement | null>(null);
@@ -221,8 +221,10 @@ const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
       };
     }, [state.controlled, setState]);
 
+    const Comp = asChild ? Slot : "div";
+
     return (
-      <div
+      <Comp
         {...otherPropsExtracted}
         className={popoverContentVariant({
           ...variantProps,
@@ -238,7 +240,7 @@ const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
         }}
       >
         {children}
-      </div>
+      </Comp>
     );
   },
 );
