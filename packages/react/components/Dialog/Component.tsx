@@ -1,4 +1,9 @@
-import { Slot, type VariantProps, vcn } from "@pswui-lib";
+import {
+  ServerSideDocumentFallback,
+  Slot,
+  type VariantProps,
+  vcn,
+} from "@pswui-lib";
 import React, { type ReactNode, useState } from "react";
 import ReactDOM from "react-dom";
 
@@ -100,8 +105,9 @@ const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlay>(
     });
     const { children, closeOnClick, onClick, ...otherPropsExtracted } =
       otherPropsCompressed;
+
     return (
-      <>
+      <ServerSideDocumentFallback>
         {ReactDOM.createPortal(
           <div
             {...otherPropsExtracted}
@@ -125,7 +131,7 @@ const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlay>(
           </div>,
           document.body,
         )}
-      </>
+      </ServerSideDocumentFallback>
     );
   },
 );
