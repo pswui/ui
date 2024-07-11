@@ -21,7 +21,7 @@ const checkboxColors = {
 };
 
 const [checkboxVariant, resolveCheckboxVariantProps] = vcn({
-  base: `inline-block rounded-md ${checkboxColors.background.disabled} ${checkboxColors.background.default} ${checkboxColors.background.hover} ${checkboxColors.background.checked} ${checkboxColors.background.checkedHover} ${checkboxColors.background.disabledChecked} ${checkboxColors.background.disabledCheckedHover} has-[input[type="checkbox"]:disabled]:cursor-not-allowed transition-colors duration-75 ease-in-out`,
+  base: `inline-block rounded-md ${checkboxColors.background.disabled} ${checkboxColors.background.default} ${checkboxColors.background.hover} ${checkboxColors.background.checked} ${checkboxColors.background.checkedHover} ${checkboxColors.background.disabledChecked} ${checkboxColors.background.disabledCheckedHover} has-[input[type="checkbox"]:disabled]:cursor-not-allowed transition-colors duration-150 ease-in-out`,
   variants: {
     size: {
       base: "size-[1em] p-0 [&>svg]:size-[1em]",
