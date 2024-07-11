@@ -80,5 +80,6 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>((props, ref) => {
     </label>
   );
 });
+Switch.displayName = "Switch";
 
 export { Switch };
