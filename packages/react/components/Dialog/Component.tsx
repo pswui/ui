@@ -1,5 +1,5 @@
 import { Slot, type VariantProps, vcn } from "@pswui-lib";
-import React, { useState } from "react";
+import React, { type ReactNode, useState } from "react";
 import ReactDOM from "react-dom";
 
 import {
@@ -402,6 +402,33 @@ const DialogFooter = React.forwardRef<HTMLDivElement, DialogFooterProps>(
   },
 );
 
+interface DialogControllers {
+  context: IDialogContext;
+
+  setContext: React.Dispatch<React.SetStateAction<IDialogContext>>;
+  close: () => void;
+}
+
+interface DialogControllerProps {
+  children: (controllers: DialogControllers) => ReactNode;
+}
+
+const DialogController = (props: DialogControllerProps) => {
+  return (
+    <DialogContext.Consumer>
+      {([context, setContext]) =>
+        props.children({
+          context,
+          setContext,
+          close() {
+            setContext((p) => ({ ...p, opened: false }));
+          },
+        })
+      }
+    </DialogContext.Consumer>
+  );
+};
+
 export {
   DialogRoot,
   DialogTrigger,
@@ -412,4 +439,5 @@ export {
   DialogTitle,
   DialogSubtitle,
   DialogFooter,
+  DialogController,
 };
