@@ -18,12 +18,10 @@ const checkboxColors = {
     disabledCheckedHover:
       "has-[input[type='checkbox']:disabled:checked]:hover:bg-neutral-300 dark:has-[input[type='checkbox']:disabled:checked]:hover:bg-neutral-700",
   },
-  checkmark:
-    "text-black dark:text-white has-[input[type=checkbox]:disabled]:text-neutral-400 dark:has-[input[type=checkbox]:disabled]:text-neutral-500",
 };
 
 const [checkboxVariant, resolveCheckboxVariantProps] = vcn({
-  base: `inline-block rounded-md ${checkboxColors.checkmark} ${checkboxColors.background.disabled} ${checkboxColors.background.default} ${checkboxColors.background.hover} ${checkboxColors.background.checked} ${checkboxColors.background.checkedHover} ${checkboxColors.background.disabledChecked} ${checkboxColors.background.disabledCheckedHover} has-[input[type="checkbox"]:disabled]:cursor-not-allowed transition-colors duration-75 ease-in-out`,
+  base: `inline-block rounded-md ${checkboxColors.background.disabled} ${checkboxColors.background.default} ${checkboxColors.background.hover} ${checkboxColors.background.checked} ${checkboxColors.background.checkedHover} ${checkboxColors.background.disabledChecked} ${checkboxColors.background.disabledCheckedHover} has-[input[type="checkbox"]:disabled]:cursor-not-allowed transition-colors duration-75 ease-in-out`,
   variants: {
     size: {
       base: "size-[1em] p-0 [&>svg]:size-[1em]",
@@ -92,19 +90,6 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               }
             }}
           />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1em"
-            height="1em"
-            viewBox="0 0 24 24"
-            className={`${checked ? "opacity-100" : "opacity-0"} transition-opacity duration-75 ease-in-out`}
-          >
-            <title>checked</title>
-            <path
-              fill="currentColor"
-              d="M21 7L9 19l-5.5-5.5l1.41-1.41L9 16.17L19.59 5.59z"
-            />
-          </svg>
         </label>
       </>
     );
