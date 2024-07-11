@@ -71,6 +71,7 @@ const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
     </TooltipContext.Provider>
   );
 });
+Tooltip.displayName = "Tooltip";
 
 const tooltipContentColors = {
   variants: {
@@ -83,10 +84,10 @@ const tooltipContentColors = {
 };
 
 const [tooltipContentVariant, resolveTooltipContentVariantProps] = vcn({
-  base: `absolute py-1 px-3 rounded-md border opacity-0 transition-all 
-  group-[:not(.controlled):hover]/tooltip:opacity-100 group-[.opened]/tooltip:opacity-100 
-  select-none pointer-events-none 
-  group-[:not(.controlled):hover]/tooltip:select-auto group-[.opened]/tooltip:select-auto group-[:not(.controlled):hover]/tooltip:pointer-events-auto group-[.opened]/tooltip:pointer-events-auto  
+  base: `absolute py-1 px-3 rounded-md border opacity-0 transition-all
+  group-[:not(.controlled):hover]/tooltip:opacity-100 group-[.opened]/tooltip:opacity-100
+  select-none pointer-events-none
+  group-[:not(.controlled):hover]/tooltip:select-auto group-[.opened]/tooltip:select-auto group-[:not(.controlled):hover]/tooltip:pointer-events-auto group-[.opened]/tooltip:pointer-events-auto
   group-[:not(.controlled):hover]/tooltip:[transition:transform_150ms_ease-out_var(--delay),opacity_150ms_ease-out_var(--delay),background-color_150ms_ease-in-out,color_150ms_ease-in-out,border-color_150ms_ease-in-out]`,
   variants: {
     position: {
@@ -144,5 +145,6 @@ const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
     );
   },
 );
+TooltipContent.displayName = "TooltipContent";
 
 export { Tooltip, TooltipContent };
