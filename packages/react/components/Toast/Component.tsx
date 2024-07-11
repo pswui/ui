@@ -208,5 +208,6 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>((props, ref) => {
     </>
   );
 });
+Toaster.displayName = "Toaster";
 
 export { Toaster };
