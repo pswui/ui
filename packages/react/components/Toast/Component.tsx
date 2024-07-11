@@ -1,4 +1,4 @@
-import { type VariantProps, vcn } from "@pswui-lib";
+import { type VariantProps, vcn, withServerSideDocument } from "@pswui-lib";
 import React, { useEffect, useId, useRef } from "react";
 import ReactDOM from "react-dom";
 
@@ -145,69 +145,71 @@ interface ToasterProps
   muteDuplicationWarning?: boolean;
 }
 
-const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>((props, ref) => {
-  const id = useId();
-  const [variantProps, otherPropsCompressed] =
-    resolveToasterVariantProps(props);
-  const { defaultOption, muteDuplicationWarning, ...otherPropsExtracted } =
-    otherPropsCompressed;
+const Toaster = withServerSideDocument(
+  React.forwardRef<HTMLDivElement, ToasterProps>((props, ref) => {
+    const id = useId();
+    const [variantProps, otherPropsCompressed] =
+      resolveToasterVariantProps(props);
+    const { defaultOption, muteDuplicationWarning, ...otherPropsExtracted } =
+      otherPropsCompressed;
 
-  const [toastList, setToastList] = React.useState<typeof toasts>(toasts);
-  const internalRef = useRef<HTMLDivElement | null>(null);
+    const [toastList, setToastList] = React.useState<typeof toasts>(toasts);
+    const internalRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    return subscribe(() => {
-      setToastList(getSnapshot());
-    });
-  }, []);
+    useEffect(() => {
+      return subscribe(() => {
+        setToastList(getSnapshot());
+      });
+    }, []);
 
-  const option = React.useMemo(() => {
-    return {
-      ...defaultToastOption,
-      ...defaultOption,
-    };
-  }, [defaultOption]);
+    const option = React.useMemo(() => {
+      return {
+        ...defaultToastOption,
+        ...defaultOption,
+      };
+    }, [defaultOption]);
 
-  const toasterInstance = document.querySelector("div[data-toaster-root]");
-  if (toasterInstance && id !== toasterInstance.id) {
-    if (process.env.NODE_ENV === "development" && !muteDuplicationWarning) {
-      console.warn(
-        "Multiple Toaster instances detected. Only one Toaster is allowed.",
-      );
+    const toasterInstance = document.querySelector("div[data-toaster-root]");
+    if (toasterInstance && id !== toasterInstance.id) {
+      if (process.env.NODE_ENV === "development" && !muteDuplicationWarning) {
+        console.warn(
+          "Multiple Toaster instances detected. Only one Toaster is allowed.",
+        );
+      }
+      return null;
     }
-    return null;
-  }
 
-  return (
-    <>
-      {ReactDOM.createPortal(
-        <div
-          {...otherPropsExtracted}
-          data-toaster-root={true}
-          className={toasterVariant(variantProps)}
-          ref={(el) => {
-            internalRef.current = el;
-            if (typeof ref === "function") {
-              ref(el);
-            } else if (ref) {
-              ref.current = el;
-            }
-          }}
-          id={id}
-        >
-          {Object.entries(toastList).map(([id]) => (
-            <ToastTemplate
-              key={id}
-              id={id as `${number}`}
-              globalOption={option}
-            />
-          ))}
-        </div>,
-        document.body,
-      )}
-    </>
-  );
-});
+    return (
+      <>
+        {ReactDOM.createPortal(
+          <div
+            {...otherPropsExtracted}
+            data-toaster-root={true}
+            className={toasterVariant(variantProps)}
+            ref={(el) => {
+              internalRef.current = el;
+              if (typeof ref === "function") {
+                ref(el);
+              } else if (ref) {
+                ref.current = el;
+              }
+            }}
+            id={id}
+          >
+            {Object.entries(toastList).map(([id]) => (
+              <ToastTemplate
+                key={id}
+                id={id as `${number}`}
+                globalOption={option}
+              />
+            ))}
+          </div>,
+          document.body,
+        )}
+      </>
+    );
+  }),
+);
 Toaster.displayName = "Toaster";
 
 export { Toaster };
