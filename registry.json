@@ -4,22 +4,36 @@
     "components": "/packages/react/components/{componentName}",
     "lib": "/packages/react/lib/{libName}"
   },
-  "lib": [
-    "index.ts",
-    "Slot.tsx",
-    "vcn.ts"
-  ],
+  "lib": ["index.ts", "Slot.tsx", "vcn.ts", "ssrFallback.tsx"],
   "components": {
     "button": { "type": "file", "name": "Button.tsx" },
     "checkbox": { "type": "file", "name": "Checkbox.tsx" },
-    "dialog": { "type": "dir", "name": "Dialog", "files": ["index.ts", "Component.tsx", "Context.ts"] },
+    "dialog": {
+      "type": "dir",
+      "name": "Dialog",
+      "files": ["index.ts", "Component.tsx", "Context.ts"]
+    },
     "drawer": { "type": "file", "name": "Drawer.tsx" },
     "input": { "type": "file", "name": "Input.tsx" },
     "label": { "type": "file", "name": "Label.tsx" },
     "popover": { "type": "file", "name": "Popover.tsx" },
     "switch": { "type": "file", "name": "Switch.tsx" },
-    "tabs": { "type": "dir", "name": "Tabs", "files": ["index.ts", "Context.ts", "Hook.ts", "Component.tsx"] },
-    "toast": { "type": "dir", "name": "Toast", "files": ["index.ts", "Component.tsx", "Hook.ts", "Store.ts", "Variant.ts"] },
+    "tabs": {
+      "type": "dir",
+      "name": "Tabs",
+      "files": ["index.ts", "Context.ts", "Hook.ts", "Component.tsx"]
+    },
+    "toast": {
+      "type": "dir",
+      "name": "Toast",
+      "files": [
+        "index.ts",
+        "Component.tsx",
+        "Hook.ts",
+        "Store.ts",
+        "Variant.ts"
+      ]
+    },
     "tooltip": { "type": "file", "name": "Tooltip.tsx" }
   }
 }
