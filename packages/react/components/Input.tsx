@@ -63,6 +63,7 @@ const InputFrame = React.forwardRef<HTMLLabelElement, InputFrameProps>(
     );
   },
 );
+InputFrame.displayName = "InputFrame";
 
 interface InputProps
   extends VariantProps<typeof inputVariant>,
@@ -113,5 +114,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     />
   );
 });
+Input.displayName = "Input";
 
 export { InputFrame, Input };
