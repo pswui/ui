@@ -4,7 +4,7 @@
     "components": "/packages/react/components/{componentName}",
     "lib": "/packages/react/lib/{libName}"
   },
-  "lib": ["index.ts", "Slot.tsx", "vcn.ts", "ssrFallback.tsx"],
+  "lib": ["index.ts", "Slot.tsx", "vcn.ts", "ssrFallback.tsx", "withSSD.tsx"],
   "components": {
     "button": { "type": "file", "name": "Button.tsx" },
     "checkbox": { "type": "file", "name": "Checkbox.tsx" },
