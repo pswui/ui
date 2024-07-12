@@ -144,30 +144,11 @@ DialogOverlay.displayName = "DialogOverlay";
  */
 
 const [dialogContentVariant, resolveDialogContentVariant] = vcn({
-  base: "transition-transform duration-300 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800",
+  base: "transition-transform duration-300 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 p-6 w-full max-w-xl rounded-md space-y-6",
   variants: {
     opened: {
       true: "scale-100",
       false: "scale-50",
-    },
-    size: {
-      fit: "w-fit",
-      fullSm: "w-full max-w-sm",
-      fullMd: "w-full max-w-md",
-      fullLg: "w-full max-w-lg",
-      fullXl: "w-full max-w-xl",
-      full2xl: "w-full max-w-2xl",
-    },
-    rounded: {
-      sm: "rounded-sm",
-      md: "rounded-md",
-      lg: "rounded-lg",
-      xl: "rounded-xl",
-    },
-    padding: {
-      sm: "p-4",
-      md: "p-6",
-      lg: "p-8",
     },
     gap: {
       sm: "space-y-4",
@@ -177,9 +158,6 @@ const [dialogContentVariant, resolveDialogContentVariant] = vcn({
   },
   defaults: {
     opened: false,
-    size: "fit",
-    rounded: "md",
-    padding: "md",
     gap: "md",
   },
 });
