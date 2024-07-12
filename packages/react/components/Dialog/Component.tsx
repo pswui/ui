@@ -334,7 +334,7 @@ DialogSubtitle.displayName = "DialogSubtitle";
  */
 
 const [dialogFooterVariant, resolveDialogFooterVariant] = vcn({
-  base: "flex flex-col items-end sm:flex-row sm:items-center sm:justify-end",
+  base: "flex w-full flex-col items-end sm:flex-row sm:items-center sm:justify-end",
   variants: {
     gap: {
       sm: "gap-2",
