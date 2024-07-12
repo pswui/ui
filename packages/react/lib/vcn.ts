@@ -270,6 +270,7 @@ export function vcn<
       for (const [variantName, variantKey] of Object.entries(
         otherVariantProps,
       ) as VariantKVEntry<V>) {
+        if (typeof variantKey === "undefined") continue;
         kv[variantName] = variantKey;
       }
 
