@@ -144,21 +144,15 @@ DialogOverlay.displayName = "DialogOverlay";
  */
 
 const [dialogContentVariant, resolveDialogContentVariant] = vcn({
-  base: "transition-transform duration-300 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 p-6 w-full max-w-xl rounded-md space-y-6",
+  base: "transition-transform duration-300 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 p-6 w-full max-w-xl rounded-md flex flex-col justify-start items-start gap-6",
   variants: {
     opened: {
       true: "scale-100",
       false: "scale-50",
     },
-    gap: {
-      sm: "space-y-4",
-      md: "space-y-6",
-      lg: "space-y-8",
-    },
   },
   defaults: {
     opened: false,
-    gap: "md",
   },
 });
 
