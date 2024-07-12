@@ -60,33 +60,15 @@ const DialogTrigger = ({ children }: DialogTriggerProps) => {
  */
 
 const [dialogOverlayVariant, resolveDialogOverlayVariant] = vcn({
-  base: "fixed inset-0 z-50 w-full h-screen overflow-y-auto max-w-screen transition-all duration-300",
+  base: "fixed inset-0 z-50 w-full h-screen overflow-y-auto max-w-screen transition-all duration-300 backdrop-blur-md backdrop-brightness-75 [&>div]:p-6",
   variants: {
     opened: {
       true: "pointer-events-auto opacity-100",
       false: "pointer-events-none opacity-0",
     },
-    blur: {
-      sm: "backdrop-blur-sm",
-      md: "backdrop-blur-md",
-      lg: "backdrop-blur-lg",
-    },
-    darken: {
-      sm: "backdrop-brightness-90",
-      md: "backdrop-brightness-75",
-      lg: "backdrop-brightness-50",
-    },
-    padding: {
-      sm: "[&>div]:p-4",
-      md: "[&>div]:p-6",
-      lg: "[&>div]:p-8",
-    },
   },
   defaults: {
     opened: false,
-    blur: "md",
-    darken: "md",
-    padding: "md",
   },
 });
 
