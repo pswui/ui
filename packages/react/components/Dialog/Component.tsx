@@ -196,17 +196,9 @@ const DialogClose = ({ children }: DialogCloseProps) => {
  */
 
 const [dialogHeaderVariant, resolveDialogHeaderVariant] = vcn({
-  base: "flex flex-col",
-  variants: {
-    gap: {
-      sm: "gap-2",
-      md: "gap-4",
-      lg: "gap-6",
-    },
-  },
-  defaults: {
-    gap: "sm",
-  },
+  base: "flex flex-col gap-2",
+  variants: {},
+  defaults: {},
 });
 
 interface DialogHeaderProps
@@ -239,22 +231,9 @@ DialogHeader.displayName = "DialogHeader";
  */
 
 const [dialogTitleVariant, resolveDialogTitleVariant] = vcn({
-  variants: {
-    size: {
-      sm: "text-lg",
-      md: "text-xl",
-      lg: "text-2xl",
-    },
-    weight: {
-      sm: "font-medium",
-      md: "font-semibold",
-      lg: "font-bold",
-    },
-  },
-  defaults: {
-    size: "md",
-    weight: "lg",
-  },
+  base: "text-xl font-bold",
+  variants: {},
+  defaults: {},
 });
 
 interface DialogTitleProps
@@ -262,28 +241,9 @@ interface DialogTitleProps
     VariantProps<typeof dialogTitleVariant> {}
 
 const [dialogSubtitleVariant, resolveDialogSubtitleVariant] = vcn({
-  variants: {
-    size: {
-      sm: "text-sm",
-      md: "text-base",
-      lg: "text-lg",
-    },
-    opacity: {
-      sm: "opacity-60",
-      md: "opacity-70",
-      lg: "opacity-80",
-    },
-    weight: {
-      sm: "font-light",
-      md: "font-normal",
-      lg: "font-medium",
-    },
-  },
-  defaults: {
-    size: "sm",
-    opacity: "sm",
-    weight: "md",
-  },
+  base: "text-sm opacity-60 font-normal",
+  variants: {},
+  defaults: {},
 });
 
 interface DialogSubtitleProps
