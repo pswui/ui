@@ -20,7 +20,10 @@ export interface IDialogContext {
   };
 }
 
-export const initialDialogContext: IDialogContext = { opened: false, id: "" };
+export const initialDialogContext: IDialogContext = {
+  opened: false,
+  ids: { title: "", dialog: "", description: "" },
+};
 export const DialogContext = createContext<
   [IDialogContext, Dispatch<SetStateAction<IDialogContext>>]
 >([
