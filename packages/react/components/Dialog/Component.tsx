@@ -4,7 +4,7 @@ import {
   type VariantProps,
   vcn,
 } from "@pswui-lib";
-import React, { type ReactNode, useState } from "react";
+import React, { type ReactNode, useId, useState } from "react";
 import ReactDOM from "react-dom";
 
 import {
@@ -25,7 +25,10 @@ interface DialogRootProps {
 }
 
 const DialogRoot = ({ children }: DialogRootProps) => {
-  const state = useState<IDialogContext>(initialDialogContext);
+  const state = useState<IDialogContext>({
+    ...initialDialogContext,
+    ids: { dialog: useId(), title: useId(), description: useId() },
+  });
   return (
     <DialogContext.Provider value={state}>{children}</DialogContext.Provider>
   );
@@ -42,15 +45,17 @@ interface DialogTriggerProps {
 }
 
 const DialogTrigger = ({ children }: DialogTriggerProps) => {
-  const [_, setState] = useDialogContext();
+  const [{ ids }, setState] = useDialogContext();
   const onClick = () => setState((p) => ({ ...p, opened: true }));
 
-  const slotProps = {
-    onClick,
-    children,
-  };
-
-  return <Slot {...slotProps} />;
+  return (
+    <Slot
+      onClick={onClick}
+      aria-controls={ids.dialog}
+    >
+      {children}
+    </Slot>
+  );
 };
 
 /**
@@ -80,7 +85,7 @@ interface DialogOverlay
 
 const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlay>(
   (props, ref) => {
-    const [{ opened }, setContext] = useDialogContext();
+    const [{ opened, ids }, setContext] = useDialogContext();
     const [variantProps, otherPropsCompressed] = resolveDialogOverlayVariant({
       ...props,
       opened,
@@ -93,6 +98,7 @@ const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlay>(
         {ReactDOM.createPortal(
           <div
             {...otherPropsExtracted}
+            id={ids.dialog}
             ref={ref}
             className={dialogOverlayVariant(variantProps)}
             onClick={(e) => {
@@ -144,7 +150,7 @@ interface DialogContentProps
 
 const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
   (props, ref) => {
-    const [{ opened }] = useDialogContext();
+    const [{ opened, ids }] = useDialogContext();
     const [variantProps, otherPropsCompressed] = resolveDialogContentVariant({
       ...props,
       opened,
@@ -154,6 +160,9 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
       <div
         {...otherPropsExtracted}
         ref={ref}
+        role="dialog"
+        aria-labelledby={ids.title}
+        aria-describedby={ids.description}
         className={dialogContentVariant(variantProps)}
         onClick={(e) => {
           e.stopPropagation();
@@ -240,26 +249,28 @@ interface DialogTitleProps
   extends React.ComponentPropsWithoutRef<"h1">,
     VariantProps<typeof dialogTitleVariant> {}
 
-const [dialogSubtitleVariant, resolveDialogSubtitleVariant] = vcn({
+const [dialogDescriptionVariant, resolveDialogDescriptionVariant] = vcn({
   base: "text-sm opacity-60 font-normal",
   variants: {},
   defaults: {},
 });
 
-interface DialogSubtitleProps
+interface DialogDescriptionProps
   extends React.ComponentPropsWithoutRef<"h2">,
-    VariantProps<typeof dialogSubtitleVariant> {}
+    VariantProps<typeof dialogDescriptionVariant> {}
 
 const DialogTitle = React.forwardRef<HTMLHeadingElement, DialogTitleProps>(
   (props, ref) => {
     const [variantProps, otherPropsCompressed] =
       resolveDialogTitleVariant(props);
     const { children, ...otherPropsExtracted } = otherPropsCompressed;
+    const [{ ids }] = useDialogContext();
     return (
       <h1
         {...otherPropsExtracted}
         ref={ref}
         className={dialogTitleVariant(variantProps)}
+        id={ids.title}
       >
         {children}
       </h1>
@@ -268,24 +279,30 @@ const DialogTitle = React.forwardRef<HTMLHeadingElement, DialogTitleProps>(
 );
 DialogTitle.displayName = "DialogTitle";
 
-const DialogSubtitle = React.forwardRef<
+const DialogDescription = React.forwardRef<
   HTMLHeadingElement,
-  DialogSubtitleProps
+  DialogDescriptionProps
 >((props, ref) => {
   const [variantProps, otherPropsCompressed] =
-    resolveDialogSubtitleVariant(props);
+    resolveDialogDescriptionVariant(props);
   const { children, ...otherPropsExtracted } = otherPropsCompressed;
+  const [{ ids }] = useDialogContext();
   return (
     <h2
       {...otherPropsExtracted}
       ref={ref}
-      className={dialogSubtitleVariant(variantProps)}
+      className={dialogDescriptionVariant(variantProps)}
+      id={ids.description}
     >
       {children}
     </h2>
   );
 });
-DialogSubtitle.displayName = "DialogSubtitle";
+DialogDescription.displayName = "DialogDescription";
+
+// renamed DialogSubtitle -> DialogDescription
+// keep DialogSubtitle for backward compatibility
+const DialogSubtitle = DialogDescription;
 
 /**
  * =========================
@@ -309,13 +326,13 @@ const DialogFooter = React.forwardRef<HTMLDivElement, DialogFooterProps>(
       resolveDialogFooterVariant(props);
     const { children, ...otherPropsExtracted } = otherPropsCompressed;
     return (
-      <div
+      <footer
         {...otherPropsExtracted}
         ref={ref}
         className={dialogFooterVariant(variantProps)}
       >
         {children}
-      </div>
+      </footer>
     );
   },
 );
@@ -357,6 +374,7 @@ export {
   DialogHeader,
   DialogTitle,
   DialogSubtitle,
+  DialogDescription,
   DialogFooter,
   DialogController,
 };

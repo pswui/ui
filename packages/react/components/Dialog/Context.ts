@@ -13,9 +13,14 @@ import {
 
 export interface IDialogContext {
   opened: boolean;
+  ids: {
+    dialog: string;
+    title: string;
+    description: string;
+  };
 }
 
-export const initialDialogContext: IDialogContext = { opened: false };
+export const initialDialogContext: IDialogContext = { opened: false, id: "" };
 export const DialogContext = createContext<
   [IDialogContext, Dispatch<SetStateAction<IDialogContext>>]
 >([
