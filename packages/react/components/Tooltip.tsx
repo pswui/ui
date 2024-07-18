@@ -1,5 +1,5 @@
 import { type AsChild, Slot, type VariantProps, vcn } from "@pswui-lib";
-import React, { useState } from "react";
+import React, { useState, useId } from "react";
 
 interface TooltipContextBody {
   position: "top" | "bottom" | "left" | "right";
@@ -140,6 +140,7 @@ const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
           ...variantProps,
           position: contextState.position,
         })}
+        role="tooltip"
         {...rest}
       />
     );
