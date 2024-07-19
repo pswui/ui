@@ -7,4 +7,12 @@ pre-push:
   commands:
     biome_check:
       glob: "*.{ts,tsx,json}"
-      run: yarn biome check --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      run: yarn biome check --no-errors-on-unmatched --files-ignore-unknown=true {all_files}
+    react_tsc:
+      glob: "packages/react/*.{ts,tsx}"
+      root: "packages/react/"
+      run: yarn tsc
+    cli_tsc:
+      glob: "packages/cli/*.{ts,tsx}"
+      root: "packages/cli/"
+      run: yarn tsc
