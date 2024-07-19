@@ -127,23 +127,25 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
 
     return (
       <ServerSideDocumentFallback>
-        {createPortal(
-          <Comp
-            {...restPropsExtracted}
-            className={drawerOverlayVariant({
-              ...variantProps,
-              opened: state.isDragging ? true : state.opened,
-            })}
-            onClick={onOutsideClick}
-            style={{
-              backdropFilter,
-              WebkitBackdropFilter: backdropFilter,
-              transitionDuration: state.isDragging ? "0s" : undefined,
-            }}
-            ref={ref}
-          />,
-          document.body,
-        )}
+        {() =>
+          createPortal(
+            <Comp
+              {...restPropsExtracted}
+              className={drawerOverlayVariant({
+                ...variantProps,
+                opened: state.isDragging ? true : state.opened,
+              })}
+              onClick={onOutsideClick}
+              style={{
+                backdropFilter,
+                WebkitBackdropFilter: backdropFilter,
+                transitionDuration: state.isDragging ? "0s" : undefined,
+              }}
+              ref={ref}
+            />,
+            document.body,
+          )
+        }
       </ServerSideDocumentFallback>
     );
   },

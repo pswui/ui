@@ -95,30 +95,32 @@ const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlay>(
 
     return (
       <ServerSideDocumentFallback>
-        {ReactDOM.createPortal(
-          <div
-            {...otherPropsExtracted}
-            id={ids.dialog}
-            ref={ref}
-            className={dialogOverlayVariant(variantProps)}
-            onClick={(e) => {
-              if (closeOnClick) {
-                setContext((p) => ({ ...p, opened: false }));
-              }
-              onClick?.(e);
-            }}
-          >
+        {() =>
+          ReactDOM.createPortal(
             <div
-              className={
-                "w-screen max-w-full min-h-screen flex flex-col justify-center items-center"
-              }
+              {...otherPropsExtracted}
+              id={ids.dialog}
+              ref={ref}
+              className={dialogOverlayVariant(variantProps)}
+              onClick={(e) => {
+                if (closeOnClick) {
+                  setContext((p) => ({ ...p, opened: false }));
+                }
+                onClick?.(e);
+              }}
             >
-              {/* Layer for overflow positioning */}
-              {children}
-            </div>
-          </div>,
-          document.body,
-        )}
+              <div
+                className={
+                  "w-screen max-w-full min-h-screen flex flex-col justify-center items-center"
+                }
+              >
+                {/* Layer for overflow positioning */}
+                {children}
+              </div>
+            </div>,
+            document.body,
+          )
+        }
       </ServerSideDocumentFallback>
     );
   },
