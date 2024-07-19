@@ -7,7 +7,7 @@ function withServerSideDocument<P extends {}>(
   const SSDocumentFallbackWrapper = (props: P) => {
     return (
       <ServerSideDocumentFallback>
-        <Component {...props} />
+        {() => <Component {...props} />}
       </ServerSideDocumentFallback>
     );
   };
