@@ -1,0 +1,14 @@
+{
+  "lsp": {
+    "tailwindcss-language-server": {
+      "settings": {
+        "experimental": {
+          "classRegex": [
+            ["vcn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+            ["[cC]olors\\s*\\=\\s*{([^]*(?=}))}", "[\"'`]([^\"'`]*).*?[\"'`]"]
+          ]
+        }
+      }
+    }
+  }
+}
