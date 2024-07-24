@@ -4,7 +4,8 @@ import React from "react";
 const inputColors = {
   background: {
     default: "bg-neutral-50 dark:bg-neutral-900",
-    hover: "hover:bg-neutral-100 dark:hover:bg-neutral-800",
+    hover:
+      "hover:bg-neutral-100 dark:hover:bg-neutral-800 has-[input:hover]:bg-neutral-100 dark:has-[input:hover]:bg-neutral-800",
     invalid:
       "invalid:bg-red-100 invalid:dark:bg-red-900 has-[input:invalid]:bg-red-100 dark:has-[input:invalid]:bg-red-900",
     invalidHover:
