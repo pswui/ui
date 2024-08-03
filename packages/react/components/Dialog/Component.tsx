@@ -1,9 +1,4 @@
-import {
-  ServerSideDocumentFallback,
-  Slot,
-  type VariantProps,
-  vcn,
-} from "@pswui-lib";
+import { Slot, type VariantProps, useDocument, vcn } from "@pswui-lib";
 import React, { type ReactNode, useId, useState } from "react";
 import ReactDOM from "react-dom";
 
@@ -93,35 +88,32 @@ const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlay>(
     const { children, closeOnClick, onClick, ...otherPropsExtracted } =
       otherPropsCompressed;
 
-    return (
-      <ServerSideDocumentFallback>
-        {() =>
-          ReactDOM.createPortal(
-            <div
-              {...otherPropsExtracted}
-              id={ids.dialog}
-              ref={ref}
-              className={dialogOverlayVariant(variantProps)}
-              onClick={(e) => {
-                if (closeOnClick) {
-                  setContext((p) => ({ ...p, opened: false }));
-                }
-                onClick?.(e);
-              }}
-            >
-              <div
-                className={
-                  "w-screen max-w-full min-h-screen flex flex-col justify-center items-center"
-                }
-              >
-                {/* Layer for overflow positioning */}
-                {children}
-              </div>
-            </div>,
-            document.body,
-          )
-        }
-      </ServerSideDocumentFallback>
+    const document = useDocument();
+    if (!document) return null;
+
+    return ReactDOM.createPortal(
+      <div
+        {...otherPropsExtracted}
+        id={ids.dialog}
+        ref={ref}
+        className={dialogOverlayVariant(variantProps)}
+        onClick={(e) => {
+          if (closeOnClick) {
+            setContext((p) => ({ ...p, opened: false }));
+          }
+          onClick?.(e);
+        }}
+      >
+        <div
+          className={
+            "w-screen max-w-full min-h-screen flex flex-col justify-center items-center"
+          }
+        >
+          {/* Layer for overflow positioning */}
+          {children}
+        </div>
+      </div>,
+      document.body,
     );
   },
 );

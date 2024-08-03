@@ -1,8 +1,8 @@
 import {
   type AsChild,
-  ServerSideDocumentFallback,
   Slot,
   type VariantProps,
+  useDocument,
   vcn,
 } from "@pswui-lib";
 import React, {
@@ -125,28 +125,25 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
           : 1
     })`;
 
-    return (
-      <ServerSideDocumentFallback>
-        {() =>
-          createPortal(
-            <Comp
-              {...restPropsExtracted}
-              className={drawerOverlayVariant({
-                ...variantProps,
-                opened: state.isDragging ? true : state.opened,
-              })}
-              onClick={onOutsideClick}
-              style={{
-                backdropFilter,
-                WebkitBackdropFilter: backdropFilter,
-                transitionDuration: state.isDragging ? "0s" : undefined,
-              }}
-              ref={ref}
-            />,
-            document.body,
-          )
-        }
-      </ServerSideDocumentFallback>
+    const document = useDocument();
+    if (!document) return null;
+
+    return createPortal(
+      <Comp
+        {...restPropsExtracted}
+        className={drawerOverlayVariant({
+          ...variantProps,
+          opened: state.isDragging ? true : state.opened,
+        })}
+        onClick={onOutsideClick}
+        style={{
+          backdropFilter,
+          WebkitBackdropFilter: backdropFilter,
+          transitionDuration: state.isDragging ? "0s" : undefined,
+        }}
+        ref={ref}
+      />,
+      document.body,
     );
   },
 );
