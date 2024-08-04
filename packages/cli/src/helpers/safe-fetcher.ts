@@ -1,5 +1,3 @@
-import fetch, { type Response } from "node-fetch";
-
 export async function safeFetch(
   url: string,
 ): Promise<
