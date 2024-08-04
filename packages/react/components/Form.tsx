@@ -157,12 +157,12 @@ const [formErrorVariant, resolveFormErrorVariantProps] = vcn({
 interface FormErrorProps
   extends VariantProps<typeof formErrorVariant>,
     AsChild,
-    ComponentPropsWithoutRef<"span"> {}
+    Omit<ComponentPropsWithoutRef<"span">, "children"> {}
 
 const FormError = forwardRef<HTMLSpanElement, FormErrorProps>((props, ref) => {
   const [variantProps, otherPropsCompressed] =
     resolveFormErrorVariantProps(props);
-  const { asChild, children, ...otherPropsExtracted } = otherPropsCompressed;
+  const { asChild, ...otherPropsExtracted } = otherPropsCompressed;
 
   const item = useContext(FormItemContext);
 
@@ -174,7 +174,7 @@ const FormError = forwardRef<HTMLSpanElement, FormErrorProps>((props, ref) => {
       className={formErrorVariant(variantProps)}
       {...otherPropsExtracted}
     >
-      {children}
+      {item.invalid}
     </Comp>
   ) : null;
 });
