@@ -163,6 +163,12 @@ const [drawerContentVariant, resolveDrawerContentVariantProps] = vcn({
       left: "left-0 inset-y-0 h-screen rounded-l-lg border-r-2",
       right: "right-0 inset-y-0 h-screen rounded-r-lg border-l-2",
     },
+    maxSize: {
+      sm: "[&.left-0]:max-w-sm [&.right-0]:max-w-sm",
+      md: "[&.left-0]:max-w-md [&.right-0]:max-w-md",
+      lg: "[&.left-0]:max-w-lg [&.right-0]:max-w-lg",
+      xl: "[&.left-0]:max-w-xl [&.right-0]:max-w-xl",
+    },
     opened: {
       true: "",
       false:
@@ -172,6 +178,7 @@ const [drawerContentVariant, resolveDrawerContentVariantProps] = vcn({
   defaults: {
     position: "left",
     opened: false,
+    maxSize: "sm",
   },
 });
 
