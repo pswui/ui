@@ -38,3 +38,23 @@ export const DialogContext = createContext<
 ]);
 
 export const useDialogContext = () => useContext(DialogContext);
+
+/**
+ * ===================
+ * InnerDialogContext
+ * ===================
+ */
+
+export interface IInnerDialogContext {
+  isMounted: boolean;
+  isRendered: boolean;
+}
+export const initialInnerDialogContext: IInnerDialogContext = {
+  isMounted: false,
+  isRendered: false,
+};
+export const InnerDialogContext = createContext<IInnerDialogContext>(
+  initialInnerDialogContext,
+);
+
+export const useInnerDialogContext = () => useContext(InnerDialogContext);

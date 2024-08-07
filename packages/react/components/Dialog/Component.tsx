@@ -1,12 +1,20 @@
-import { Slot, type VariantProps, useDocument, vcn } from "@pswui-lib";
-import React, { type ReactNode, useId, useState } from "react";
+import {
+  Slot,
+  type VariantProps,
+  useAnimatedMount,
+  useDocument,
+  vcn,
+} from "@pswui-lib";
+import React, { type ReactNode, useId, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 
 import {
   DialogContext,
   type IDialogContext,
+  InnerDialogContext,
   initialDialogContext,
   useDialogContext,
+  useInnerDialogContext,
 } from "./Context";
 
 /**
@@ -81,40 +89,56 @@ interface DialogOverlay
 const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlay>(
   (props, ref) => {
     const [{ opened, ids }, setContext] = useDialogContext();
-    const [variantProps, otherPropsCompressed] = resolveDialogOverlayVariant({
-      ...props,
-      opened,
-    });
+    const [variantProps, otherPropsCompressed] =
+      resolveDialogOverlayVariant(props);
     const { children, closeOnClick, onClick, ...otherPropsExtracted } =
       otherPropsCompressed;
+
+    const internalRef = useRef<HTMLDivElement | null>(null);
+
+    const { isMounted, isRendered } = useAnimatedMount(opened, internalRef);
 
     const document = useDocument();
     if (!document) return null;
 
-    return ReactDOM.createPortal(
-      <div
-        {...otherPropsExtracted}
-        id={ids.dialog}
-        ref={ref}
-        className={dialogOverlayVariant(variantProps)}
-        onClick={(e) => {
-          if (closeOnClick) {
-            setContext((p) => ({ ...p, opened: false }));
-          }
-          onClick?.(e);
-        }}
-      >
-        <div
-          className={
-            "w-screen max-w-full min-h-screen flex flex-col justify-center items-center"
-          }
-        >
-          {/* Layer for overflow positioning */}
-          {children}
-        </div>
-      </div>,
-      document.body,
-    );
+    return isMounted
+      ? ReactDOM.createPortal(
+          <div
+            {...otherPropsExtracted}
+            id={ids.dialog}
+            ref={(el) => {
+              internalRef.current = el;
+              if (typeof ref === "function") {
+                ref(el);
+              } else if (ref) {
+                ref.current = el;
+              }
+            }}
+            className={dialogOverlayVariant({
+              ...variantProps,
+              opened: isRendered,
+            })}
+            onClick={(e) => {
+              if (closeOnClick) {
+                setContext((p) => ({ ...p, opened: false }));
+              }
+              onClick?.(e);
+            }}
+          >
+            {/* Layer for overflow positioning */}
+            <div
+              className={
+                "w-screen max-w-full min-h-screen flex flex-col justify-center items-center"
+              }
+            >
+              <InnerDialogContext.Provider value={{ isMounted, isRendered }}>
+                {children}
+              </InnerDialogContext.Provider>
+            </div>
+          </div>,
+          document.body,
+        )
+      : null;
   },
 );
 DialogOverlay.displayName = "DialogOverlay";
@@ -144,11 +168,10 @@ interface DialogContentProps
 
 const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
   (props, ref) => {
-    const [{ opened, ids }] = useDialogContext();
-    const [variantProps, otherPropsCompressed] = resolveDialogContentVariant({
-      ...props,
-      opened,
-    });
+    const [{ ids }] = useDialogContext();
+    const [variantProps, otherPropsCompressed] =
+      resolveDialogContentVariant(props);
+    const { isRendered } = useInnerDialogContext();
     const { children, onClick, ...otherPropsExtracted } = otherPropsCompressed;
     return (
       <div
@@ -157,7 +180,10 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
         role="dialog"
         aria-labelledby={ids.title}
         aria-describedby={ids.description}
-        className={dialogContentVariant(variantProps)}
+        className={dialogContentVariant({
+          ...variantProps,
+          opened: isRendered,
+        })}
         onClick={(e) => {
           e.stopPropagation();
           onClick?.(e);
