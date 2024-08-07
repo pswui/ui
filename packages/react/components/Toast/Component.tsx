@@ -46,9 +46,16 @@ const ToastTemplate = ({
 
   React.useEffect(() => {
     if (toastData.life === "born") {
-      requestAnimationFrame(() => {
-        // To make sure that the toast is rendered as "born" state
-        // and then change to "normal" state
+      requestAnimationFrame(function untilBorn() {
+        /*
+        To confirm that the toast is rendered as "born" state and then change to "normal" state
+        This way will make sure born -> normal stage transition animation will work.
+        */
+        const elm = document.querySelector(
+          `div[data-toaster-root] > div[data-toast-id="${id}"][data-toast-lifecycle="born"]`,
+        );
+        if (!elm) return requestAnimationFrame(untilBorn);
+
         toasts[id] = {
           ...toasts[id],
           life: "normal",
@@ -83,6 +90,8 @@ const ToastTemplate = ({
         life: toastData.life,
       })}
       ref={ref}
+      data-toast-id={id}
+      data-toast-lifecycle={toastData.life}
     >
       {toastData.closeButton && (
         <button
