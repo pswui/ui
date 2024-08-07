@@ -1,5 +1,10 @@
-import { type VariantProps, useDocument, vcn } from "@pswui-lib";
-import React, { useEffect, useId, useRef } from "react";
+import {
+  type VariantProps,
+  getCalculatedTransitionDuration,
+  useDocument,
+  vcn,
+} from "@pswui-lib";
+import React, { type MutableRefObject, useEffect, useId, useRef } from "react";
 import ReactDOM from "react-dom";
 
 import {
@@ -58,42 +63,15 @@ const ToastTemplate = ({
       return () => clearTimeout(timeout);
     }
     if (toastData.life === "dead") {
-      let transitionDuration: {
-        value: number;
-        unit: string;
-      } | null;
-      if (!ref.current) {
-        transitionDuration = null;
-      } else if (ref.current.computedStyleMap !== undefined) {
-        transitionDuration = ref.current
-          .computedStyleMap()
-          .get("transition-duration") as { value: number; unit: string };
-      } else {
-        const style = /(\d+(\.\d+)?)(.+)/.exec(
-          window.getComputedStyle(ref.current).transitionDuration,
+      let calculatedTransitionDurationMs = 1;
+      if (ref.current)
+        calculatedTransitionDurationMs = getCalculatedTransitionDuration(
+          ref as MutableRefObject<HTMLDivElement>,
         );
-        transitionDuration = style
-          ? {
-              value: Number.parseFloat(style[1] ?? "0"),
-              unit: style[3] ?? style[2] ?? "s",
-            }
-          : null;
-      }
-      if (!transitionDuration) {
-        delete toasts[id];
-        notify();
-        return;
-      }
-      const calculatedTransitionDuration =
-        transitionDuration.value *
-        ({
-          s: 1000,
-          ms: 1,
-        }[transitionDuration.unit] ?? 1);
       const timeout = setTimeout(() => {
         delete toasts[id];
         notify();
-      }, calculatedTransitionDuration);
+      }, calculatedTransitionDurationMs);
       return () => clearTimeout(timeout);
     }
   }, [id, toastData.life, toastData.closeTimeout]);
