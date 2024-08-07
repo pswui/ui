@@ -32,6 +32,7 @@ function getCalculatedTransitionDuration(
 }
 
 /*
+ * isMounted: true     isRendered: true         isRendered: false        isMounted: false
  * Component Mount     Component Appear         Component Disappear      Component Unmount
  * v                   v                        v                        v
  * |-|=================|------------------------|======================|-|
