@@ -2,6 +2,7 @@ import {
   type AsChild,
   Slot,
   type VariantProps,
+  useAnimatedMount,
   useDocument,
   vcn,
 } from "@pswui-lib";
@@ -21,6 +22,8 @@ interface IDrawerContext {
   closeThreshold: number;
   movePercentage: number;
   isDragging: boolean;
+  isMounted: boolean;
+  isRendered: boolean;
   leaveWhileDragging: boolean;
 }
 const DrawerContextInitial: IDrawerContext = {
@@ -28,6 +31,8 @@ const DrawerContextInitial: IDrawerContext = {
   closeThreshold: 0.3,
   movePercentage: 0,
   isDragging: false,
+  isMounted: false,
+  isRendered: false,
   leaveWhileDragging: false,
 };
 const DrawerContext = React.createContext<
@@ -102,7 +107,13 @@ interface DrawerOverlayProps
 
 const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
   (props, ref) => {
+    const internalRef = useRef<HTMLDivElement | null>(null);
     const [state, setState] = useContext(DrawerContext);
+
+    const { isMounted, isRendered } = useAnimatedMount(
+      state.isDragging ? true : state.opened,
+      internalRef,
+    );
 
     const [variantProps, restPropsCompressed] =
       resolveDrawerOverlayVariantProps(props);
@@ -128,22 +139,39 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
     const document = useDocument();
     if (!document) return null;
 
-    return createPortal(
-      <Comp
-        {...restPropsExtracted}
-        className={drawerOverlayVariant({
-          ...variantProps,
-          opened: state.isDragging ? true : state.opened,
-        })}
-        onClick={onOutsideClick}
-        style={{
-          backdropFilter,
-          WebkitBackdropFilter: backdropFilter,
-          transitionDuration: state.isDragging ? "0s" : undefined,
-        }}
-        ref={ref}
-      />,
-      document.body,
+    return (
+      <>
+        <DrawerContext.Provider
+          value={[{ ...state, isMounted, isRendered }, setState]}
+        >
+          {isMounted
+            ? createPortal(
+                <Comp
+                  {...restPropsExtracted}
+                  className={drawerOverlayVariant({
+                    ...variantProps,
+                    opened: isRendered,
+                  })}
+                  onClick={onOutsideClick}
+                  style={{
+                    backdropFilter,
+                    WebkitBackdropFilter: backdropFilter,
+                    transitionDuration: state.isDragging ? "0s" : undefined,
+                  }}
+                  ref={(el: HTMLDivElement) => {
+                    internalRef.current = el;
+                    if (typeof ref === "function") {
+                      ref(el);
+                    } else if (ref) {
+                      ref.current = el;
+                    }
+                  }}
+                />,
+                document.body,
+              )
+            : null}
+        </DrawerContext.Provider>
+      </>
     );
   },
 );
@@ -353,7 +381,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
           {...restPropsExtracted}
           className={drawerContentVariant({
             ...variantProps,
-            opened: state.opened,
+            opened: state.isRendered,
           })}
           style={{
             transform: dragState.isDragging
