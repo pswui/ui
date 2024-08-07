@@ -82,4 +82,4 @@ function useAnimatedMount(
   return state;
 }
 
-export { useAnimatedMount };
+export { getCalculatedTransitionDuration, useAnimatedMount };
