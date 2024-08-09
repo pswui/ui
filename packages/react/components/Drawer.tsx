@@ -1,3 +1,5 @@
+"use client";
+
 import {
   type AsChild,
   Slot,
@@ -186,10 +188,10 @@ const [drawerContentVariant, resolveDrawerContentVariantProps] = vcn({
   base: `fixed ${drawerContentColors.background} ${drawerContentColors.border} transition-all p-4 flex flex-col justify-between gap-8 overflow-auto`,
   variants: {
     position: {
-      top: "top-0 inset-x-0 w-full max-w-screen rounded-t-lg border-b-2",
-      bottom: "bottom-0 inset-x-0 w-full max-w-screen rounded-b-lg border-t-2",
-      left: "left-0 inset-y-0 h-screen rounded-l-lg border-r-2",
-      right: "right-0 inset-y-0 h-screen rounded-r-lg border-l-2",
+      top: "top-0 w-full max-w-screen rounded-t-lg border-b-2",
+      bottom: "bottom-0 w-full max-w-screen rounded-b-lg border-t-2",
+      left: "left-0 h-screen rounded-l-lg border-r-2",
+      right: "right-0 h-screen rounded-r-lg border-l-2",
     },
     maxSize: {
       sm: "[&.left-0]:max-w-sm [&.right-0]:max-w-sm",
@@ -202,16 +204,36 @@ const [drawerContentVariant, resolveDrawerContentVariantProps] = vcn({
       false:
         "[&.top-0]:-translate-y-full [&.bottom-0]:translate-y-full [&.left-0]:-translate-x-full [&.right-0]:translate-x-full",
     },
+    internal: {
+      true: "relative",
+      false: "fixed",
+    },
   },
   defaults: {
     position: "left",
     opened: false,
     maxSize: "sm",
+    internal: false,
   },
+  dynamics: [
+    ({ position, internal }) => {
+      if (!internal) {
+        if (["top", "bottom"].includes(position)) {
+          return "inset-x-0";
+        }
+        return "inset-y-0";
+      }
+
+      return "w-fit";
+    },
+  ],
 });
 
 interface DrawerContentProps
-  extends Omit<VariantProps<typeof drawerContentVariant>, "opened">,
+  extends Omit<
+      VariantProps<typeof drawerContentVariant>,
+      "opened" | "internal"
+    >,
     AsChild,
     ComponentPropsWithoutRef<"div"> {}
 
@@ -352,7 +374,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
       <div
         className={drawerContentVariant({
           ...variantProps,
-          opened: true,
+          opened: state.isRendered,
           className: dragState.isDragging
             ? "transition-[width] duration-0"
             : variantProps.className,
@@ -366,6 +388,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
                       0) +
                     (position === "top" ? dragState.delta : -dragState.delta),
                   padding: 0,
+                  [`padding${position.slice(0, 1).toUpperCase()}${position.slice(1)}`]: `${dragState.delta}px`,
                 }
               : {
                   width:
@@ -373,6 +396,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
                       0) +
                     (position === "left" ? dragState.delta : -dragState.delta),
                   padding: 0,
+                  [`padding${position.slice(0, 1).toUpperCase()}${position.slice(1)}`]: `${dragState.delta}px`,
                 }
             : { width: 0, height: 0, padding: 0 }
         }
@@ -382,13 +406,15 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
           className={drawerContentVariant({
             ...variantProps,
             opened: state.isRendered,
+            internal: true,
           })}
           style={{
-            transform: dragState.isDragging
-              ? `translate${["top", "bottom"].includes(position) ? "Y" : "X"}(${
-                  dragState.delta
-                }px)`
-              : undefined,
+            transform:
+              dragState.isDragging &&
+              ((["top", "left"].includes(position) && dragState.delta < 0) ||
+                (["bottom", "right"].includes(position) && dragState.delta > 0))
+                ? `translate${["top", "bottom"].includes(position) ? "Y" : "X"}(${dragState.delta}px)`
+                : undefined,
             transitionDuration: dragState.isDragging ? "0s" : undefined,
             userSelect: dragState.isDragging ? "none" : undefined,
           }}
