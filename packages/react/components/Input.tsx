@@ -24,7 +24,7 @@ const inputColors = {
 };
 
 const [inputVariant, resolveInputVariantProps] = vcn({
-  base: `rounded-md p-2 border ring-1 outline-none transition-all duration-200 [appearance:textfield] disabled:brightness-50 disabled:saturate-0 disabled:cursor-not-allowed ${inputColors.background.default} ${inputColors.background.hover} ${inputColors.border.default} ${inputColors.ring.default} ${inputColors.background.invalid} ${inputColors.background.invalidHover} ${inputColors.border.invalid} ${inputColors.ring.invalid} [&:has(input)]:flex`,
+  base: `rounded-md p-2 border ring-1 outline-hidden transition-all duration-200 [appearance:textfield] disabled:brightness-50 disabled:saturate-0 disabled:cursor-not-allowed ${inputColors.background.default} ${inputColors.background.hover} ${inputColors.border.default} ${inputColors.ring.default} ${inputColors.background.invalid} ${inputColors.background.invalidHover} ${inputColors.border.invalid} ${inputColors.ring.invalid} [&:has(input)]:flex`,
   variants: {
     unstyled: {
       true: "bg-transparent border-none p-0 ring-0 hover:bg-transparent invalid:hover:bg-transparent invalid:focus-within:bg-transparent invalid:focus-within:ring-0",

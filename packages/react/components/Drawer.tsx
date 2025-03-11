@@ -493,7 +493,7 @@ const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
 DrawerHeader.displayName = "DrawerHeader";
 
 const [drawerBodyVariant, resolveDrawerBodyVariantProps] = vcn({
-  base: "flex-grow",
+  base: "grow",
   variants: {},
   defaults: {},
 });

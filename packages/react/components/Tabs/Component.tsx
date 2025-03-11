@@ -39,7 +39,7 @@ const TabList = (props: TabListProps) => {
 };
 
 const [TabTriggerVariant, resolveTabTriggerVariantProps] = vcn({
-  base: "py-1.5 rounded-md flex-grow transition-all text-sm",
+  base: "py-1.5 rounded-md grow transition-all text-sm",
   variants: {
     active: {
       true: "bg-white/100 dark:bg-black/100 text-black dark:text-white",
