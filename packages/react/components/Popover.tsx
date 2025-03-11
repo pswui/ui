@@ -65,7 +65,7 @@ const popoverColors = {
 };
 
 const [popoverContentVariant, resolvePopoverContentVariantProps] = vcn({
-  base: `absolute transition-all duration-150 border rounded-lg p-0.5 z-10 [&>*]:w-full ${popoverColors.background} ${popoverColors.border}`,
+  base: `absolute transition-all duration-150 border rounded-lg p-0.5 z-10 *:w-full ${popoverColors.background} ${popoverColors.border}`,
   variants: {
     direction: {
       row: "",

@@ -7,19 +7,19 @@ const inputColors = {
     hover:
       "hover:bg-neutral-100 dark:hover:bg-neutral-800 has-[input:hover]:bg-neutral-100 dark:has-[input:hover]:bg-neutral-800",
     invalid:
-      "invalid:bg-red-100 invalid:dark:bg-red-900 has-[input:invalid]:bg-red-100 dark:has-[input:invalid]:bg-red-900",
+      "invalid:bg-red-100 dark:invalid:bg-red-900 has-[input:invalid]:bg-red-100 dark:has-[input:invalid]:bg-red-900",
     invalidHover:
       "hover:invalid:bg-red-200 dark:hover:invalid:bg-red-800 has-[input:invalid:hover]:bg-red-200 dark:has-[input:invalid:hover]:bg-red-800",
   },
   border: {
     default: "border-neutral-400 dark:border-neutral-600",
     invalid:
-      "invalid:border-red-400 invalid:dark:border-red-600 has-[input:invalid]:border-red-400 dark:has-[input:invalid]:border-red-600",
+      "invalid:border-red-400 dark:invalid:border-red-600 has-[input:invalid]:border-red-400 dark:has-[input:invalid]:border-red-600",
   },
   ring: {
     default: "ring-transparent focus-within:ring-current",
     invalid:
-      "invalid:focus-within:ring-red-400 invalid:focus-within:dark:ring-red-600 has-[input:invalid]:focus-within:ring-red-400 dark:has-[input:invalid]:focus-within:ring-red-600",
+      "invalid:focus-within:ring-red-400 dark:invalid:focus-within:ring-red-600 has-[input:invalid]:focus-within:ring-red-400 dark:has-[input:invalid]:focus-within:ring-red-600",
   },
 };
 
