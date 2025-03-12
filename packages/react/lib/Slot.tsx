@@ -85,7 +85,10 @@ export const Slot = React.forwardRef<
     return null;
   }
   return React.cloneElement(children, {
-    ...mergeReactProps(safeSlotProps, children.props),
+    ...mergeReactProps(
+      safeSlotProps,
+      children.props as Record<string, unknown>,
+    ),
     ref: combinedRef([
       ref,
       (children as unknown as { ref: React.Ref<HTMLElement> }).ref,
