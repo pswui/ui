@@ -37,4 +37,4 @@ jobs:
       - name: Lint
         run: bun --filter react lint --write
       - name: TypeScript Compile
-        run: bun --filter react tsc
+        run: cd packages/react && bun run tsc --noEmit
