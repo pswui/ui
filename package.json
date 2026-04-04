@@ -12,6 +12,7 @@
     "cli": "yarn workspace @psw-ui/cli",
     "react:build": "yarn workspace react build",
     "react:dev": "yarn workspace react dev",
+    "react:test:e2e": "yarn workspace react test:e2e",
     "cli:build": "yarn workspace @psw-ui/cli build"
   },
   "private": true,

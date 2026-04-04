@@ -28,3 +28,6 @@ dist-ssr
 src
 src/main.tsx
 !src/tailwind.css
+
+playwright-report
+test-results
