@@ -103,15 +103,12 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
 ## Building local development environment
 
 ```bash
-# Corepack - Yarn 4.2.2
-corepack enable
-
 # Install Packages
-yarn install
+bun install
 
 # Script running in workspace
-yarn react dev  # `yarn dev` in react workspace
-yarn cli build  # `yarn build` in cli workspace
+bun run react:dev  # `bun run dev` in react workspace
+bun run cli:build  # `bun run build` in cli workspace
 ```
 
 ## Project Structure

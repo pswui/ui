@@ -5,18 +5,18 @@
   "repository": "https://github.com/pswui/ui",
   "author": "p-sw <shinwoo.park@psw.kr>",
   "license": "MIT",
-  "workspaces": ["packages/*", "components"],
+  "workspaces": ["packages/*"],
   "scripts": {
     "postinstall": "lefthook install",
-    "react": "yarn workspace react",
-    "cli": "yarn workspace @psw-ui/cli",
-    "react:build": "yarn workspace react build",
-    "react:dev": "yarn workspace react dev",
-    "react:test:e2e": "yarn workspace react test:e2e",
-    "cli:build": "yarn workspace @psw-ui/cli build"
+    "react": "bun --filter react",
+    "cli": "bun --filter @psw-ui/cli",
+    "react:build": "bun --filter react build",
+    "react:dev": "bun --filter react dev",
+    "react:test:e2e": "bun --filter react test:e2e",
+    "cli:build": "bun --filter @psw-ui/cli build"
   },
   "private": true,
-  "packageManager": "yarn@4.4.0+sha512.91d93b445d9284e7ed52931369bc89a663414e5582d00eea45c67ddc459a2582919eece27c412d6ffd1bd0793ff35399381cb229326b961798ce4f4cc60ddfdb",
+  "packageManager": "bun@1.3.10",
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
     "lefthook": "^1.6.18"

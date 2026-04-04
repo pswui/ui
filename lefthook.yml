@@ -2,17 +2,17 @@ pre-commit:
   commands:
     biome_write:
       glob: "*.{ts,tsx,json}"
-      run: yarn biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files} && git update-index --again
+      run: bun run biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files} && git update-index --again
 pre-push:
   commands:
     biome_check:
       glob: "*.{ts,tsx,json}"
-      run: yarn biome check --no-errors-on-unmatched --files-ignore-unknown=true {all_files}
+      run: bun run biome check --no-errors-on-unmatched --files-ignore-unknown=true {all_files}
     react_tsc:
       glob: "packages/react/*.{ts,tsx}"
       root: "packages/react/"
-      run: yarn tsc
+      run: bun run tsc
     cli_tsc:
       glob: "packages/cli/*.{ts,tsx}"
       root: "packages/cli/"
-      run: yarn tsc
+      run: bun run tsc
