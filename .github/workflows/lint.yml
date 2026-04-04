@@ -36,5 +36,5 @@ jobs:
           bun install --frozen-lockfile
       - name: Lint
         run: bun --filter react lint --write
-      - name: TypeScript Compile
-        run: cd packages/react && bun run tsc --noEmit
+      - name: Build
+        run: bun run react:build
