@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc && vite build && cp ./404.html ./dist",
     "lint": "biome check --no-errors-on-unmatched",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.12",
@@ -17,6 +19,7 @@
     "tailwindcss": "^4.0.12"
   },
   "devDependencies": {
+    "@playwright/test": "^1.52.0",
     "@types/node": "^20.12.13",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
