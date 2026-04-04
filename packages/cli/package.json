@@ -24,6 +24,7 @@
     "@types/chai": "^4",
     "@types/ink-divider": "^2.0.4",
     "@types/node": "^18",
+    "@types/react": "^18.2.66",
     "chai": "^4",
     "oclif": "^4",
     "shx": "^0.3.3",
@@ -56,7 +57,7 @@
   "scripts": {
     "build": "shx rm -rf dist && tsc",
     "lint": "biome check --no-errors-on-unmatched",
-    "prepack": "yarn build"
+    "prepack": "bun run build"
   },
   "types": "dist/index.d.ts"
 }

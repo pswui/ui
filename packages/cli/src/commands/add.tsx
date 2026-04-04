@@ -5,7 +5,7 @@ import { Args, Command, Flags } from "@oclif/core";
 import { colorize } from "@oclif/core/ux";
 import { Box, render } from "ink";
 import ora from "ora";
-import React, { type ComponentPropsWithoutRef } from "react";
+import React from "react";
 import { Choice } from "../components/Choice.js";
 import { SearchBox } from "../components/SearchBox.js";
 import { loadConfig, validateConfig } from "../helpers/config.js";
@@ -20,12 +20,20 @@ import {
 } from "../helpers/registry.js";
 import { safeFetch } from "../helpers/safe-fetcher.js";
 
+type SearchBoxComponent = {
+  displayName: string;
+  key: string;
+  installed: boolean;
+};
+
 function Generator() {
   let complete = false;
 
-  function ComponentSelector<
-    T extends { displayName: string; key: string; installed: boolean },
-  >(props: Omit<ComponentPropsWithoutRef<typeof SearchBox<T>>, "helper">) {
+  function ComponentSelector(props: {
+    components: SearchBoxComponent[];
+    initialQuery?: string;
+    onSubmit?: (item: SearchBoxComponent) => void;
+  }) {
     return (
       <Box>
         <SearchBox
@@ -137,7 +145,7 @@ export default class Add extends Command {
     }
 
     const loadRegistryOra = ora("Fetching registry...").start();
-    if (flags.registry) {
+    if (flags.branch) {
       this.log(`Using ${flags.branch} for branch.`);
     }
     const unsafeRegistry = await getRegistry(flags.branch);
@@ -150,11 +158,7 @@ export default class Add extends Command {
     loadRegistryOra.succeed(
       `Successfully fetched registry! (${componentNames.length} components)`,
     );
-    const searchBoxComponent: {
-      displayName: string;
-      key: string;
-      installed: boolean;
-    }[] = [];
+    const searchBoxComponent: SearchBoxComponent[] = [];
     for await (const name of componentNames) {
       const installed = await checkComponentInstalled(
         registry.components[name],

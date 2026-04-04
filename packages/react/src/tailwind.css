@@ -1,5 +1,5 @@
-@import tailwindcss;
 @import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+@import "tailwindcss";
 
 @layer base {
   :root {
@@ -16,7 +16,11 @@
   }
 
   body {
-    @apply bg-white dark:bg-[var(--dark-bg-color)] text-black dark:text-[var(--dark-text-color)] transition-colors duration-300;
+    background-color: #fff;
+    color: #000;
+    transition:
+      background-color 300ms,
+      color 300ms;
   }
 
   html,body,div#root {
@@ -29,6 +33,21 @@
   }
 
   * {
-    @apply transition-colors;
+    transition:
+      background-color 150ms,
+      border-color 150ms,
+      color 150ms,
+      fill 150ms,
+      stroke 150ms,
+      text-decoration-color 150ms;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  @layer base {
+    body {
+      background-color: var(--dark-bg-color);
+      color: var(--dark-text-color);
+    }
   }
 }

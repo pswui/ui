@@ -9,28 +9,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: "20"
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
-      - name: Enable Corepack
-        run: |
-          corepack enable
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: .yarn/cache
-          key: ${{ runner.os }}-ui-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-ui-
+          bun-version-file: package.json
       - name: Install dependencies
         run: |
-          yarn install
+          bun install --frozen-lockfile
       - name: Lint
-        run: yarn cli lint --write
+        run: bun --filter @psw-ui/cli lint --write
       - name: Build
-        run: yarn cli build
+        run: bun --filter @psw-ui/cli build
 
   component-check:
     runs-on: ubuntu-latest
@@ -38,25 +27,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: "20"
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
-      - name: Enable Corepack
-        run: |
-          corepack enable
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: .yarn/cache
-          key: ${{ runner.os }}-ui-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-ui-
+          bun-version-file: package.json
       - name: Install dependencies
         run: |
-          yarn install
+          bun install --frozen-lockfile
       - name: Lint
-        run: yarn react lint --write
-      - name: TypeScript Compile
-        run: yarn react tsc
+        run: bun --filter react lint --write
+      - name: Build
+        run: bun run react:build
