@@ -91,8 +91,9 @@ const [popoverContentVariant, resolvePopoverContentVariantProps] = vcn({
       lg: "[--popover-offset:8px]",
     },
     opened: {
-      true: "opacity-1 scale-100 pointer-events-auto select-auto touch-auto",
-      false: "opacity-0 scale-75 pointer-events-none select-none touch-none",
+      true: "visible opacity-1 scale-100 pointer-events-auto select-auto touch-auto",
+      false:
+        "invisible opacity-0 scale-75 pointer-events-none select-none touch-none",
     },
   },
   defaults: {

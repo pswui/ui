@@ -9,10 +9,13 @@ test("popover opens on trigger and closes on outside click", async ({
 
   const section = page.getByTestId("popover-section");
   const content = page.getByText("Popover content");
+  const trigger = section.getByRole("button", { name: "Open popover" });
 
-  await section.getByRole("button", { name: "Open popover" }).click();
+  await expect(content).toBeHidden();
+
+  await trigger.click();
   await expect(content).toBeVisible();
 
   await page.mouse.click(5, 5);
-  await expect(content).not.toBeVisible();
+  await expect(content).toBeHidden();
 });
