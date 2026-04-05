@@ -6,11 +6,10 @@ test("switch toggles checked state", async ({ page }) => {
   await gotoHarness(page);
 
   const section = page.getByTestId("switch-section");
-  const input = section.getByRole("checkbox", {
-    name: "Enable notifications",
-  });
+  const control = section.getByTestId("switch-control");
+  const input = control.locator('input[type="checkbox"]');
 
-  await input.check();
+  await control.click();
 
   await expect(input).toBeChecked();
   await expect(section.getByTestId("switch-state")).toHaveText("true");

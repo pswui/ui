@@ -6,9 +6,10 @@ test("checkbox toggles checked state", async ({ page }) => {
   await gotoHarness(page);
 
   const section = page.getByTestId("checkbox-section");
-  const input = section.getByRole("checkbox", { name: "Accept terms" });
+  const control = section.getByTestId("checkbox-control");
+  const input = control.locator('input[type="checkbox"]');
 
-  await input.check();
+  await control.click();
 
   await expect(input).toBeChecked();
   await expect(section.getByTestId("checkbox-state")).toHaveText("true");

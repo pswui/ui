@@ -38,3 +38,7 @@ jobs:
         run: bun --filter react lint --write
       - name: Build
         run: bun run react:build
+      - name: Install Playwright Browser
+        run: bunx playwright install --with-deps chromium
+      - name: E2E
+        run: bun run react:test:e2e
