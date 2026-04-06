@@ -36,6 +36,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../../components/Popover";
+import { Separator } from "../../components/Separator";
 import { Switch } from "../../components/Switch";
 import {
   TabContent,
@@ -253,6 +254,36 @@ const PopoverShowcase = () => {
   );
 };
 
+const SeparatorShowcase = () => {
+  return (
+    <Section
+      testId="separator"
+      title="Separator"
+      description="Horizontal, vertical, and decorative separators."
+    >
+      <div className="flex flex-col gap-4">
+        <div>
+          <p>Above horizontal separator</p>
+          <Separator aria-label="Horizontal separator" />
+          <p>Below horizontal separator</p>
+        </div>
+        <div className="flex h-10 items-stretch gap-4">
+          <span>Left content</span>
+          <Separator
+            orientation="vertical"
+            aria-label="Vertical separator"
+          />
+          <span>Right content</span>
+        </div>
+        <Separator
+          decorative
+          data-testid="decorative-separator"
+        />
+      </div>
+    </Section>
+  );
+};
+
 const SwitchShowcase = () => {
   const [checked, setChecked] = React.useState(false);
 
@@ -362,6 +393,7 @@ const showcases = [
   InputShowcase,
   LabelShowcase,
   PopoverShowcase,
+  SeparatorShowcase,
   SwitchShowcase,
   TabsShowcase,
   ToastShowcase,
