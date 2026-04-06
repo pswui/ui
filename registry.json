@@ -30,6 +30,7 @@
       "name": "Tabs",
       "files": ["index.ts", "Context.ts", "Hook.ts", "Component.tsx"]
     },
+    "textarea": { "type": "file", "name": "Textarea.tsx" },
     "toast": {
       "type": "dir",
       "name": "Toast",

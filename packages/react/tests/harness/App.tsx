@@ -43,6 +43,7 @@ import {
   TabProvider,
   TabTrigger,
 } from "../../components/Tabs";
+import { Textarea, TextareaFrame } from "../../components/Textarea";
 import { Toaster, useToast } from "../../components/Toast";
 import { Tooltip, TooltipContent } from "../../components/Tooltip";
 
@@ -213,6 +214,24 @@ const InputShowcase = () => {
   );
 };
 
+const TextareaShowcase = () => {
+  return (
+    <Section
+      testId="textarea"
+      title="Textarea"
+      description="Standalone textarea with custom validity."
+    >
+      <TextareaFrame full>
+        <Textarea
+          aria-label="Feedback textarea"
+          invalid="Feedback is required"
+          rows={4}
+        />
+      </TextareaFrame>
+    </Section>
+  );
+};
+
 const LabelShowcase = () => {
   return (
     <Section
@@ -360,6 +379,7 @@ const showcases = [
   DrawerShowcase,
   FormShowcase,
   InputShowcase,
+  TextareaShowcase,
   LabelShowcase,
   PopoverShowcase,
   SwitchShowcase,
