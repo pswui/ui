@@ -78,11 +78,14 @@ const ButtonShowcase = () => {
     <Section
       testId="button"
       title="Button"
-      description="Basic click and disabled behavior."
+      description="Basic click, disabled, and asChild link behavior."
     >
       <div className="flex items-center gap-3">
         <Button onClick={() => setCount((prev) => prev + 1)}>Increment</Button>
         <Button disabled>Disabled action</Button>
+        <Button asChild>
+          <a href="#button-as-child-link">Button asChild link</a>
+        </Button>
         <span data-testid="button-count">{count}</span>
       </div>
     </Section>
