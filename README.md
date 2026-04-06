@@ -69,7 +69,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] Badge
   - [ ] Breadcrumb
   - [x] Button
-  - [ ] Card
+  - [x] Card
   - [x] Checkbox
   - [ ] Context Menu
   - [ ] Data Table
