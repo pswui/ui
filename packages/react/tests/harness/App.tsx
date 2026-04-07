@@ -1,6 +1,14 @@
 import React from "react";
 
 import { Button } from "../../components/Button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../../components/Card";
 import { Checkbox } from "../../components/Checkbox";
 import {
   DialogClose,
@@ -85,6 +93,29 @@ const ButtonShowcase = () => {
         <Button disabled>Disabled action</Button>
         <span data-testid="button-count">{count}</span>
       </div>
+    </Section>
+  );
+};
+
+const CardShowcase = () => {
+  return (
+    <Section
+      testId="card"
+      title="Card"
+      description="Static content grouped with header, body, and footer."
+    >
+      <Card data-testid="card-root">
+        <CardHeader data-testid="card-header">
+          <CardTitle>Design review</CardTitle>
+          <CardDescription>Ready for a focused component pass.</CardDescription>
+        </CardHeader>
+        <CardContent data-testid="card-content">
+          <p>Review spacing, contrast, and responsive structure.</p>
+        </CardContent>
+        <CardFooter data-testid="card-footer">
+          <Button>Open review</Button>
+        </CardFooter>
+      </Card>
     </Section>
   );
 };
@@ -355,6 +386,7 @@ const TooltipShowcase = () => {
 
 const showcases = [
   ButtonShowcase,
+  CardShowcase,
   CheckboxShowcase,
   DialogShowcase,
   DrawerShowcase,
