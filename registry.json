@@ -12,6 +12,7 @@
     "useAnimatedMount.ts"
   ],
   "components": {
+    "badge": { "type": "file", "name": "Badge.tsx" },
     "button": { "type": "file", "name": "Button.tsx" },
     "checkbox": { "type": "file", "name": "Checkbox.tsx" },
     "dialog": {

@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Badge } from "../../components/Badge";
 import { Button } from "../../components/Button";
 import { Checkbox } from "../../components/Checkbox";
 import {
@@ -84,6 +85,36 @@ const ButtonShowcase = () => {
         <Button onClick={() => setCount((prev) => prev + 1)}>Increment</Button>
         <Button disabled>Disabled action</Button>
         <span data-testid="button-count">{count}</span>
+      </div>
+    </Section>
+  );
+};
+
+const BadgeShowcase = () => {
+  return (
+    <Section
+      testId="badge"
+      title="Badge"
+      description="Inline status labels and linked badge semantics."
+    >
+      <div className="flex flex-wrap items-center gap-3">
+        <Badge>Default</Badge>
+        <Badge status="success">Success</Badge>
+        <Badge
+          status="warning"
+          size="sm"
+        >
+          Warning
+        </Badge>
+        <Badge status="danger">Danger</Badge>
+        <Badge asChild>
+          <a
+            href="#badge-link"
+            data-testid="badge-link"
+          >
+            Linked badge
+          </a>
+        </Badge>
       </div>
     </Section>
   );
@@ -354,6 +385,7 @@ const TooltipShowcase = () => {
 };
 
 const showcases = [
+  BadgeShowcase,
   ButtonShowcase,
   CheckboxShowcase,
   DialogShowcase,
