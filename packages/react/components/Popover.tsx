@@ -6,20 +6,27 @@ interface IPopoverContext {
   opened: boolean;
 }
 
-const PopoverContext = React.createContext<
-  [IPopoverContext, React.Dispatch<React.SetStateAction<IPopoverContext>>]
->([
+type PopoverContextValue = [
+  IPopoverContext,
+  React.Dispatch<React.SetStateAction<IPopoverContext>>,
+  React.RefObject<HTMLElement>,
+];
+
+function warnMissingPopoverProvider() {
+  if (process.env.NODE_ENV && process.env.NODE_ENV === "development") {
+    console.warn(
+      "It seems like you're using PopoverContext outside of a provider.",
+    );
+  }
+}
+
+const PopoverContext = React.createContext<PopoverContextValue>([
   {
     opened: false,
     controlled: false,
   },
-  () => {
-    if (process.env.NODE_ENV && process.env.NODE_ENV === "development") {
-      console.warn(
-        "It seems like you're using PopoverContext outside of a provider.",
-      );
-    }
-  },
+  warnMissingPopoverProvider,
+  { current: null },
 ]);
 
 interface PopoverProps extends AsChild {
@@ -28,6 +35,7 @@ interface PopoverProps extends AsChild {
 }
 
 const Popover = ({ children, opened, asChild }: PopoverProps) => {
+  const triggerRef = useRef<HTMLElement>(null);
   const [state, setState] = React.useState<IPopoverContext>({
     opened: opened ?? false,
     controlled: opened !== undefined,
@@ -44,19 +52,27 @@ const Popover = ({ children, opened, asChild }: PopoverProps) => {
   const Comp = asChild ? Slot : "div";
 
   return (
-    <PopoverContext.Provider value={[state, setState]}>
+    <PopoverContext.Provider value={[state, setState, triggerRef]}>
       <Comp className="relative">{children}</Comp>
     </PopoverContext.Provider>
   );
 };
 
 const PopoverTrigger = ({ children }: { children: React.ReactNode }) => {
-  const [_, setState] = React.useContext(PopoverContext);
-  function setOpen() {
-    setState((prev) => ({ ...prev, opened: true }));
+  const [state, setState, triggerRef] = React.useContext(PopoverContext);
+  function toggleOpen() {
+    setState((prev) => ({ ...prev, opened: !prev.opened }));
   }
 
-  return <Slot onClick={setOpen}>{children}</Slot>;
+  return (
+    <Slot
+      aria-expanded={state.opened}
+      onClick={toggleOpen}
+      ref={triggerRef}
+    >
+      {children}
+    </Slot>
+  );
 };
 
 const popoverColors = {
@@ -202,15 +218,19 @@ const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
     const [variantProps, otherPropsCompressed] =
       resolvePopoverContentVariantProps(props);
     const { children, asChild, ...otherPropsExtracted } = otherPropsCompressed;
-    const [state, setState] = useContext(PopoverContext);
+    const [state, setState, triggerRef] = useContext(PopoverContext);
 
     const internalRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
       function handleOutsideClick(e: MouseEvent) {
+        if (!(e.target instanceof Node)) {
+          return;
+        }
+
         if (
-          internalRef.current &&
-          !internalRef.current.contains(e.target as Node | null)
+          !internalRef.current?.contains(e.target) &&
+          !triggerRef.current?.contains(e.target)
         ) {
           setState((prev) => ({ ...prev, opened: false }));
         }
@@ -220,7 +240,7 @@ const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
       return () => {
         document.removeEventListener("mousedown", handleOutsideClick);
       };
-    }, [state.controlled, setState]);
+    }, [state.controlled, setState, triggerRef]);
 
     const Comp = asChild ? Slot : "div";
 
