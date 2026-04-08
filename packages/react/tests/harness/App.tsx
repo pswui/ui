@@ -45,6 +45,7 @@ import {
   PopoverTrigger,
 } from "../../components/Popover";
 import { Separator } from "../../components/Separator";
+import { Skeleton } from "../../components/Skeleton";
 import { Switch } from "../../components/Switch";
 import {
   TabContent,
@@ -315,6 +316,47 @@ const SeparatorShowcase = () => {
   );
 };
 
+const SkeletonShowcase = () => {
+  return (
+    <Section
+      testId="skeleton"
+      title="Skeleton"
+      description="Loading placeholder blocks with shape and size variants."
+    >
+      <div
+        data-testid="skeleton-card"
+        className="flex w-full max-w-sm flex-col gap-3"
+      >
+        <div className="flex items-center gap-3">
+          <Skeleton
+            data-testid="skeleton-avatar"
+            shape="circle"
+            size="icon"
+          />
+          <div className="flex flex-1 flex-col gap-2">
+            <Skeleton
+              data-testid="skeleton-title"
+              size="lg"
+              className="w-48"
+            />
+            <Skeleton
+              data-testid="skeleton-subtitle"
+              size="sm"
+              className="w-32"
+            />
+          </div>
+        </div>
+        <Skeleton data-testid="skeleton-line" />
+        <Skeleton
+          data-testid="skeleton-short-line"
+          size="sm"
+          className="w-2/3"
+        />
+      </div>
+    </Section>
+  );
+};
+
 const SwitchShowcase = () => {
   const [checked, setChecked] = React.useState(false);
 
@@ -426,6 +468,7 @@ const showcases = [
   LabelShowcase,
   PopoverShowcase,
   SeparatorShowcase,
+  SkeletonShowcase,
   SwitchShowcase,
   TabsShowcase,
   ToastShowcase,

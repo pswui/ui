@@ -86,7 +86,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] Scroll Area
   - [ ] Select
   - [x] Separator
-  - [ ] Skeleton
+  - [x] Skeleton
   - [ ] Slider
   - [x] Switch
   - [ ] Table
