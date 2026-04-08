@@ -25,6 +25,7 @@
     "input": { "type": "file", "name": "Input.tsx" },
     "label": { "type": "file", "name": "Label.tsx" },
     "popover": { "type": "file", "name": "Popover.tsx" },
+    "progress": { "type": "file", "name": "Progress.tsx" },
     "separator": { "type": "file", "name": "Separator.tsx" },
     "switch": { "type": "file", "name": "Switch.tsx" },
     "tabs": {

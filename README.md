@@ -81,7 +81,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] Navigation Menu
   - [ ] Pagination
   - [x] Popover
-  - [ ] Progress
+  - [x] Progress
   - [ ] Radio Group
   - [ ] Scroll Area
   - [ ] Select
