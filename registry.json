@@ -13,6 +13,7 @@
   ],
   "components": {
     "alert": { "type": "file", "name": "Alert.tsx" },
+    "avatar": { "type": "file", "name": "Avatar.tsx" },
     "button": { "type": "file", "name": "Button.tsx" },
     "card": { "type": "file", "name": "Card.tsx" },
     "checkbox": { "type": "file", "name": "Checkbox.tsx" },
