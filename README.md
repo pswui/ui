@@ -64,7 +64,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] Form
   - [ ] Textarea
   - [ ] Accordion
-  - [ ] Alert
+  - [x] Alert
   - [ ] Avatar
   - [ ] Badge
   - [ ] Breadcrumb
