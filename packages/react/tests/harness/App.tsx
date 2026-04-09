@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Alert, AlertDescription, AlertTitle } from "../../components/Alert";
 import { Button } from "../../components/Button";
 import {
   Card,
@@ -77,6 +78,34 @@ const Section = ({
       </div>
       {children}
     </section>
+  );
+};
+
+const AlertShowcase = () => {
+  return (
+    <Section
+      testId="alert"
+      title="Alert"
+      description="Semantic alerts with compact status variants."
+    >
+      <div className="flex flex-col gap-3">
+        <Alert data-testid="alert-default">
+          <AlertTitle>Heads up</AlertTitle>
+          <AlertDescription>
+            This default alert keeps the content compact and readable.
+          </AlertDescription>
+        </Alert>
+        <Alert
+          status="success"
+          data-testid="alert-success"
+        >
+          <AlertTitle>Changes saved</AlertTitle>
+          <AlertDescription>
+            Your profile settings were stored successfully.
+          </AlertDescription>
+        </Alert>
+      </div>
+    </Section>
   );
 };
 
@@ -416,6 +445,7 @@ const TooltipShowcase = () => {
 };
 
 const showcases = [
+  AlertShowcase,
   ButtonShowcase,
   CardShowcase,
   CheckboxShowcase,
