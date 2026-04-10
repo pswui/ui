@@ -21,6 +21,26 @@ import {
 } from "./Store";
 import { toastVariant } from "./Variant";
 
+function getToastAnnouncementAttributes(
+  status: (typeof toasts)[`${number}`]["status"],
+) {
+  if (status === "error") {
+    return {
+      role: "alert" as const,
+      "aria-live": "assertive" as const,
+      "aria-atomic": "true" as const,
+      "aria-relevant": "additions text" as const,
+    };
+  }
+
+  return {
+    role: "status" as const,
+    "aria-live": "polite" as const,
+    "aria-atomic": "true" as const,
+    "aria-relevant": "additions text" as const,
+  };
+}
+
 const ToastTemplate = ({
   id,
   globalOption,
@@ -43,6 +63,9 @@ const ToastTemplate = ({
     ...globalOption,
     ...toast,
   };
+  const announcementAttributes = getToastAnnouncementAttributes(
+    toastData.status,
+  );
 
   React.useEffect(() => {
     if (toastData.life === "born") {
@@ -113,8 +136,13 @@ const ToastTemplate = ({
           </svg>
         </button>
       )}
-      <div className="text-sm font-bold">{toastData.title}</div>
-      <div className="text-sm">{toastData.description}</div>
+      <div
+        data-toast-announcement={true}
+        {...announcementAttributes}
+      >
+        <div className="text-sm font-bold">{toastData.title}</div>
+        <div className="text-sm">{toastData.description}</div>
+      </div>
     </div>
   );
 };
