@@ -12,6 +12,11 @@
     "useAnimatedMount.ts"
   ],
   "components": {
+    "accordion": {
+      "type": "dir",
+      "name": "Accordion",
+      "files": ["index.ts", "Context.ts", "Component.tsx"]
+    },
     "alert": { "type": "file", "name": "Alert.tsx" },
     "button": { "type": "file", "name": "Button.tsx" },
     "card": { "type": "file", "name": "Card.tsx" },
