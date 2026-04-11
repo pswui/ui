@@ -283,6 +283,7 @@ const LabelShowcase = () => {
     >
       <Label
         direction="horizontal"
+        className="bg-amber-100"
         data-testid="label-control"
       >
         <input
