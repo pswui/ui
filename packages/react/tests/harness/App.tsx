@@ -261,7 +261,7 @@ const InputShowcase = () => {
     <Section
       testId="input"
       title="Input"
-      description="Standalone input with custom validity."
+      description="Standalone input exposing semantic invalid state and custom validity."
     >
       <InputFrame>
         <Input
