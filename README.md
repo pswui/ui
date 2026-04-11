@@ -79,7 +79,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [x] Label
   - [ ] Menubar
   - [ ] Navigation Menu
-  - [ ] Pagination
+  - [x] Pagination
   - [x] Popover
   - [ ] Progress
   - [ ] Radio Group
