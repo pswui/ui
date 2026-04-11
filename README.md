@@ -89,7 +89,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] Skeleton
   - [ ] Slider
   - [x] Switch
-  - [ ] Table
+  - [x] Table
   - [x] Tabs
   - [x] Toast
   - [ ] Toggle
