@@ -629,18 +629,32 @@ const ToastTrigger = () => {
   const { toast } = useToast();
 
   return (
-    <Button
-      onClick={() =>
-        toast({
-          title: "Toast title",
-          description: "Toast description",
-          status: "success",
-          closeTimeout: null,
-        })
-      }
-    >
-      Show toast
-    </Button>
+    <div className="flex gap-2">
+      <Button
+        onClick={() =>
+          toast({
+            title: "Toast title",
+            description: "Toast description",
+            status: "success",
+            closeTimeout: null,
+          })
+        }
+      >
+        Show toast
+      </Button>
+      <Button
+        onClick={() =>
+          toast({
+            title: "Error toast title",
+            description: "Error toast description",
+            status: "error",
+            closeTimeout: null,
+          })
+        }
+      >
+        Show error toast
+      </Button>
+    </div>
   );
 };
 
