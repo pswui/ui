@@ -1,6 +1,5 @@
 import React from "react";
 
-import { Badge } from "../../components/Badge";
 import {
   Accordion,
   AccordionContent,
@@ -9,6 +8,7 @@ import {
 } from "../../components/Accordion";
 import { Alert, AlertDescription, AlertTitle } from "../../components/Alert";
 import { Avatar } from "../../components/Avatar";
+import { Badge } from "../../components/Badge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -71,6 +71,7 @@ import {
   PopoverTrigger,
 } from "../../components/Popover";
 import { Progress } from "../../components/Progress";
+import { RadioGroup, RadioGroupItem } from "../../components/RadioGroup";
 import { Separator } from "../../components/Separator";
 import { Skeleton } from "../../components/Skeleton";
 import { Switch } from "../../components/Switch";
@@ -251,7 +252,7 @@ const BadgeShowcase = () => {
     </Section>
   );
 };
-  
+
 const BreadcrumbShowcase = () => {
   return (
     <Section
@@ -599,6 +600,36 @@ const ProgressShowcase = () => {
   );
 };
 
+const RadioGroupShowcase = () => {
+  const [value, setValue] = React.useState("starter");
+
+  return (
+    <Section
+      testId="radio-group"
+      title="Radio Group"
+      description="Controlled radio selection with native keyboard support."
+    >
+      <div className="flex flex-col gap-3">
+        <RadioGroup
+          aria-label="Plan"
+          value={value}
+          onValueChange={setValue}
+        >
+          <RadioGroupItem value="starter">Starter</RadioGroupItem>
+          <RadioGroupItem value="pro">Pro</RadioGroupItem>
+          <RadioGroupItem
+            value="enterprise"
+            disabled
+          >
+            Enterprise
+          </RadioGroupItem>
+        </RadioGroup>
+        <span data-testid="radio-group-state">{value}</span>
+      </div>
+    </Section>
+  );
+};
+
 const SeparatorShowcase = () => {
   return (
     <Section
@@ -740,7 +771,7 @@ const TableShowcase = () => {
     </Section>
   );
 };
-  
+
 const ToggleShowcase = () => {
   const [pressed, setPressed] = React.useState(false);
 
@@ -884,6 +915,7 @@ const showcases = [
   PaginationShowcase,
   PopoverShowcase,
   ProgressShowcase,
+  RadioGroupShowcase,
   SeparatorShowcase,
   SkeletonShowcase,
   SwitchShowcase,

@@ -82,7 +82,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [x] Pagination
   - [x] Popover
   - [x] Progress
-  - [ ] Radio Group
+  - [x] Radio Group
   - [ ] Scroll Area
   - [ ] Select
   - [x] Separator
