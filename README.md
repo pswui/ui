@@ -103,8 +103,8 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
 ## Building local development environment
 
 ```bash
-# Install Packages
-bun install
+# Bun is the only supported package manager for local development.
+bun install --frozen-lockfile
 
 # Script running in workspace
 bun run react:dev  # `bun run dev` in react workspace
