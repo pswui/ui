@@ -112,13 +112,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       otherPropsCompressed;
 
     const Comp = asChild ? Slot : "button";
+    const semanticProps = asChild
+      ? { role, type }
+      : { role: role ?? "button", type: type ?? "button" };
 
     return (
       <Comp
         ref={ref}
-        type={type ?? "button"}
         className={buttonVariants(variantProps)}
-        role={role ?? "button"}
+        {...semanticProps}
         {...otherPropsExtracted}
       />
     );
