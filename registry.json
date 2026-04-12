@@ -25,6 +25,7 @@
     "form": { "type": "file", "name": "Form.tsx" },
     "input": { "type": "file", "name": "Input.tsx" },
     "label": { "type": "file", "name": "Label.tsx" },
+    "pagination": { "type": "file", "name": "Pagination.tsx" },
     "popover": { "type": "file", "name": "Popover.tsx" },
     "separator": { "type": "file", "name": "Separator.tsx" },
     "switch": { "type": "file", "name": "Switch.tsx" },

@@ -41,6 +41,15 @@ import {
 import { Input, InputFrame } from "../../components/Input";
 import { Label } from "../../components/Label";
 import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../../components/Pagination";
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -318,6 +327,76 @@ const LabelShowcase = () => {
   );
 };
 
+const PaginationShowcase = () => {
+  const [lastAction, setLastAction] = React.useState("page:1");
+
+  return (
+    <Section
+      testId="pagination"
+      title="Pagination"
+      description="Semantic pagination with current, disabled, and ellipsis states."
+    >
+      <div className="flex flex-col gap-4">
+        <Pagination aria-label="Results pages">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#page-0"
+                disabled
+                onClick={() => setLastAction("previous")}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href="#page-1"
+                active
+                onClick={(event) => event.preventDefault()}
+              >
+                1
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href="#page-2"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setLastAction("page:2");
+                }}
+              >
+                2
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis data-testid="pagination-ellipsis" />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href="#page-8"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setLastAction("page:8");
+                }}
+              >
+                8
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext
+                href="#page-2"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setLastAction("next");
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+        <p data-testid="pagination-last-action">{lastAction}</p>
+      </div>
+    </Section>
+  );
+};
+
 const PopoverShowcase = () => {
   return (
     <Section
@@ -512,6 +591,7 @@ const showcases = [
   InputShowcase,
   TextareaShowcase,
   LabelShowcase,
+  PaginationShowcase,
   PopoverShowcase,
   SeparatorShowcase,
   SwitchShowcase,
