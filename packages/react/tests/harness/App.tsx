@@ -1,5 +1,12 @@
 import React from "react";
 
+import { Badge } from "../../components/Badge";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../../components/Accordion";
 import { Alert, AlertDescription, AlertTitle } from "../../components/Alert";
 import { Avatar } from "../../components/Avatar";
 import {
@@ -63,7 +70,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../../components/Popover";
+import { Progress } from "../../components/Progress";
 import { Separator } from "../../components/Separator";
+import { Skeleton } from "../../components/Skeleton";
 import { Switch } from "../../components/Switch";
 import {
   Table,
@@ -164,6 +173,34 @@ const AlertShowcase = () => {
   );
 };
 
+const AccordionShowcase = () => {
+  return (
+    <Section
+      testId="accordion"
+      title="Accordion"
+      description="Single-open accordion with collapsible sections."
+    >
+      <Accordion
+        defaultValue="shipping"
+        collapsible
+      >
+        <AccordionItem value="shipping">
+          <AccordionTrigger>Shipping</AccordionTrigger>
+          <AccordionContent>
+            Ships within 2 to 3 business days for in-stock items.
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="returns">
+          <AccordionTrigger>Returns</AccordionTrigger>
+          <AccordionContent>
+            Returns are accepted within 30 days of delivery.
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </Section>
+  );
+};
+
 const ButtonShowcase = () => {
   const [count, setCount] = React.useState(0);
 
@@ -185,6 +222,36 @@ const ButtonShowcase = () => {
   );
 };
 
+const BadgeShowcase = () => {
+  return (
+    <Section
+      testId="badge"
+      title="Badge"
+      description="Inline status labels and linked badge semantics."
+    >
+      <div className="flex flex-wrap items-center gap-3">
+        <Badge>Default</Badge>
+        <Badge status="success">Success</Badge>
+        <Badge
+          status="warning"
+          size="sm"
+        >
+          Warning
+        </Badge>
+        <Badge status="danger">Danger</Badge>
+        <Badge asChild>
+          <a
+            href="#badge-link"
+            data-testid="badge-link"
+          >
+            Linked badge
+          </a>
+        </Badge>
+      </div>
+    </Section>
+  );
+};
+  
 const BreadcrumbShowcase = () => {
   return (
     <Section
@@ -329,17 +396,33 @@ const FormShowcase = () => {
     <Section
       testId="form"
       title="Form"
-      description="Helper and error text driven by invalid state."
+      description="Helper and error text remain associated with their field."
     >
-      <FormItem invalid="Required field">
-        <FormLabel>Name</FormLabel>
-        <Input
-          aria-label="Form name"
-          type="text"
-        />
-        <FormHelper hiddenOnInvalid>Helpful instructions</FormHelper>
-        <FormError data-testid="form-error" />
-      </FormItem>
+      <div className="flex w-full flex-col gap-6">
+        <FormItem invalid="Required field">
+          <FormLabel>Name</FormLabel>
+          <Input
+            aria-label="Form name"
+            data-testid="form-invalid-input"
+            type="text"
+          />
+          <FormHelper hiddenOnInvalid>Helpful instructions</FormHelper>
+          <FormError data-testid="form-error" />
+        </FormItem>
+
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <Input
+            aria-label="Form email"
+            data-testid="form-valid-input"
+            type="email"
+          />
+          <FormHelper data-testid="form-helper">
+            Send a work email we can reach.
+          </FormHelper>
+          <FormError />
+        </FormItem>
+      </div>
     </Section>
   );
 };
@@ -491,6 +574,31 @@ const PopoverShowcase = () => {
   );
 };
 
+const ProgressShowcase = () => {
+  const [value, setValue] = React.useState(40);
+
+  return (
+    <Section
+      testId="progress"
+      title="Progress"
+      description="Determinate and indeterminate progress state."
+    >
+      <div className="flex flex-col gap-4">
+        <Progress
+          aria-label="Upload progress"
+          value={value}
+          max={100}
+        />
+        <div className="flex items-center gap-3">
+          <Button onClick={() => setValue(75)}>Set progress to 75</Button>
+          <span data-testid="progress-value">{value}</span>
+        </div>
+        <Progress aria-label="Sync progress" />
+      </div>
+    </Section>
+  );
+};
+
 const SeparatorShowcase = () => {
   return (
     <Section
@@ -515,6 +623,47 @@ const SeparatorShowcase = () => {
         <Separator
           decorative
           data-testid="decorative-separator"
+        />
+      </div>
+    </Section>
+  );
+};
+
+const SkeletonShowcase = () => {
+  return (
+    <Section
+      testId="skeleton"
+      title="Skeleton"
+      description="Loading placeholder blocks with shape and size variants."
+    >
+      <div
+        data-testid="skeleton-card"
+        className="flex w-full max-w-sm flex-col gap-3"
+      >
+        <div className="flex items-center gap-3">
+          <Skeleton
+            data-testid="skeleton-avatar"
+            shape="circle"
+            size="icon"
+          />
+          <div className="flex flex-1 flex-col gap-2">
+            <Skeleton
+              data-testid="skeleton-title"
+              size="lg"
+              className="w-48"
+            />
+            <Skeleton
+              data-testid="skeleton-subtitle"
+              size="sm"
+              className="w-32"
+            />
+          </div>
+        </div>
+        <Skeleton data-testid="skeleton-line" />
+        <Skeleton
+          data-testid="skeleton-short-line"
+          size="sm"
+          className="w-2/3"
         />
       </div>
     </Section>
@@ -718,6 +867,8 @@ const TooltipShowcase = () => {
 };
 
 const showcases = [
+  BadgeShowcase,
+  AccordionShowcase,
   AlertShowcase,
   AvatarShowcase,
   ButtonShowcase,
@@ -732,7 +883,9 @@ const showcases = [
   LabelShowcase,
   PaginationShowcase,
   PopoverShowcase,
+  ProgressShowcase,
   SeparatorShowcase,
+  SkeletonShowcase,
   SwitchShowcase,
   TableShowcase,
   ToggleShowcase,

@@ -63,10 +63,10 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] ImageInput
   - [ ] Form
   - [x] Textarea
-  - [ ] Accordion
+  - [x] Accordion
   - [x] Alert
   - [x] Avatar
-  - [ ] Badge
+  - [x] Badge
   - [x] Breadcrumb
   - [x] Button
   - [x] Card
@@ -81,12 +81,12 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] Navigation Menu
   - [x] Pagination
   - [x] Popover
-  - [ ] Progress
+  - [x] Progress
   - [ ] Radio Group
   - [ ] Scroll Area
   - [ ] Select
   - [x] Separator
-  - [ ] Skeleton
+  - [x] Skeleton
   - [ ] Slider
   - [x] Switch
   - [x] Table

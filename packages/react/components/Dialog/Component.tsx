@@ -5,7 +5,13 @@ import {
   useDocument,
   vcn,
 } from "@pswui-lib";
-import React, { type ReactNode, useId, useRef, useState } from "react";
+import React, {
+  type ReactNode,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
 import ReactDOM from "react-dom";
 
 import {
@@ -99,6 +105,23 @@ const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlay>(
     const { isMounted, isRendered } = useAnimatedMount(opened, internalRef);
 
     const document = useDocument();
+
+    useEffect(() => {
+      if (!document || !opened) return;
+
+      const onKeyDown = (event: KeyboardEvent) => {
+        if (event.defaultPrevented || event.key !== "Escape") return;
+
+        setContext((prev) => ({ ...prev, opened: false }));
+      };
+
+      document.addEventListener("keydown", onKeyDown);
+
+      return () => {
+        document.removeEventListener("keydown", onKeyDown);
+      };
+    }, [document, opened, setContext]);
+
     if (!document) return null;
 
     return isMounted
@@ -173,11 +196,28 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
       resolveDialogContentVariant(props);
     const { isRendered } = useInnerDialogContext();
     const { children, onClick, ...otherPropsExtracted } = otherPropsCompressed;
+    const internalRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+      if (!isRendered) return;
+
+      internalRef.current?.focus();
+    }, [isRendered]);
+
     return (
       <div
         {...otherPropsExtracted}
-        ref={ref}
+        ref={(el) => {
+          internalRef.current = el;
+          if (typeof ref === "function") {
+            ref(el);
+          } else if (ref) {
+            ref.current = el;
+          }
+        }}
         role="dialog"
+        tabIndex={-1}
+        aria-modal="true"
         aria-labelledby={ids.title}
         aria-describedby={ids.description}
         className={dialogContentVariant({
