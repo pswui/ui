@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Badge } from "../../components/Badge";
 import {
   Accordion,
   AccordionContent,
@@ -195,6 +196,36 @@ const ButtonShowcase = () => {
   );
 };
 
+const BadgeShowcase = () => {
+  return (
+    <Section
+      testId="badge"
+      title="Badge"
+      description="Inline status labels and linked badge semantics."
+    >
+      <div className="flex flex-wrap items-center gap-3">
+        <Badge>Default</Badge>
+        <Badge status="success">Success</Badge>
+        <Badge
+          status="warning"
+          size="sm"
+        >
+          Warning
+        </Badge>
+        <Badge status="danger">Danger</Badge>
+        <Badge asChild>
+          <a
+            href="#badge-link"
+            data-testid="badge-link"
+          >
+            Linked badge
+          </a>
+        </Badge>
+      </div>
+    </Section>
+  );
+};
+  
 const BreadcrumbShowcase = () => {
   return (
     <Section
@@ -810,6 +841,7 @@ const TooltipShowcase = () => {
 };
 
 const showcases = [
+  BadgeShowcase,
   AccordionShowcase,
   AlertShowcase,
   ButtonShowcase,

@@ -12,6 +12,7 @@
     "useAnimatedMount.ts"
   ],
   "components": {
+    "badge": { "type": "file", "name": "Badge.tsx" },
     "accordion": {
       "type": "dir",
       "name": "Accordion",

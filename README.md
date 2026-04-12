@@ -66,7 +66,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [x] Accordion
   - [x] Alert
   - [ ] Avatar
-  - [ ] Badge
+  - [x] Badge
   - [x] Breadcrumb
   - [x] Button
   - [x] Card
