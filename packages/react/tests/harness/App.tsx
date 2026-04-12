@@ -338,17 +338,33 @@ const FormShowcase = () => {
     <Section
       testId="form"
       title="Form"
-      description="Helper and error text driven by invalid state."
+      description="Helper and error text remain associated with their field."
     >
-      <FormItem invalid="Required field">
-        <FormLabel>Name</FormLabel>
-        <Input
-          aria-label="Form name"
-          type="text"
-        />
-        <FormHelper hiddenOnInvalid>Helpful instructions</FormHelper>
-        <FormError data-testid="form-error" />
-      </FormItem>
+      <div className="flex w-full flex-col gap-6">
+        <FormItem invalid="Required field">
+          <FormLabel>Name</FormLabel>
+          <Input
+            aria-label="Form name"
+            data-testid="form-invalid-input"
+            type="text"
+          />
+          <FormHelper hiddenOnInvalid>Helpful instructions</FormHelper>
+          <FormError data-testid="form-error" />
+        </FormItem>
+
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <Input
+            aria-label="Form email"
+            data-testid="form-valid-input"
+            type="email"
+          />
+          <FormHelper data-testid="form-helper">
+            Send a work email we can reach.
+          </FormHelper>
+          <FormError />
+        </FormItem>
+      </div>
     </Section>
   );
 };
