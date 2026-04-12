@@ -29,6 +29,7 @@
     "pagination": { "type": "file", "name": "Pagination.tsx" },
     "popover": { "type": "file", "name": "Popover.tsx" },
     "separator": { "type": "file", "name": "Separator.tsx" },
+    "skeleton": { "type": "file", "name": "Skeleton.tsx" },
     "switch": { "type": "file", "name": "Switch.tsx" },
     "table": { "type": "file", "name": "Table.tsx" },
     "toggle": { "type": "file", "name": "Toggle.tsx" },
