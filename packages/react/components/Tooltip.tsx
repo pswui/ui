@@ -1,12 +1,16 @@
 import { type AsChild, Slot, type VariantProps, vcn } from "@pswui-lib";
-import React, { useState } from "react";
+import React from "react";
 
 interface TooltipContextBody {
   position: "top" | "bottom" | "left" | "right";
+  opened: boolean;
+  controlled: boolean;
 }
 
 const tooltipContextInitial: TooltipContextBody = {
   position: "top",
+  opened: false,
+  controlled: false,
 };
 const TooltipContext = React.createContext<
   [TooltipContextBody, React.Dispatch<React.SetStateAction<TooltipContextBody>>]
@@ -53,19 +57,83 @@ interface TooltipProps
 
 const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
   const [variantProps, rest] = resolveTooltipVariantProps(props);
-  const { asChild, ...extractedRest } = rest;
-  const contextState = useState<TooltipContextBody>({
+  const {
+    asChild,
+    onBlur,
+    onFocus,
+    onMouseEnter,
+    onMouseLeave,
+    ...extractedRest
+  } = rest;
+  const internalRef = React.useRef<HTMLElement | null>(null);
+  const isControlled = variantProps.controlled || props.opened !== undefined;
+  const [contextState, setContextState] = React.useState<TooltipContextBody>({
     ...tooltipContextInitial,
-    ...variantProps,
+    position: variantProps.position ?? tooltipContextInitial.position,
+    opened: props.opened ?? false,
+    controlled: isControlled,
   });
+
+  React.useEffect(() => {
+    setContextState((prev) => ({
+      ...prev,
+      position: variantProps.position ?? tooltipContextInitial.position,
+      controlled: isControlled,
+      opened: isControlled ? props.opened ?? false : prev.opened,
+    }));
+  }, [isControlled, props.opened, variantProps.position]);
+
+  function setOpen(opened: boolean) {
+    if (!isControlled) {
+      setContextState((prev) => ({ ...prev, opened }));
+    }
+  }
+
+  const handleMouseEnter: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    onMouseEnter?.(event);
+    setOpen(true);
+  };
+
+  const handleMouseLeave: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    onMouseLeave?.(event);
+    setOpen(false);
+  };
+
+  const handleFocus: React.FocusEventHandler<HTMLDivElement> = (event) => {
+    onFocus?.(event);
+    setOpen(true);
+  };
+
+  const handleBlur: React.FocusEventHandler<HTMLDivElement> = (event) => {
+    onBlur?.(event);
+    if (internalRef.current?.contains(event.relatedTarget as Node | null)) {
+      return;
+    }
+    setOpen(false);
+  };
 
   const Comp = asChild ? Slot : "div";
 
   return (
-    <TooltipContext.Provider value={contextState}>
+    <TooltipContext.Provider value={[contextState, setContextState]}>
       <Comp
-        ref={ref}
-        className={tooltipVariant(variantProps)}
+        ref={(element: HTMLElement | null) => {
+          internalRef.current = element;
+          if (typeof ref === "function") {
+            ref(element as HTMLDivElement | null);
+          } else if (ref) {
+            ref.current = element as HTMLDivElement | null;
+          }
+        }}
+        className={tooltipVariant({
+          ...variantProps,
+          controlled: isControlled,
+          opened: contextState.opened,
+        })}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         {...extractedRest}
       />
     </TooltipContext.Provider>
@@ -84,19 +152,19 @@ const tooltipContentColors = {
 };
 
 const [tooltipContentVariant, resolveTooltipContentVariantProps] = vcn({
-  base: `absolute py-1 px-3 rounded-md border opacity-0 transition-all
-  group-[:not(.controlled):hover]/tooltip:opacity-100 group-[:not(.controlled):focus-within]/tooltip:opacity-100 group-[.opened]/tooltip:opacity-100
-  select-none pointer-events-none
-  group-[:not(.controlled):hover]/tooltip:select-auto group-[:not(.controlled):focus-within]/tooltip:select-auto group-[.opened]/tooltip:select-auto group-[:not(.controlled):hover]/tooltip:pointer-events-auto group-[:not(.controlled):focus-within]/tooltip:pointer-events-auto group-[.opened]/tooltip:pointer-events-auto
-  group-[:not(.controlled):hover]/tooltip:[transition:transform_150ms_ease-out_var(--delay),opacity_150ms_ease-out_var(--delay),background-color_150ms_ease-in-out,color_150ms_ease-in-out,border-color_150ms_ease-in-out] group-[:not(.controlled):focus-within]/tooltip:[transition:transform_150ms_ease-out_var(--delay),opacity_150ms_ease-out_var(--delay),background-color_150ms_ease-in-out,color_150ms_ease-in-out,border-color_150ms_ease-in-out]`,
+  base: `absolute py-1 px-3 rounded-md border opacity-0 select-none pointer-events-none
+  [transition:transform_150ms_ease-out_var(--delay),opacity_150ms_ease-out_var(--delay),background-color_150ms_ease-in-out,color_150ms_ease-in-out,border-color_150ms_ease-in-out]`,
   variants: {
     position: {
-      top: "bottom-[calc(100%+var(--tooltip-offset))] left-1/2 -translate-x-1/2 group-[:not(.controlled):hover]/tooltip:translate-y-0 group-[:not(.controlled):focus-within]/tooltip:translate-y-0 group-[.opened]/tooltip:translate-y-0 translate-y-[10px]",
+      top: "bottom-[calc(100%+var(--tooltip-offset))] left-1/2 -translate-x-1/2",
       bottom:
-        "top-[calc(100%+var(--tooltip-offset))] left-1/2 -translate-x-1/2 group-[:not(.controlled):hover]/tooltip:translate-y-0 group-[:not(.controlled):focus-within]/tooltip:translate-y-0 group-[.opened]/tooltip:translate-y-0 translate-y-[-10px]",
-      left: "right-[calc(100%+var(--tooltip-offset))] top-1/2 -translate-y-1/2 group-[:not(.controlled):hover]/tooltip:translate-x-0 group-[:not(.controlled):focus-within]/tooltip:translate-x-0 group-[.opened]/tooltip:translate-x-0 translate-x-[10px]",
-      right:
-        "left-[calc(100%+var(--tooltip-offset))] top-1/2 -translate-y-1/2 group-[:not(.controlled):hover]/tooltip:translate-x-0 group-[:not(.controlled):focus-within]/tooltip:translate-x-0 group-[.opened]/tooltip:translate-x-0 translate-x-[-10px]",
+        "top-[calc(100%+var(--tooltip-offset))] left-1/2 -translate-x-1/2",
+      left: "right-[calc(100%+var(--tooltip-offset))] top-1/2 -translate-y-1/2",
+      right: "left-[calc(100%+var(--tooltip-offset))] top-1/2 -translate-y-1/2",
+    },
+    opened: {
+      true: "opacity-100 select-auto pointer-events-auto",
+      false: "opacity-0 select-none pointer-events-none",
     },
     delay: {
       none: "[--delay:0ms]",
@@ -118,15 +186,30 @@ const [tooltipContentVariant, resolveTooltipContentVariantProps] = vcn({
   },
   defaults: {
     position: "top",
+    opened: false,
     offset: "md",
     delay: "normal",
     status: "normal",
   },
+  dynamics: [
+    ({ position, opened }) => {
+      switch (position) {
+        case "top":
+          return opened ? "translate-y-0" : "translate-y-[10px]";
+        case "bottom":
+          return opened ? "translate-y-0" : "translate-y-[-10px]";
+        case "left":
+          return opened ? "translate-x-0" : "translate-x-[10px]";
+        case "right":
+          return opened ? "translate-x-0" : "translate-x-[-10px]";
+      }
+    },
+  ],
 });
 
 interface TooltipContentProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    Omit<VariantProps<typeof tooltipContentVariant>, "position"> {}
+    Omit<VariantProps<typeof tooltipContentVariant>, "position" | "opened"> {}
 
 const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
   (props, ref) => {
@@ -136,10 +219,14 @@ const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
     return (
       <div
         ref={ref}
+        aria-hidden={!contextState.opened}
         className={tooltipContentVariant({
           ...variantProps,
+          opened: contextState.opened,
           position: contextState.position,
         })}
+        data-state={contextState.opened ? "open" : "closed"}
+        hidden={!contextState.opened}
         role="tooltip"
         {...rest}
       />
