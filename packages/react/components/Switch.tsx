@@ -24,7 +24,7 @@ const switchColors = {
 };
 
 const [switchVariant, resolveSwitchVariantProps] = vcn({
-  base: `relative inline-block group/switch rounded-full p-1 has-[input[type=checkbox]:not(:checked)]:pr-5 has-[input[type=checkbox]:checked]:pl-5 ${switchColors.background.default} ${switchColors.background.hover} ${switchColors.background.checked} ${switchColors.background.checkedHover} ${switchColors.background.disabled} ${switchColors.background.disabledHover} ${switchColors.background.disabledChecked} ${switchColors.background.disabledCheckedHover} has-[input[type=checkbox]:disabled]:cursor-not-allowed transition-all duration-200 ease-in-out`,
+  base: `relative inline-block group/switch rounded-full p-1 outline outline-2 outline-offset-2 outline-transparent has-[input[type=checkbox]:focus-visible]:outline-black/20 dark:has-[input[type=checkbox]:focus-visible]:outline-white/30 has-[input[type=checkbox]:not(:checked)]:pr-5 has-[input[type=checkbox]:checked]:pl-5 ${switchColors.background.default} ${switchColors.background.hover} ${switchColors.background.checked} ${switchColors.background.checkedHover} ${switchColors.background.disabled} ${switchColors.background.disabledHover} ${switchColors.background.disabledChecked} ${switchColors.background.disabledCheckedHover} has-[input[type=checkbox]:disabled]:cursor-not-allowed transition-all duration-200 ease-in-out`,
   variants: {},
   defaults: {},
 });
@@ -42,6 +42,7 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>((props, ref) => {
     defaultChecked,
     checked: propChecked,
     onChange,
+    role,
     ...otherPropsExtracted
   } = otherPropsCompressed;
 
@@ -62,7 +63,8 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>((props, ref) => {
         defaultChecked={defaultChecked}
         checked={typeof defaultChecked === "boolean" ? undefined : checked}
         type="checkbox"
-        className="hidden"
+        role={role ?? "switch"}
+        className="absolute inset-0 m-0 h-full w-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
         onChange={(e) => {
           setChecked(e.currentTarget.checked);
           onChange?.(e);

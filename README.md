@@ -63,11 +63,11 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] ImageInput
   - [ ] Form
   - [x] Textarea
-  - [ ] Accordion
+  - [x] Accordion
   - [x] Alert
   - [ ] Avatar
   - [x] Badge
-  - [ ] Breadcrumb
+  - [x] Breadcrumb
   - [x] Button
   - [x] Card
   - [x] Checkbox
@@ -79,20 +79,20 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [x] Label
   - [ ] Menubar
   - [ ] Navigation Menu
-  - [ ] Pagination
+  - [x] Pagination
   - [x] Popover
-  - [ ] Progress
+  - [x] Progress
   - [ ] Radio Group
   - [ ] Scroll Area
   - [ ] Select
   - [x] Separator
-  - [ ] Skeleton
+  - [x] Skeleton
   - [ ] Slider
   - [x] Switch
-  - [ ] Table
+  - [x] Table
   - [x] Tabs
   - [x] Toast
-  - [ ] Toggle
+  - [x] Toggle
   - [ ] Toggle Group
   - [x] Tooltip
 - CLI

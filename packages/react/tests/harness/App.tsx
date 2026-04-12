@@ -1,7 +1,21 @@
 import React from "react";
 
 import { Badge } from "../../components/Badge";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../../components/Accordion";
 import { Alert, AlertDescription, AlertTitle } from "../../components/Alert";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "../../components/Breadcrumb";
 import { Button } from "../../components/Button";
 import {
   Card,
@@ -42,12 +56,33 @@ import {
 import { Input, InputFrame } from "../../components/Input";
 import { Label } from "../../components/Label";
 import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../../components/Pagination";
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "../../components/Popover";
+import { Progress } from "../../components/Progress";
 import { Separator } from "../../components/Separator";
+import { Skeleton } from "../../components/Skeleton";
 import { Switch } from "../../components/Switch";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../components/Table";
 import {
   TabContent,
   TabList,
@@ -56,6 +91,7 @@ import {
 } from "../../components/Tabs";
 import { Textarea, TextareaFrame } from "../../components/Textarea";
 import { Toaster, useToast } from "../../components/Toast";
+import { Toggle } from "../../components/Toggle";
 import { Tooltip, TooltipContent } from "../../components/Tooltip";
 
 const Section = ({
@@ -111,6 +147,34 @@ const AlertShowcase = () => {
   );
 };
 
+const AccordionShowcase = () => {
+  return (
+    <Section
+      testId="accordion"
+      title="Accordion"
+      description="Single-open accordion with collapsible sections."
+    >
+      <Accordion
+        defaultValue="shipping"
+        collapsible
+      >
+        <AccordionItem value="shipping">
+          <AccordionTrigger>Shipping</AccordionTrigger>
+          <AccordionContent>
+            Ships within 2 to 3 business days for in-stock items.
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="returns">
+          <AccordionTrigger>Returns</AccordionTrigger>
+          <AccordionContent>
+            Returns are accepted within 30 days of delivery.
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </Section>
+  );
+};
+
 const ButtonShowcase = () => {
   const [count, setCount] = React.useState(0);
 
@@ -158,6 +222,36 @@ const BadgeShowcase = () => {
           </a>
         </Badge>
       </div>
+    </Section>
+  );
+};
+  
+const BreadcrumbShowcase = () => {
+  return (
+    <Section
+      testId="breadcrumb"
+      title="Breadcrumb"
+      description="Semantic navigation with decorative separators."
+    >
+      <Breadcrumb data-testid="breadcrumb-nav">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator data-testid="breadcrumb-separator" />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <a href="#settings">Settings</a>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator data-testid="breadcrumb-separator" />
+          <BreadcrumbItem>
+            <BreadcrumbPage asChild>
+              <span data-testid="breadcrumb-current-page">Profile</span>
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
     </Section>
   );
 };
@@ -276,17 +370,33 @@ const FormShowcase = () => {
     <Section
       testId="form"
       title="Form"
-      description="Helper and error text driven by invalid state."
+      description="Helper and error text remain associated with their field."
     >
-      <FormItem invalid="Required field">
-        <FormLabel>Name</FormLabel>
-        <Input
-          aria-label="Form name"
-          type="text"
-        />
-        <FormHelper hiddenOnInvalid>Helpful instructions</FormHelper>
-        <FormError data-testid="form-error" />
-      </FormItem>
+      <div className="flex w-full flex-col gap-6">
+        <FormItem invalid="Required field">
+          <FormLabel>Name</FormLabel>
+          <Input
+            aria-label="Form name"
+            data-testid="form-invalid-input"
+            type="text"
+          />
+          <FormHelper hiddenOnInvalid>Helpful instructions</FormHelper>
+          <FormError data-testid="form-error" />
+        </FormItem>
+
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <Input
+            aria-label="Form email"
+            data-testid="form-valid-input"
+            type="email"
+          />
+          <FormHelper data-testid="form-helper">
+            Send a work email we can reach.
+          </FormHelper>
+          <FormError />
+        </FormItem>
+      </div>
     </Section>
   );
 };
@@ -296,7 +406,7 @@ const InputShowcase = () => {
     <Section
       testId="input"
       title="Input"
-      description="Standalone input with custom validity."
+      description="Standalone input exposing semantic invalid state and custom validity."
     >
       <InputFrame>
         <Input
@@ -336,6 +446,7 @@ const LabelShowcase = () => {
     >
       <Label
         direction="horizontal"
+        className="bg-amber-100"
         data-testid="label-control"
       >
         <input
@@ -344,6 +455,76 @@ const LabelShowcase = () => {
         />
         <span>Label text</span>
       </Label>
+    </Section>
+  );
+};
+
+const PaginationShowcase = () => {
+  const [lastAction, setLastAction] = React.useState("page:1");
+
+  return (
+    <Section
+      testId="pagination"
+      title="Pagination"
+      description="Semantic pagination with current, disabled, and ellipsis states."
+    >
+      <div className="flex flex-col gap-4">
+        <Pagination aria-label="Results pages">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#page-0"
+                disabled
+                onClick={() => setLastAction("previous")}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href="#page-1"
+                active
+                onClick={(event) => event.preventDefault()}
+              >
+                1
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href="#page-2"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setLastAction("page:2");
+                }}
+              >
+                2
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis data-testid="pagination-ellipsis" />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href="#page-8"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setLastAction("page:8");
+                }}
+              >
+                8
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext
+                href="#page-2"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setLastAction("next");
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+        <p data-testid="pagination-last-action">{lastAction}</p>
+      </div>
     </Section>
   );
 };
@@ -363,6 +544,31 @@ const PopoverShowcase = () => {
           <div>Popover content</div>
         </PopoverContent>
       </Popover>
+    </Section>
+  );
+};
+
+const ProgressShowcase = () => {
+  const [value, setValue] = React.useState(40);
+
+  return (
+    <Section
+      testId="progress"
+      title="Progress"
+      description="Determinate and indeterminate progress state."
+    >
+      <div className="flex flex-col gap-4">
+        <Progress
+          aria-label="Upload progress"
+          value={value}
+          max={100}
+        />
+        <div className="flex items-center gap-3">
+          <Button onClick={() => setValue(75)}>Set progress to 75</Button>
+          <span data-testid="progress-value">{value}</span>
+        </div>
+        <Progress aria-label="Sync progress" />
+      </div>
     </Section>
   );
 };
@@ -397,6 +603,47 @@ const SeparatorShowcase = () => {
   );
 };
 
+const SkeletonShowcase = () => {
+  return (
+    <Section
+      testId="skeleton"
+      title="Skeleton"
+      description="Loading placeholder blocks with shape and size variants."
+    >
+      <div
+        data-testid="skeleton-card"
+        className="flex w-full max-w-sm flex-col gap-3"
+      >
+        <div className="flex items-center gap-3">
+          <Skeleton
+            data-testid="skeleton-avatar"
+            shape="circle"
+            size="icon"
+          />
+          <div className="flex flex-1 flex-col gap-2">
+            <Skeleton
+              data-testid="skeleton-title"
+              size="lg"
+              className="w-48"
+            />
+            <Skeleton
+              data-testid="skeleton-subtitle"
+              size="sm"
+              className="w-32"
+            />
+          </div>
+        </div>
+        <Skeleton data-testid="skeleton-line" />
+        <Skeleton
+          data-testid="skeleton-short-line"
+          size="sm"
+          className="w-2/3"
+        />
+      </div>
+    </Section>
+  );
+};
+
 const SwitchShowcase = () => {
   const [checked, setChecked] = React.useState(false);
 
@@ -420,27 +667,109 @@ const SwitchShowcase = () => {
   );
 };
 
+const TableShowcase = () => {
+  return (
+    <Section
+      testId="table"
+      title="Table"
+      description="Semantic table structure with header, body, footer, and caption."
+    >
+      <div className="overflow-x-auto">
+        <Table data-testid="table-root">
+          <TableCaption data-testid="table-caption">
+            Quarterly revenue by team
+          </TableCaption>
+          <TableHeader data-testid="table-header">
+            <TableRow>
+              <TableHead scope="col">Team</TableHead>
+              <TableHead scope="col">Region</TableHead>
+              <TableHead
+                scope="col"
+                className="text-right"
+              >
+                Revenue
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody data-testid="table-body">
+            <TableRow>
+              <TableCell>Platform</TableCell>
+              <TableCell>North America</TableCell>
+              <TableCell className="text-right">$92K</TableCell>
+            </TableRow>
+            <TableRow data-state="selected">
+              <TableCell>Infrastructure</TableCell>
+              <TableCell>Europe</TableCell>
+              <TableCell className="text-right">$74K</TableCell>
+            </TableRow>
+          </TableBody>
+          <TableFooter data-testid="table-footer">
+            <TableRow>
+              <TableCell colSpan={2}>Total</TableCell>
+              <TableCell className="text-right">$166K</TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
+    </Section>
+  );
+};
+  
+const ToggleShowcase = () => {
+  const [pressed, setPressed] = React.useState(false);
+
+  return (
+    <Section
+      testId="toggle"
+      title="Toggle"
+      description="Controlled pressed state and disabled behavior."
+    >
+      <div className="flex items-center gap-3">
+        <Toggle
+          pressed={pressed}
+          onPressedChange={setPressed}
+        >
+          Pin item
+        </Toggle>
+        <Toggle disabled>Disabled toggle</Toggle>
+        <span data-testid="toggle-state">{String(pressed)}</span>
+      </div>
+    </Section>
+  );
+};
+
 const TabsShowcase = () => {
+  const [submitCount, setSubmitCount] = React.useState(0);
+
   return (
     <Section
       testId="tabs"
       title="Tabs"
       description="Default tab and manual switching."
     >
-      <TabProvider defaultName="account">
-        <TabList>
-          <TabTrigger name="account">Account</TabTrigger>
-          <TabTrigger name="security">Security</TabTrigger>
-        </TabList>
-        <div className="pt-4">
-          <TabContent name="account">
-            <div>Account content</div>
-          </TabContent>
-          <TabContent name="security">
-            <div>Security content</div>
-          </TabContent>
-        </div>
-      </TabProvider>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={(event) => {
+          event.preventDefault();
+          setSubmitCount((count) => count + 1);
+        }}
+      >
+        <TabProvider defaultName="account">
+          <TabList>
+            <TabTrigger name="account">Account</TabTrigger>
+            <TabTrigger name="security">Security</TabTrigger>
+          </TabList>
+          <div className="pt-4">
+            <TabContent name="account">
+              <div>Account content</div>
+            </TabContent>
+            <TabContent name="security">
+              <div>Security content</div>
+            </TabContent>
+          </div>
+        </TabProvider>
+        <span data-testid="tabs-submit-count">{submitCount}</span>
+      </form>
     </Section>
   );
 };
@@ -449,18 +778,32 @@ const ToastTrigger = () => {
   const { toast } = useToast();
 
   return (
-    <Button
-      onClick={() =>
-        toast({
-          title: "Toast title",
-          description: "Toast description",
-          status: "success",
-          closeTimeout: null,
-        })
-      }
-    >
-      Show toast
-    </Button>
+    <div className="flex gap-2">
+      <Button
+        onClick={() =>
+          toast({
+            title: "Toast title",
+            description: "Toast description",
+            status: "success",
+            closeTimeout: null,
+          })
+        }
+      >
+        Show toast
+      </Button>
+      <Button
+        onClick={() =>
+          toast({
+            title: "Error toast title",
+            description: "Error toast description",
+            status: "error",
+            closeTimeout: null,
+          })
+        }
+      >
+        Show error toast
+      </Button>
+    </div>
   );
 };
 
@@ -499,8 +842,10 @@ const TooltipShowcase = () => {
 
 const showcases = [
   BadgeShowcase,
+  AccordionShowcase,
   AlertShowcase,
   ButtonShowcase,
+  BreadcrumbShowcase,
   CardShowcase,
   CheckboxShowcase,
   DialogShowcase,
@@ -509,9 +854,14 @@ const showcases = [
   InputShowcase,
   TextareaShowcase,
   LabelShowcase,
+  PaginationShowcase,
   PopoverShowcase,
+  ProgressShowcase,
   SeparatorShowcase,
+  SkeletonShowcase,
   SwitchShowcase,
+  TableShowcase,
+  ToggleShowcase,
   TabsShowcase,
   ToastShowcase,
   TooltipShowcase,

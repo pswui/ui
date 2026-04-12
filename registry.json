@@ -13,7 +13,13 @@
   ],
   "components": {
     "badge": { "type": "file", "name": "Badge.tsx" },
+    "accordion": {
+      "type": "dir",
+      "name": "Accordion",
+      "files": ["index.ts", "Context.ts", "Component.tsx"]
+    },
     "alert": { "type": "file", "name": "Alert.tsx" },
+    "breadcrumb": { "type": "file", "name": "Breadcrumb.tsx" },
     "button": { "type": "file", "name": "Button.tsx" },
     "card": { "type": "file", "name": "Card.tsx" },
     "checkbox": { "type": "file", "name": "Checkbox.tsx" },
@@ -26,9 +32,14 @@
     "form": { "type": "file", "name": "Form.tsx" },
     "input": { "type": "file", "name": "Input.tsx" },
     "label": { "type": "file", "name": "Label.tsx" },
+    "pagination": { "type": "file", "name": "Pagination.tsx" },
     "popover": { "type": "file", "name": "Popover.tsx" },
+    "progress": { "type": "file", "name": "Progress.tsx" },
     "separator": { "type": "file", "name": "Separator.tsx" },
+    "skeleton": { "type": "file", "name": "Skeleton.tsx" },
     "switch": { "type": "file", "name": "Switch.tsx" },
+    "table": { "type": "file", "name": "Table.tsx" },
+    "toggle": { "type": "file", "name": "Toggle.tsx" },
     "tabs": {
       "type": "dir",
       "name": "Tabs",
