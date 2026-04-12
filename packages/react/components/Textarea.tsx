@@ -79,7 +79,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   (props, ref) => {
     const [variantProps, otherPropsCompressed] =
       resolveTextareaVariantProps(props);
-    const { invalid, ...otherPropsExtracted } = otherPropsCompressed;
+    const {
+      invalid,
+      "aria-invalid": ariaInvalid,
+      ...otherPropsExtracted
+    } = otherPropsCompressed;
+    const isInvalid = Boolean(invalid);
+    const resolvedAriaInvalid = isInvalid ? true : ariaInvalid;
 
     const innerRef = React.useRef<HTMLTextAreaElement | null>(null);
 
@@ -91,6 +97,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     return (
       <textarea
+        aria-invalid={resolvedAriaInvalid}
         ref={(el) => {
           innerRef.current = el;
           if (typeof ref === "function") {
