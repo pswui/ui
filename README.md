@@ -93,7 +93,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [x] Tabs
   - [x] Toast
   - [x] Toggle
-  - [ ] Toggle Group
+  - [x] Toggle Group
   - [x] Tooltip
 - CLI
   - [x] Add

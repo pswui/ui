@@ -42,6 +42,7 @@
     "switch": { "type": "file", "name": "Switch.tsx" },
     "table": { "type": "file", "name": "Table.tsx" },
     "toggle": { "type": "file", "name": "Toggle.tsx" },
+    "toggle-group": { "type": "file", "name": "ToggleGroup.tsx" },
     "tabs": {
       "type": "dir",
       "name": "Tabs",
