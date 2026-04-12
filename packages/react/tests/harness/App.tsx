@@ -57,6 +57,16 @@ import {
 import { Separator } from "../../components/Separator";
 import { Switch } from "../../components/Switch";
 import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../components/Table";
+import {
   TabContent,
   TabList,
   TabProvider,
@@ -470,6 +480,54 @@ const SwitchShowcase = () => {
   );
 };
 
+const TableShowcase = () => {
+  return (
+    <Section
+      testId="table"
+      title="Table"
+      description="Semantic table structure with header, body, footer, and caption."
+    >
+      <div className="overflow-x-auto">
+        <Table data-testid="table-root">
+          <TableCaption data-testid="table-caption">
+            Quarterly revenue by team
+          </TableCaption>
+          <TableHeader data-testid="table-header">
+            <TableRow>
+              <TableHead scope="col">Team</TableHead>
+              <TableHead scope="col">Region</TableHead>
+              <TableHead
+                scope="col"
+                className="text-right"
+              >
+                Revenue
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody data-testid="table-body">
+            <TableRow>
+              <TableCell>Platform</TableCell>
+              <TableCell>North America</TableCell>
+              <TableCell className="text-right">$92K</TableCell>
+            </TableRow>
+            <TableRow data-state="selected">
+              <TableCell>Infrastructure</TableCell>
+              <TableCell>Europe</TableCell>
+              <TableCell className="text-right">$74K</TableCell>
+            </TableRow>
+          </TableBody>
+          <TableFooter data-testid="table-footer">
+            <TableRow>
+              <TableCell colSpan={2}>Total</TableCell>
+              <TableCell className="text-right">$166K</TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
+    </Section>
+  );
+};
+  
 const ToggleShowcase = () => {
   const [pressed, setPressed] = React.useState(false);
 
@@ -596,6 +654,7 @@ const showcases = [
   PopoverShowcase,
   SeparatorShowcase,
   SwitchShowcase,
+  TableShowcase,
   ToggleShowcase,
   TabsShowcase,
   ToastShowcase,
