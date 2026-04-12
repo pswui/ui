@@ -41,6 +41,15 @@ import {
 import { Input, InputFrame } from "../../components/Input";
 import { Label } from "../../components/Label";
 import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../../components/Pagination";
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -63,7 +72,9 @@ import {
   TabProvider,
   TabTrigger,
 } from "../../components/Tabs";
+import { Textarea, TextareaFrame } from "../../components/Textarea";
 import { Toaster, useToast } from "../../components/Toast";
+import { Toggle } from "../../components/Toggle";
 import { Tooltip, TooltipContent } from "../../components/Tooltip";
 
 const Section = ({
@@ -126,11 +137,14 @@ const ButtonShowcase = () => {
     <Section
       testId="button"
       title="Button"
-      description="Basic click and disabled behavior."
+      description="Basic click, disabled, and asChild link behavior."
     >
       <div className="flex items-center gap-3">
         <Button onClick={() => setCount((prev) => prev + 1)}>Increment</Button>
         <Button disabled>Disabled action</Button>
+        <Button asChild>
+          <a href="#button-as-child-link">Button asChild link</a>
+        </Button>
         <span data-testid="button-count">{count}</span>
       </div>
     </Section>
@@ -271,7 +285,7 @@ const InputShowcase = () => {
     <Section
       testId="input"
       title="Input"
-      description="Standalone input with custom validity."
+      description="Standalone input exposing semantic invalid state and custom validity."
     >
       <InputFrame>
         <Input
@@ -280,6 +294,24 @@ const InputShowcase = () => {
           invalid="Invalid email"
         />
       </InputFrame>
+    </Section>
+  );
+};
+
+const TextareaShowcase = () => {
+  return (
+    <Section
+      testId="textarea"
+      title="Textarea"
+      description="Standalone textarea with custom validity."
+    >
+      <TextareaFrame full>
+        <Textarea
+          aria-label="Feedback textarea"
+          invalid="Feedback is required"
+          rows={4}
+        />
+      </TextareaFrame>
     </Section>
   );
 };
@@ -293,6 +325,7 @@ const LabelShowcase = () => {
     >
       <Label
         direction="horizontal"
+        className="bg-amber-100"
         data-testid="label-control"
       >
         <input
@@ -301,6 +334,76 @@ const LabelShowcase = () => {
         />
         <span>Label text</span>
       </Label>
+    </Section>
+  );
+};
+
+const PaginationShowcase = () => {
+  const [lastAction, setLastAction] = React.useState("page:1");
+
+  return (
+    <Section
+      testId="pagination"
+      title="Pagination"
+      description="Semantic pagination with current, disabled, and ellipsis states."
+    >
+      <div className="flex flex-col gap-4">
+        <Pagination aria-label="Results pages">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#page-0"
+                disabled
+                onClick={() => setLastAction("previous")}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href="#page-1"
+                active
+                onClick={(event) => event.preventDefault()}
+              >
+                1
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href="#page-2"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setLastAction("page:2");
+                }}
+              >
+                2
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis data-testid="pagination-ellipsis" />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href="#page-8"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setLastAction("page:8");
+                }}
+              >
+                8
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext
+                href="#page-2"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setLastAction("next");
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+        <p data-testid="pagination-last-action">{lastAction}</p>
+      </div>
     </Section>
   );
 };
@@ -424,28 +527,62 @@ const TableShowcase = () => {
     </Section>
   );
 };
+  
+const ToggleShowcase = () => {
+  const [pressed, setPressed] = React.useState(false);
+
+  return (
+    <Section
+      testId="toggle"
+      title="Toggle"
+      description="Controlled pressed state and disabled behavior."
+    >
+      <div className="flex items-center gap-3">
+        <Toggle
+          pressed={pressed}
+          onPressedChange={setPressed}
+        >
+          Pin item
+        </Toggle>
+        <Toggle disabled>Disabled toggle</Toggle>
+        <span data-testid="toggle-state">{String(pressed)}</span>
+      </div>
+    </Section>
+  );
+};
 
 const TabsShowcase = () => {
+  const [submitCount, setSubmitCount] = React.useState(0);
+
   return (
     <Section
       testId="tabs"
       title="Tabs"
       description="Default tab and manual switching."
     >
-      <TabProvider defaultName="account">
-        <TabList>
-          <TabTrigger name="account">Account</TabTrigger>
-          <TabTrigger name="security">Security</TabTrigger>
-        </TabList>
-        <div className="pt-4">
-          <TabContent name="account">
-            <div>Account content</div>
-          </TabContent>
-          <TabContent name="security">
-            <div>Security content</div>
-          </TabContent>
-        </div>
-      </TabProvider>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={(event) => {
+          event.preventDefault();
+          setSubmitCount((count) => count + 1);
+        }}
+      >
+        <TabProvider defaultName="account">
+          <TabList>
+            <TabTrigger name="account">Account</TabTrigger>
+            <TabTrigger name="security">Security</TabTrigger>
+          </TabList>
+          <div className="pt-4">
+            <TabContent name="account">
+              <div>Account content</div>
+            </TabContent>
+            <TabContent name="security">
+              <div>Security content</div>
+            </TabContent>
+          </div>
+        </TabProvider>
+        <span data-testid="tabs-submit-count">{submitCount}</span>
+      </form>
     </Section>
   );
 };
@@ -511,11 +648,14 @@ const showcases = [
   DrawerShowcase,
   FormShowcase,
   InputShowcase,
+  TextareaShowcase,
   LabelShowcase,
+  PaginationShowcase,
   PopoverShowcase,
   SeparatorShowcase,
   SwitchShowcase,
   TableShowcase,
+  ToggleShowcase,
   TabsShowcase,
   ToastShowcase,
   TooltipShowcase,
