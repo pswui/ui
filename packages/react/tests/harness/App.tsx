@@ -1,7 +1,16 @@
 import React from "react";
 
 import { Badge } from "../../components/Badge";
+import { Alert, AlertDescription, AlertTitle } from "../../components/Alert";
 import { Button } from "../../components/Button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../../components/Card";
 import { Checkbox } from "../../components/Checkbox";
 import {
   DialogClose,
@@ -37,6 +46,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../../components/Popover";
+import { Separator } from "../../components/Separator";
 import { Switch } from "../../components/Switch";
 import {
   TabContent,
@@ -44,6 +54,7 @@ import {
   TabProvider,
   TabTrigger,
 } from "../../components/Tabs";
+import { Textarea, TextareaFrame } from "../../components/Textarea";
 import { Toaster, useToast } from "../../components/Toast";
 import { Tooltip, TooltipContent } from "../../components/Tooltip";
 
@@ -72,6 +83,34 @@ const Section = ({
   );
 };
 
+const AlertShowcase = () => {
+  return (
+    <Section
+      testId="alert"
+      title="Alert"
+      description="Semantic alerts with compact status variants."
+    >
+      <div className="flex flex-col gap-3">
+        <Alert data-testid="alert-default">
+          <AlertTitle>Heads up</AlertTitle>
+          <AlertDescription>
+            This default alert keeps the content compact and readable.
+          </AlertDescription>
+        </Alert>
+        <Alert
+          status="success"
+          data-testid="alert-success"
+        >
+          <AlertTitle>Changes saved</AlertTitle>
+          <AlertDescription>
+            Your profile settings were stored successfully.
+          </AlertDescription>
+        </Alert>
+      </div>
+    </Section>
+  );
+};
+
 const ButtonShowcase = () => {
   const [count, setCount] = React.useState(0);
 
@@ -79,11 +118,14 @@ const ButtonShowcase = () => {
     <Section
       testId="button"
       title="Button"
-      description="Basic click and disabled behavior."
+      description="Basic click, disabled, and asChild link behavior."
     >
       <div className="flex items-center gap-3">
         <Button onClick={() => setCount((prev) => prev + 1)}>Increment</Button>
         <Button disabled>Disabled action</Button>
+        <Button asChild>
+          <a href="#button-as-child-link">Button asChild link</a>
+        </Button>
         <span data-testid="button-count">{count}</span>
       </div>
     </Section>
@@ -116,6 +158,29 @@ const BadgeShowcase = () => {
           </a>
         </Badge>
       </div>
+    </Section>
+  );
+};
+
+const CardShowcase = () => {
+  return (
+    <Section
+      testId="card"
+      title="Card"
+      description="Static content grouped with header, body, and footer."
+    >
+      <Card data-testid="card-root">
+        <CardHeader data-testid="card-header">
+          <CardTitle>Design review</CardTitle>
+          <CardDescription>Ready for a focused component pass.</CardDescription>
+        </CardHeader>
+        <CardContent data-testid="card-content">
+          <p>Review spacing, contrast, and responsive structure.</p>
+        </CardContent>
+        <CardFooter data-testid="card-footer">
+          <Button>Open review</Button>
+        </CardFooter>
+      </Card>
     </Section>
   );
 };
@@ -244,6 +309,24 @@ const InputShowcase = () => {
   );
 };
 
+const TextareaShowcase = () => {
+  return (
+    <Section
+      testId="textarea"
+      title="Textarea"
+      description="Standalone textarea with custom validity."
+    >
+      <TextareaFrame full>
+        <Textarea
+          aria-label="Feedback textarea"
+          invalid="Feedback is required"
+          rows={4}
+        />
+      </TextareaFrame>
+    </Section>
+  );
+};
+
 const LabelShowcase = () => {
   return (
     <Section
@@ -280,6 +363,36 @@ const PopoverShowcase = () => {
           <div>Popover content</div>
         </PopoverContent>
       </Popover>
+    </Section>
+  );
+};
+
+const SeparatorShowcase = () => {
+  return (
+    <Section
+      testId="separator"
+      title="Separator"
+      description="Horizontal, vertical, and decorative separators."
+    >
+      <div className="flex flex-col gap-4">
+        <div>
+          <p>Above horizontal separator</p>
+          <Separator aria-label="Horizontal separator" />
+          <p>Below horizontal separator</p>
+        </div>
+        <div className="flex h-10 items-stretch gap-4">
+          <span>Left content</span>
+          <Separator
+            orientation="vertical"
+            aria-label="Vertical separator"
+          />
+          <span>Right content</span>
+        </div>
+        <Separator
+          decorative
+          data-testid="decorative-separator"
+        />
+      </div>
     </Section>
   );
 };
@@ -386,14 +499,18 @@ const TooltipShowcase = () => {
 
 const showcases = [
   BadgeShowcase,
+  AlertShowcase,
   ButtonShowcase,
+  CardShowcase,
   CheckboxShowcase,
   DialogShowcase,
   DrawerShowcase,
   FormShowcase,
   InputShowcase,
+  TextareaShowcase,
   LabelShowcase,
   PopoverShowcase,
+  SeparatorShowcase,
   SwitchShowcase,
   TabsShowcase,
   ToastShowcase,

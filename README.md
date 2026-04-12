@@ -62,14 +62,14 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] FileInput
   - [ ] ImageInput
   - [ ] Form
-  - [ ] Textarea
+  - [x] Textarea
   - [ ] Accordion
-  - [ ] Alert
+  - [x] Alert
   - [ ] Avatar
   - [x] Badge
   - [ ] Breadcrumb
   - [x] Button
-  - [ ] Card
+  - [x] Card
   - [x] Checkbox
   - [ ] Context Menu
   - [ ] Data Table
@@ -85,7 +85,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] Radio Group
   - [ ] Scroll Area
   - [ ] Select
-  - [ ] Separator
+  - [x] Separator
   - [ ] Skeleton
   - [ ] Slider
   - [x] Switch
