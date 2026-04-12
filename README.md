@@ -92,7 +92,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] Table
   - [x] Tabs
   - [x] Toast
-  - [ ] Toggle
+  - [x] Toggle
   - [ ] Toggle Group
   - [x] Tooltip
 - CLI

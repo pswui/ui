@@ -28,6 +28,7 @@
     "popover": { "type": "file", "name": "Popover.tsx" },
     "separator": { "type": "file", "name": "Separator.tsx" },
     "switch": { "type": "file", "name": "Switch.tsx" },
+    "toggle": { "type": "file", "name": "Toggle.tsx" },
     "tabs": {
       "type": "dir",
       "name": "Tabs",

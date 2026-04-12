@@ -55,6 +55,7 @@ import {
 } from "../../components/Tabs";
 import { Textarea, TextareaFrame } from "../../components/Textarea";
 import { Toaster, useToast } from "../../components/Toast";
+import { Toggle } from "../../components/Toggle";
 import { Tooltip, TooltipContent } from "../../components/Tooltip";
 
 const Section = ({
@@ -389,6 +390,29 @@ const SwitchShowcase = () => {
   );
 };
 
+const ToggleShowcase = () => {
+  const [pressed, setPressed] = React.useState(false);
+
+  return (
+    <Section
+      testId="toggle"
+      title="Toggle"
+      description="Controlled pressed state and disabled behavior."
+    >
+      <div className="flex items-center gap-3">
+        <Toggle
+          pressed={pressed}
+          onPressedChange={setPressed}
+        >
+          Pin item
+        </Toggle>
+        <Toggle disabled>Disabled toggle</Toggle>
+        <span data-testid="toggle-state">{String(pressed)}</span>
+      </div>
+    </Section>
+  );
+};
+
 const TabsShowcase = () => {
   const [submitCount, setSubmitCount] = React.useState(0);
 
@@ -491,6 +515,7 @@ const showcases = [
   PopoverShowcase,
   SeparatorShowcase,
   SwitchShowcase,
+  ToggleShowcase,
   TabsShowcase,
   ToastShowcase,
   TooltipShowcase,
