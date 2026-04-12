@@ -1,6 +1,14 @@
 import React from "react";
 
 import { Alert, AlertDescription, AlertTitle } from "../../components/Alert";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "../../components/Breadcrumb";
 import { Button } from "../../components/Button";
 import {
   Card,
@@ -147,6 +155,36 @@ const ButtonShowcase = () => {
         </Button>
         <span data-testid="button-count">{count}</span>
       </div>
+    </Section>
+  );
+};
+
+const BreadcrumbShowcase = () => {
+  return (
+    <Section
+      testId="breadcrumb"
+      title="Breadcrumb"
+      description="Semantic navigation with decorative separators."
+    >
+      <Breadcrumb data-testid="breadcrumb-nav">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator data-testid="breadcrumb-separator" />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <a href="#settings">Settings</a>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator data-testid="breadcrumb-separator" />
+          <BreadcrumbItem>
+            <BreadcrumbPage asChild>
+              <span data-testid="breadcrumb-current-page">Profile</span>
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
     </Section>
   );
 };
@@ -642,6 +680,7 @@ const TooltipShowcase = () => {
 const showcases = [
   AlertShowcase,
   ButtonShowcase,
+  BreadcrumbShowcase,
   CardShowcase,
   CheckboxShowcase,
   DialogShowcase,

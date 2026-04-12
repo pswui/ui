@@ -67,7 +67,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [x] Alert
   - [ ] Avatar
   - [ ] Badge
-  - [ ] Breadcrumb
+  - [x] Breadcrumb
   - [x] Button
   - [x] Card
   - [x] Checkbox
