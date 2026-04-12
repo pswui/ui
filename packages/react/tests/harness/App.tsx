@@ -1,5 +1,11 @@
 import React from "react";
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../../components/Accordion";
 import { Alert, AlertDescription, AlertTitle } from "../../components/Alert";
 import {
   Breadcrumb,
@@ -135,6 +141,34 @@ const AlertShowcase = () => {
           </AlertDescription>
         </Alert>
       </div>
+    </Section>
+  );
+};
+
+const AccordionShowcase = () => {
+  return (
+    <Section
+      testId="accordion"
+      title="Accordion"
+      description="Single-open accordion with collapsible sections."
+    >
+      <Accordion
+        defaultValue="shipping"
+        collapsible
+      >
+        <AccordionItem value="shipping">
+          <AccordionTrigger>Shipping</AccordionTrigger>
+          <AccordionContent>
+            Ships within 2 to 3 business days for in-stock items.
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="returns">
+          <AccordionTrigger>Returns</AccordionTrigger>
+          <AccordionContent>
+            Returns are accepted within 30 days of delivery.
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </Section>
   );
 };
@@ -734,6 +768,7 @@ const TooltipShowcase = () => {
 };
 
 const showcases = [
+  AccordionShowcase,
   AlertShowcase,
   ButtonShowcase,
   BreadcrumbShowcase,

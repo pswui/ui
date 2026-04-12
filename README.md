@@ -63,7 +63,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] ImageInput
   - [ ] Form
   - [x] Textarea
-  - [ ] Accordion
+  - [x] Accordion
   - [x] Alert
   - [ ] Avatar
   - [ ] Badge
