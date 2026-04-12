@@ -68,6 +68,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../../components/Popover";
+import { Progress } from "../../components/Progress";
 import { Separator } from "../../components/Separator";
 import { Skeleton } from "../../components/Skeleton";
 import { Switch } from "../../components/Switch";
@@ -516,6 +517,31 @@ const PopoverShowcase = () => {
   );
 };
 
+const ProgressShowcase = () => {
+  const [value, setValue] = React.useState(40);
+
+  return (
+    <Section
+      testId="progress"
+      title="Progress"
+      description="Determinate and indeterminate progress state."
+    >
+      <div className="flex flex-col gap-4">
+        <Progress
+          aria-label="Upload progress"
+          value={value}
+          max={100}
+        />
+        <div className="flex items-center gap-3">
+          <Button onClick={() => setValue(75)}>Set progress to 75</Button>
+          <span data-testid="progress-value">{value}</span>
+        </div>
+        <Progress aria-label="Sync progress" />
+      </div>
+    </Section>
+  );
+};
+
 const SeparatorShowcase = () => {
   return (
     <Section
@@ -798,6 +824,7 @@ const showcases = [
   LabelShowcase,
   PaginationShowcase,
   PopoverShowcase,
+  ProgressShowcase,
   SeparatorShowcase,
   SkeletonShowcase,
   SwitchShowcase,
