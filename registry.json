@@ -19,6 +19,7 @@
       "files": ["index.ts", "Context.ts", "Component.tsx"]
     },
     "alert": { "type": "file", "name": "Alert.tsx" },
+    "avatar": { "type": "file", "name": "Avatar.tsx" },
     "breadcrumb": { "type": "file", "name": "Breadcrumb.tsx" },
     "button": { "type": "file", "name": "Button.tsx" },
     "card": { "type": "file", "name": "Card.tsx" },

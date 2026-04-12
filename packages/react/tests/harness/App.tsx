@@ -8,6 +8,7 @@ import {
   AccordionTrigger,
 } from "../../components/Accordion";
 import { Alert, AlertDescription, AlertTitle } from "../../components/Alert";
+import { Avatar } from "../../components/Avatar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -94,6 +95,8 @@ import { Toaster, useToast } from "../../components/Toast";
 import { Toggle } from "../../components/Toggle";
 import { Tooltip, TooltipContent } from "../../components/Tooltip";
 
+const avatarImageSrc = "/avatar-demo.svg";
+
 const Section = ({
   testId,
   title,
@@ -116,6 +119,29 @@ const Section = ({
       </div>
       {children}
     </section>
+  );
+};
+
+const AvatarShowcase = () => {
+  return (
+    <Section
+      testId="avatar"
+      title="Avatar"
+      description="Image avatars fall back to initials when an image is missing."
+    >
+      <div className="flex flex-wrap items-center gap-4">
+        <Avatar
+          data-testid="avatar-image"
+          src={avatarImageSrc}
+          name="Taylor Lane"
+        />
+        <Avatar
+          data-testid="avatar-fallback"
+          src="/avatar-missing.png"
+          name="Ada Lovelace"
+        />
+      </div>
+    </Section>
   );
 };
 
@@ -844,6 +870,7 @@ const showcases = [
   BadgeShowcase,
   AccordionShowcase,
   AlertShowcase,
+  AvatarShowcase,
   ButtonShowcase,
   BreadcrumbShowcase,
   CardShowcase,
