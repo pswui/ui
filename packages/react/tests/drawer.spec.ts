@@ -2,15 +2,33 @@ import { expect, test } from "@playwright/test";
 
 import { gotoHarness } from "./helpers";
 
-test("drawer opens and closes", async ({ page }) => {
+test("drawer exposes dialog semantics and moves focus inside on open", async ({
+  page,
+}) => {
   await gotoHarness(page);
 
   const section = page.getByTestId("drawer-section");
-  await section.getByRole("button", { name: "Open drawer" }).click();
+  const openButton = section.getByRole("button", { name: "Open drawer" });
 
-  const closeButton = page.getByRole("button", { name: "Close drawer" });
+  await expect(openButton).toHaveAttribute("aria-haspopup", "dialog");
+  await expect(openButton).toHaveAttribute("aria-expanded", "false");
 
-  await expect(closeButton).toBeVisible();
+  await openButton.click();
+
+  const dialog = page.getByRole("dialog", { name: "Drawer title" });
+  const closeButton = dialog.getByRole("button", { name: "Close drawer" });
+
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveAttribute(
+    "aria-describedby",
+    "drawer-description",
+  );
+  await expect(dialog).toHaveAttribute("aria-modal", "true");
+  await expect(openButton).toHaveAttribute("aria-expanded", "true");
+  await expect(openButton).toHaveAttribute("aria-controls");
+
+  await expect(closeButton).toBeFocused();
   await closeButton.click();
-  await expect(closeButton).not.toBeVisible();
+  await expect(dialog).not.toBeVisible();
+  await expect(openButton).toHaveAttribute("aria-expanded", "false");
 });

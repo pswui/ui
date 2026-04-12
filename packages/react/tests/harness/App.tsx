@@ -156,12 +156,19 @@ const DrawerShowcase = () => {
           <DrawerContent
             position="right"
             maxSize="sm"
+            aria-labelledby="drawer-title"
+            aria-describedby="drawer-description"
           >
             <DrawerHeader>
-              <h3 className="text-lg font-semibold">Drawer title</h3>
+              <h3
+                id="drawer-title"
+                className="text-lg font-semibold"
+              >
+                Drawer title
+              </h3>
             </DrawerHeader>
             <DrawerBody>
-              <p>Drawer body content</p>
+              <p id="drawer-description">Drawer body content</p>
             </DrawerBody>
             <DrawerFooter>
               <DrawerClose>

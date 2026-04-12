@@ -12,6 +12,7 @@ import React, {
   forwardRef,
   useContext,
   useEffect,
+  useId,
   useRef,
   useState,
 } from "react";
@@ -25,6 +26,9 @@ interface IDrawerContext {
   isMounted: boolean;
   isRendered: boolean;
   leaveWhileDragging: boolean;
+  ids: {
+    content: string;
+  };
 }
 const DrawerContextInitial: IDrawerContext = {
   opened: false,
@@ -34,6 +38,9 @@ const DrawerContextInitial: IDrawerContext = {
   isMounted: false,
   isRendered: false,
   leaveWhileDragging: false,
+  ids: {
+    content: "",
+  },
 };
 const DrawerContext = React.createContext<
   [IDrawerContext, React.Dispatch<React.SetStateAction<IDrawerContext>>]
@@ -57,6 +64,9 @@ interface DrawerRootProps {
 const DrawerRoot = ({ children, closeThreshold, opened }: DrawerRootProps) => {
   const state = useState<IDrawerContext>({
     ...DrawerContextInitial,
+    ids: {
+      content: useId(),
+    },
     opened: opened ?? DrawerContextInitial.opened,
     closeThreshold: closeThreshold ?? DrawerContextInitial.closeThreshold,
   });
@@ -76,13 +86,22 @@ const DrawerRoot = ({ children, closeThreshold, opened }: DrawerRootProps) => {
 };
 
 const DrawerTrigger = ({ children }: { children: React.ReactNode }) => {
-  const [_, setState] = useContext(DrawerContext);
+  const [state, setState] = useContext(DrawerContext);
 
   function onClick() {
     setState((prev) => ({ ...prev, opened: true }));
   }
 
-  return <Slot onClick={onClick}>{children}</Slot>;
+  return (
+    <Slot
+      onClick={onClick}
+      aria-controls={state.ids.content}
+      aria-expanded={state.opened}
+      aria-haspopup="dialog"
+    >
+      {children}
+    </Slot>
+  );
 };
 
 const [drawerOverlayVariant, resolveDrawerOverlayVariantProps] = vcn({
@@ -99,6 +118,15 @@ const [drawerOverlayVariant, resolveDrawerOverlayVariantProps] = vcn({
 });
 
 const DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS = 0.3;
+const DRAWER_INITIAL_FOCUS_SELECTOR = [
+  "[autofocus]",
+  "button:not([disabled])",
+  "[href]",
+  'input:not([disabled]):not([type="hidden"])',
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  '[tabindex]:not([tabindex="-1"]):not([disabled])',
+].join(", ");
 
 interface DrawerOverlayProps
   extends Omit<VariantProps<typeof drawerOverlayVariant>, "opened">,
@@ -247,11 +275,37 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
     const [variantProps, restPropsCompressed] =
       resolveDrawerContentVariantProps(props);
     const { position = "left" } = variantProps;
-    const { asChild, onClick, ...restPropsExtracted } = restPropsCompressed;
+    const {
+      "aria-modal": ariaModal,
+      asChild,
+      id,
+      onClick,
+      role,
+      tabIndex,
+      ...restPropsExtracted
+    } = restPropsCompressed;
 
     const Comp = asChild ? Slot : "div";
 
     const internalRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+      if (!state.isRendered || !internalRef.current) return;
+
+      const content = internalRef.current;
+      const frame = window.requestAnimationFrame(() => {
+        if (content.ownerDocument.activeElement instanceof Element) {
+          if (content.contains(content.ownerDocument.activeElement)) return;
+        }
+
+        const focusTarget =
+          content.querySelector<HTMLElement>(DRAWER_INITIAL_FOCUS_SELECTOR) ??
+          content;
+        focusTarget.focus();
+      });
+
+      return () => window.cancelAnimationFrame(frame);
+    }, [state.isRendered]);
 
     function onMouseDown() {
       setState((prev) => ({ ...prev, isDragging: true }));
@@ -401,11 +455,14 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
       >
         <Comp
           {...restPropsExtracted}
+          id={id ?? state.ids.content}
           className={drawerContentVariant({
             ...variantProps,
             opened: state.isRendered,
             internal: true,
           })}
+          role={role ?? "dialog"}
+          aria-modal={ariaModal ?? true}
           style={{
             transform:
               dragState.isDragging &&
@@ -424,6 +481,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
               ref.current = el;
             }
           }}
+          tabIndex={tabIndex ?? -1}
           onClick={(e) => {
             e.stopPropagation();
             onClick?.(e);
