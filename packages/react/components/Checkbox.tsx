@@ -21,7 +21,7 @@ const checkboxColors = {
 };
 
 const [checkboxVariant, resolveCheckboxVariantProps] = vcn({
-  base: `inline-block rounded-md ${checkboxColors.background.disabled} ${checkboxColors.background.default} ${checkboxColors.background.hover} ${checkboxColors.background.checked} ${checkboxColors.background.checkedHover} ${checkboxColors.background.disabledChecked} ${checkboxColors.background.disabledCheckedHover} has-[input[type="checkbox"]:disabled]:cursor-not-allowed transition-colors duration-150 ease-in-out`,
+  base: `relative inline-block rounded-md outline outline-1 outline-transparent outline-offset-2 has-[input[type="checkbox"]:focus-visible]:outline-black/10 dark:has-[input[type="checkbox"]:focus-visible]:outline-white/20 ${checkboxColors.background.disabled} ${checkboxColors.background.default} ${checkboxColors.background.hover} ${checkboxColors.background.checked} ${checkboxColors.background.checkedHover} ${checkboxColors.background.disabledChecked} ${checkboxColors.background.disabledCheckedHover} has-[input[type="checkbox"]:disabled]:cursor-not-allowed transition-colors duration-150 ease-in-out`,
   variants: {
     size: {
       base: "size-[1em] p-0 [&>svg]:size-[1em]",
@@ -80,7 +80,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               }
             }}
             type="checkbox"
-            className="hidden"
+            className="absolute inset-0 m-0 size-full cursor-inherit opacity-0"
             ref={(el) => {
               internalRef.current = el;
               if (typeof ref === "function") {

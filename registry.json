@@ -30,14 +30,17 @@
     "form": { "type": "file", "name": "Form.tsx" },
     "input": { "type": "file", "name": "Input.tsx" },
     "label": { "type": "file", "name": "Label.tsx" },
+    "pagination": { "type": "file", "name": "Pagination.tsx" },
     "popover": { "type": "file", "name": "Popover.tsx" },
     "separator": { "type": "file", "name": "Separator.tsx" },
     "switch": { "type": "file", "name": "Switch.tsx" },
+    "toggle": { "type": "file", "name": "Toggle.tsx" },
     "tabs": {
       "type": "dir",
       "name": "Tabs",
       "files": ["index.ts", "Context.ts", "Hook.ts", "Component.tsx"]
     },
+    "textarea": { "type": "file", "name": "Textarea.tsx" },
     "toast": {
       "type": "dir",
       "name": "Toast",

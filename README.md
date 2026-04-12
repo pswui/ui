@@ -62,7 +62,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] FileInput
   - [ ] ImageInput
   - [ ] Form
-  - [ ] Textarea
+  - [x] Textarea
   - [x] Accordion
   - [x] Alert
   - [ ] Avatar
@@ -79,7 +79,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [x] Label
   - [ ] Menubar
   - [ ] Navigation Menu
-  - [ ] Pagination
+  - [x] Pagination
   - [x] Popover
   - [ ] Progress
   - [ ] Radio Group
@@ -92,7 +92,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] Table
   - [x] Tabs
   - [x] Toast
-  - [ ] Toggle
+  - [x] Toggle
   - [ ] Toggle Group
   - [x] Tooltip
 - CLI

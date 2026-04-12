@@ -92,7 +92,14 @@ interface InputProps
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const [variantProps, otherPropsCompressed] = resolveInputVariantProps(props);
-  const { type, invalid, ...otherPropsExtracted } = otherPropsCompressed;
+  const {
+    type,
+    invalid,
+    "aria-invalid": ariaInvalid,
+    ...otherPropsExtracted
+  } = otherPropsCompressed;
+  const isInvalid = Boolean(invalid);
+  const resolvedAriaInvalid = isInvalid ? true : ariaInvalid;
 
   const innerRef = React.useRef<HTMLInputElement | null>(null);
 
@@ -105,6 +112,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   return (
     <input
       type={type}
+      aria-invalid={resolvedAriaInvalid}
       ref={(el) => {
         innerRef.current = el;
         if (typeof ref === "function") {
