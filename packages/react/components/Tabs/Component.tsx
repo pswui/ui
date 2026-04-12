@@ -54,14 +54,14 @@ const [TabTriggerVariant, resolveTabTriggerVariantProps] = vcn({
 
 interface TabTriggerProps
   extends Omit<VariantProps<typeof TabTriggerVariant>, "active">,
-    React.HTMLAttributes<HTMLButtonElement>,
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "name">,
     Tab,
     AsChild {}
 
 const TabTrigger = (props: TabTriggerProps) => {
   const [variantProps, restPropsBeforeParse] =
     resolveTabTriggerVariantProps(props);
-  const { name, ...restProps } = restPropsBeforeParse;
+  const { asChild, name, type, ...restProps } = restPropsBeforeParse;
   const [context, setContext] = React.useContext(TabContext);
 
   React.useEffect(() => {
@@ -83,7 +83,7 @@ const TabTrigger = (props: TabTriggerProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, setContext]);
 
-  const Comp = props.asChild ? Slot : "button";
+  const Comp = asChild ? Slot : "button";
 
   return (
     <Comp
@@ -91,6 +91,7 @@ const TabTrigger = (props: TabTriggerProps) => {
         ...variantProps,
         active: context.active[1] === name,
       })}
+      type={asChild ? type : type ?? "button"}
       onClick={() =>
         setContext((prev) => {
           return {

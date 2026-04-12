@@ -390,26 +390,37 @@ const SwitchShowcase = () => {
 };
 
 const TabsShowcase = () => {
+  const [submitCount, setSubmitCount] = React.useState(0);
+
   return (
     <Section
       testId="tabs"
       title="Tabs"
       description="Default tab and manual switching."
     >
-      <TabProvider defaultName="account">
-        <TabList>
-          <TabTrigger name="account">Account</TabTrigger>
-          <TabTrigger name="security">Security</TabTrigger>
-        </TabList>
-        <div className="pt-4">
-          <TabContent name="account">
-            <div>Account content</div>
-          </TabContent>
-          <TabContent name="security">
-            <div>Security content</div>
-          </TabContent>
-        </div>
-      </TabProvider>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={(event) => {
+          event.preventDefault();
+          setSubmitCount((count) => count + 1);
+        }}
+      >
+        <TabProvider defaultName="account">
+          <TabList>
+            <TabTrigger name="account">Account</TabTrigger>
+            <TabTrigger name="security">Security</TabTrigger>
+          </TabList>
+          <div className="pt-4">
+            <TabContent name="account">
+              <div>Account content</div>
+            </TabContent>
+            <TabContent name="security">
+              <div>Security content</div>
+            </TabContent>
+          </div>
+        </TabProvider>
+        <span data-testid="tabs-submit-count">{submitCount}</span>
+      </form>
     </Section>
   );
 };
