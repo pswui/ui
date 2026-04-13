@@ -178,6 +178,7 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
         {...otherPropsExtracted}
         ref={ref}
         role="dialog"
+        aria-modal="true"
         aria-labelledby={ids.title}
         aria-describedby={ids.description}
         className={dialogContentVariant({
