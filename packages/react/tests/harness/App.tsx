@@ -587,6 +587,7 @@ const ProgressShowcase = () => {
       <div className="flex flex-col gap-4">
         <Progress
           aria-label="Upload progress"
+          className="bg-emerald-200"
           value={value}
           max={100}
         />
