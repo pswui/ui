@@ -84,7 +84,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [x] Progress
   - [x] Radio Group
   - [ ] Scroll Area
-  - [ ] Select
+  - [x] Select
   - [x] Separator
   - [x] Skeleton
   - [ ] Slider

@@ -72,6 +72,7 @@ import {
 } from "../../components/Popover";
 import { Progress } from "../../components/Progress";
 import { RadioGroup, RadioGroupItem } from "../../components/RadioGroup";
+import { Select } from "../../components/Select";
 import { Separator } from "../../components/Separator";
 import { Skeleton } from "../../components/Skeleton";
 import { Switch } from "../../components/Switch";
@@ -630,6 +631,74 @@ const RadioGroupShowcase = () => {
   );
 };
 
+const SelectShowcase = () => {
+  const [plan, setPlan] = React.useState("starter");
+  const [region, setRegion] = React.useState("us-east");
+
+  return (
+    <Section
+      testId="select"
+      title="Select"
+      description="Custom button and listbox select with keyboard, controlled, and disabled states."
+    >
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium">Project plan</span>
+          <Select
+            aria-label="Project plan"
+            defaultValue="starter"
+            options={[
+              { label: "Starter", value: "starter" },
+              { label: "Pro", value: "pro" },
+              { label: "Enterprise", value: "enterprise" },
+            ]}
+            onValueChange={setPlan}
+            data-testid="select-uncontrolled"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium">Team region</span>
+          <Select
+            full
+            aria-label="Team region"
+            value={region}
+            options={[
+              { label: "US East", value: "us-east" },
+              { label: "Europe", value: "eu-west", disabled: true },
+              { label: "Asia Pacific", value: "apac" },
+            ]}
+            onValueChange={setRegion}
+            data-testid="select-controlled"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium">Disabled select</span>
+          <Select
+            aria-label="Disabled select"
+            defaultValue="starter"
+            disabled
+            options={[
+              { label: "Starter", value: "starter" },
+              { label: "Pro", value: "pro" },
+            ]}
+            data-testid="select-disabled"
+          />
+        </div>
+      </div>
+      <div className="flex flex-wrap items-center gap-4 text-sm">
+        <span>
+          Uncontrolled value:{" "}
+          <strong data-testid="select-uncontrolled-state">{plan}</strong>
+        </span>
+        <span>
+          Controlled value:{" "}
+          <strong data-testid="select-controlled-state">{region}</strong>
+        </span>
+      </div>
+    </Section>
+  );
+};
+
 const SeparatorShowcase = () => {
   return (
     <Section
@@ -916,6 +985,7 @@ const showcases = [
   PopoverShowcase,
   ProgressShowcase,
   RadioGroupShowcase,
+  SelectShowcase,
   SeparatorShowcase,
   SkeletonShowcase,
   SwitchShowcase,
