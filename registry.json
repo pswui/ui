@@ -37,6 +37,7 @@
     "popover": { "type": "file", "name": "Popover.tsx" },
     "progress": { "type": "file", "name": "Progress.tsx" },
     "radio-group": { "type": "file", "name": "RadioGroup.tsx" },
+    "scroll-area": { "type": "file", "name": "ScrollArea.tsx" },
     "separator": { "type": "file", "name": "Separator.tsx" },
     "skeleton": { "type": "file", "name": "Skeleton.tsx" },
     "switch": { "type": "file", "name": "Switch.tsx" },

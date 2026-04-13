@@ -83,7 +83,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [x] Popover
   - [x] Progress
   - [x] Radio Group
-  - [ ] Scroll Area
+  - [x] Scroll Area
   - [ ] Select
   - [x] Separator
   - [x] Skeleton
