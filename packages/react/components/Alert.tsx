@@ -25,6 +25,7 @@ interface AlertProps
     AsChild {}
 
 const Alert = React.forwardRef<HTMLElement, AlertProps>((props, ref) => {
+  const { className } = props;
   const [variantProps, otherPropsCompressed] = resolveAlertVariantProps(props);
   const { asChild, role, ...otherPropsExtracted } = otherPropsCompressed;
 
@@ -34,8 +35,8 @@ const Alert = React.forwardRef<HTMLElement, AlertProps>((props, ref) => {
     <Comp
       ref={ref}
       role={role ?? "alert"}
-      className={alertVariant(variantProps)}
       {...otherPropsExtracted}
+      className={alertVariant({ ...variantProps, className })}
     />
   );
 });
