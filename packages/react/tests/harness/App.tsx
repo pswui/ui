@@ -72,6 +72,7 @@ import {
 } from "../../components/Popover";
 import { Progress } from "../../components/Progress";
 import { RadioGroup, RadioGroupItem } from "../../components/RadioGroup";
+import { ScrollArea } from "../../components/ScrollArea";
 import { Select } from "../../components/Select";
 import { Separator } from "../../components/Separator";
 import { Skeleton } from "../../components/Skeleton";
@@ -100,6 +101,29 @@ import { ToggleGroup, ToggleGroupItem } from "../../components/ToggleGroup";
 import { Tooltip, TooltipContent } from "../../components/Tooltip";
 
 const avatarImageSrc = "/avatar-demo.svg";
+const scrollAreaActivityItems = [
+  "Roadmap issue triaged",
+  "Design tokens reviewed",
+  "Keyboard navigation verified",
+  "Playwright harness updated",
+  "Component API narrowed",
+  "Registry entry prepared",
+  "Accessibility pass completed",
+  "Release notes drafted",
+  "Tailwind classes aligned",
+  "Focus ring checked",
+  "Regression tests added",
+  "Build queued for review",
+];
+const scrollAreaTimelineLanes = [
+  "Backlog",
+  "Planning",
+  "Design",
+  "Implementation",
+  "Review",
+  "QA",
+  "Release",
+];
 
 const Section = ({
   testId,
@@ -767,6 +791,73 @@ const SeparatorShowcase = () => {
   );
 };
 
+const ScrollAreaShowcase = () => {
+  return (
+    <Section
+      testId="scroll-area"
+      title="Scroll Area"
+      description="Keyboard-focusable scroll containers with vertical and horizontal overflow."
+    >
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-medium">Activity feed</p>
+          <ScrollArea
+            role="region"
+            aria-label="Activity feed"
+            data-testid="scroll-area-vertical"
+            className="h-56 rounded-lg border border-neutral-200 p-3 dark:border-neutral-800"
+          >
+            <div className="flex flex-col gap-3 pr-2">
+              {scrollAreaActivityItems.map((item, index) => (
+                <div
+                  key={item}
+                  data-testid={`scroll-area-item-${index + 1}`}
+                  className="rounded-md border border-neutral-200 bg-neutral-50 p-3 text-sm dark:border-neutral-800 dark:bg-neutral-950"
+                >
+                  <p className="font-medium">Entry {index + 1}</p>
+                  <p className="text-neutral-600 dark:text-neutral-400">
+                    {item}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-medium">Timeline lanes</p>
+          <ScrollArea
+            orientation="horizontal"
+            role="region"
+            aria-label="Timeline lanes"
+            data-testid="scroll-area-horizontal"
+            className="rounded-lg border border-neutral-200 p-3 dark:border-neutral-800"
+          >
+            <div className="flex min-w-max gap-3 pb-2">
+              {scrollAreaTimelineLanes.map((lane, index) => (
+                <div
+                  key={lane}
+                  data-testid={
+                    index === scrollAreaTimelineLanes.length - 1
+                      ? "scroll-area-lane-last"
+                      : undefined
+                  }
+                  className="flex h-28 w-40 shrink-0 flex-col justify-between rounded-md border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-800 dark:bg-neutral-950"
+                >
+                  <p className="font-medium">{lane}</p>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                    Step {index + 1}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+        </div>
+      </div>
+    </Section>
+  );
+};
+
 const SkeletonShowcase = () => {
   return (
     <Section
@@ -1110,6 +1201,7 @@ const showcases = [
   ControlledPopoverShowcase,
   ProgressShowcase,
   RadioGroupShowcase,
+  ScrollAreaShowcase,
   SelectShowcase,
   SeparatorShowcase,
   SkeletonShowcase,
