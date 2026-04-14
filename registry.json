@@ -5,60 +5,138 @@
     "lib": "/packages/react/lib/{libName}"
   },
   "lib": [
-    "index.ts",
-    "Slot.tsx",
-    "vcn.ts",
-    "useDocument.ts",
-    "useAnimatedMount.ts"
+    {
+      "checksum": "a708bba3a2f482b5e55d17f9b2d157647e2673534aa4786067ccee773c80dcb1",
+      "name": "index.ts"
+    },
+    {
+      "checksum": "7fd2be30c0b651a19ec9afd1f3ec79a5d045537daebe0a0b1e144df5bb979290",
+      "name": "Slot.tsx"
+    },
+    {
+      "checksum": "727ac1495c1123110d60136f9011ee9bb38930bfad54a1654b175bf748cf3eac",
+      "name": "vcn.ts"
+    },
+    {
+      "checksum": "79a5f85ef43f8c527f15ed54b76625bbe3b9bba248720ff9dfa71bec3978598b",
+      "name": "useDocument.ts"
+    },
+    {
+      "checksum": "2f287eec35284b799d6f060c0bb09e18472e05fdb527617c19a1d2d53fbd48ee",
+      "name": "useAnimatedMount.ts"
+    }
   ],
   "components": {
-    "badge": { "type": "file", "name": "Badge.tsx" },
-    "accordion": {
-      "type": "dir",
-      "name": "Accordion",
-      "files": ["index.ts", "Context.ts", "Component.tsx"]
+    "button": {
+      "type": "file",
+      "name": "Button.tsx",
+      "checksum": "ec2de7b3c59df96b7b28cbd00abd2ecbe92d4ee799c7069b75b4c9fd8e338e79"
     },
-    "alert": { "type": "file", "name": "Alert.tsx" },
-    "avatar": { "type": "file", "name": "Avatar.tsx" },
-    "breadcrumb": { "type": "file", "name": "Breadcrumb.tsx" },
-    "button": { "type": "file", "name": "Button.tsx" },
-    "card": { "type": "file", "name": "Card.tsx" },
-    "checkbox": { "type": "file", "name": "Checkbox.tsx" },
+    "checkbox": {
+      "type": "file",
+      "name": "Checkbox.tsx",
+      "checksum": "eaa73866e027d33f728406c4bd109be3be6e559b7e9f67002e03ece73bc51340"
+    },
     "dialog": {
       "type": "dir",
       "name": "Dialog",
-      "files": ["index.ts", "Component.tsx", "Context.ts"]
+      "files": [
+        {
+          "checksum": "2bcd90ca3af06f6e9744b5eaed67abb869f1f61b478032c8760fbaf807d036d9",
+          "name": "index.ts"
+        },
+        {
+          "checksum": "f93a295910ffb4492d772f5d38d40de1ada4b7f24fe0266d22519cb5a3440e85",
+          "name": "Component.tsx"
+        },
+        {
+          "checksum": "f9d22ac7a8d3bc06357aa69adeb572197ad28803865b8342352da31f880d8ff7",
+          "name": "Context.ts"
+        }
+      ]
     },
-    "drawer": { "type": "file", "name": "Drawer.tsx" },
-    "form": { "type": "file", "name": "Form.tsx" },
-    "input": { "type": "file", "name": "Input.tsx" },
-    "label": { "type": "file", "name": "Label.tsx" },
-    "pagination": { "type": "file", "name": "Pagination.tsx" },
-    "popover": { "type": "file", "name": "Popover.tsx" },
-    "progress": { "type": "file", "name": "Progress.tsx" },
-    "radio-group": { "type": "file", "name": "RadioGroup.tsx" },
-    "separator": { "type": "file", "name": "Separator.tsx" },
-    "skeleton": { "type": "file", "name": "Skeleton.tsx" },
-    "switch": { "type": "file", "name": "Switch.tsx" },
-    "table": { "type": "file", "name": "Table.tsx" },
-    "toggle": { "type": "file", "name": "Toggle.tsx" },
+    "drawer": {
+      "type": "file",
+      "name": "Drawer.tsx",
+      "checksum": "d9dc24cce946a0e69fb799e50027fbeb31521ad36e3808b041fee5d151f15e56"
+    },
+    "form": {
+      "type": "file",
+      "name": "Form.tsx",
+      "checksum": "ecbc9d538004743d95cf59ca5a500a88f85ed6ef151201c12b99c5f7a1212d7f"
+    },
+    "input": {
+      "type": "file",
+      "name": "Input.tsx",
+      "checksum": "b2d47d1c5bff0e5552e2f659e7730b15b795d849f0efdec2c402460fdb25130d"
+    },
+    "label": {
+      "type": "file",
+      "name": "Label.tsx",
+      "checksum": "acfd9e94456e46cdbc6070d3c991d81dad939680c8f5b977cbad078b5039d72d"
+    },
+    "popover": {
+      "type": "file",
+      "name": "Popover.tsx",
+      "checksum": "19dd10852402a1ce25204ddce58834112ae4ae0a11b493a3897be4918cdce211"
+    },
+    "switch": {
+      "type": "file",
+      "name": "Switch.tsx",
+      "checksum": "ae94949748aa4a4dc17017e68c1d1292d812a2e14fbb0c7d1b3b7c7cb23ba6ce"
+    },
     "tabs": {
       "type": "dir",
       "name": "Tabs",
-      "files": ["index.ts", "Context.ts", "Hook.ts", "Component.tsx"]
+      "files": [
+        {
+          "checksum": "999fe4d4d3cee80a52cd61b935d2dbab0e7db60011691f5475070bf07e8f18af",
+          "name": "index.ts"
+        },
+        {
+          "checksum": "865993b268c0c81d8b345df53f59f15023e78369538ab0663428c082454a2776",
+          "name": "Context.ts"
+        },
+        {
+          "checksum": "bca8793fe2724764433fbdd5bf8a9182b46422014b2bc7367d5b1e9b611a8796",
+          "name": "Hook.ts"
+        },
+        {
+          "checksum": "f180412d6c83a9e25fd8460c84037473f5eb1d6aedfdc2d9ba20892f84fd1765",
+          "name": "Component.tsx"
+        }
+      ]
     },
-    "textarea": { "type": "file", "name": "Textarea.tsx" },
     "toast": {
       "type": "dir",
       "name": "Toast",
       "files": [
-        "index.ts",
-        "Component.tsx",
-        "Hook.ts",
-        "Store.ts",
-        "Variant.ts"
+        {
+          "checksum": "362b69ac0742bd1c03cca59e9440916891fe8b690f05d97d3ec980da3dbf35ae",
+          "name": "index.ts"
+        },
+        {
+          "checksum": "8e43975e7b78256a9a77508de451e3265f8442bd87c7fc7336b8a359a06fe2b6",
+          "name": "Component.tsx"
+        },
+        {
+          "checksum": "ce79891bd06199a8d7f802aa11c7c24cabcacac1c3d13aff5cf092ccaa75486d",
+          "name": "Hook.ts"
+        },
+        {
+          "checksum": "5cb04ab0fdc2d4f0393219e252c973d044f30be6f90a43d386476145d57f305b",
+          "name": "Store.ts"
+        },
+        {
+          "checksum": "817477bcfc9f3d2e8dec4838cf3233546c0f87de14ebf36fab7fbe3d9a4e7fb0",
+          "name": "Variant.ts"
+        }
       ]
     },
-    "tooltip": { "type": "file", "name": "Tooltip.tsx" }
+    "tooltip": {
+      "type": "file",
+      "name": "Tooltip.tsx",
+      "checksum": "e366d873140f50c803dfd3ff8c7dea3a8e9cd2f35ef5eb5ecff0c22126224dd2"
+    }
   }
 }
