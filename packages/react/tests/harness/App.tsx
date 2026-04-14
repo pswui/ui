@@ -74,6 +74,7 @@ import { Progress } from "../../components/Progress";
 import { RadioGroup, RadioGroupItem } from "../../components/RadioGroup";
 import { Separator } from "../../components/Separator";
 import { Skeleton } from "../../components/Skeleton";
+import { Slider } from "../../components/Slider";
 import { Switch } from "../../components/Switch";
 import {
   Table,
@@ -701,6 +702,39 @@ const SkeletonShowcase = () => {
   );
 };
 
+const SliderShowcase = () => {
+  const [value, setValue] = React.useState(35);
+
+  return (
+    <Section
+      testId="slider"
+      title="Slider"
+      description="Native range input semantics with controlled value updates."
+    >
+      <div className="flex w-full max-w-md flex-col gap-4">
+        <Label htmlFor="slider-volume">Volume</Label>
+        <Slider
+          id="slider-volume"
+          min={0}
+          max={100}
+          step={5}
+          value={value}
+          onChange={(event) => setValue(event.currentTarget.valueAsNumber)}
+        />
+        <div className="flex items-center gap-3">
+          <Button onClick={() => setValue(80)}>Set slider to 80</Button>
+          <span data-testid="slider-value">{value}</span>
+        </div>
+        <Slider
+          aria-label="Disabled volume slider"
+          defaultValue={60}
+          disabled
+        />
+      </div>
+    </Section>
+  );
+};
+
 const SwitchShowcase = () => {
   const [checked, setChecked] = React.useState(false);
 
@@ -918,6 +952,7 @@ const showcases = [
   RadioGroupShowcase,
   SeparatorShowcase,
   SkeletonShowcase,
+  SliderShowcase,
   SwitchShowcase,
   TableShowcase,
   ToggleShowcase,

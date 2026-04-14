@@ -39,6 +39,7 @@
     "radio-group": { "type": "file", "name": "RadioGroup.tsx" },
     "separator": { "type": "file", "name": "Separator.tsx" },
     "skeleton": { "type": "file", "name": "Skeleton.tsx" },
+    "slider": { "type": "file", "name": "Slider.tsx" },
     "switch": { "type": "file", "name": "Switch.tsx" },
     "table": { "type": "file", "name": "Table.tsx" },
     "toggle": { "type": "file", "name": "Toggle.tsx" },

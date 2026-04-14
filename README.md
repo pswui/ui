@@ -87,7 +87,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] Select
   - [x] Separator
   - [x] Skeleton
-  - [ ] Slider
+  - [x] Slider
   - [x] Switch
   - [x] Table
   - [x] Tabs
