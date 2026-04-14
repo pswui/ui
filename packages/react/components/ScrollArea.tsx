@@ -1,7 +1,7 @@
 import { type VariantProps, vcn } from "@pswui-lib";
 import React from "react";
 
-const TRACK_THICKNESS = 8;
+const TRACK_THICKNESS = 7;
 const TRACK_INSET = 4;
 const TRACK_CORNER_GAP = 12;
 const MIN_THUMB_SIZE = 24;
