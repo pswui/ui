@@ -17,6 +17,7 @@ test("progress exposes determinate and indeterminate state", async ({
 
   await expect(determinate).toHaveAttribute("aria-valuenow", "40");
   await expect(determinate).toHaveAttribute("aria-valuemax", "100");
+  await expect(determinate).toHaveClass(/bg-emerald-200/);
 
   await section.getByRole("button", { name: "Set progress to 75" }).click();
 

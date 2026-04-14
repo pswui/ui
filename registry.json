@@ -5,61 +5,143 @@
     "lib": "/packages/react/lib/{libName}"
   },
   "lib": [
-    "index.ts",
-    "Slot.tsx",
-    "vcn.ts",
-    "useDocument.ts",
-    "useAnimatedMount.ts"
+    {
+      "checksum": "a708bba3a2f482b5e55d17f9b2d157647e2673534aa4786067ccee773c80dcb1",
+      "name": "index.ts"
+    },
+    {
+      "checksum": "7fd2be30c0b651a19ec9afd1f3ec79a5d045537daebe0a0b1e144df5bb979290",
+      "name": "Slot.tsx"
+    },
+    {
+      "checksum": "727ac1495c1123110d60136f9011ee9bb38930bfad54a1654b175bf748cf3eac",
+      "name": "vcn.ts"
+    },
+    {
+      "checksum": "79a5f85ef43f8c527f15ed54b76625bbe3b9bba248720ff9dfa71bec3978598b",
+      "name": "useDocument.ts"
+    },
+    {
+      "checksum": "2f287eec35284b799d6f060c0bb09e18472e05fdb527617c19a1d2d53fbd48ee",
+      "name": "useAnimatedMount.ts"
+    }
   ],
   "components": {
-    "badge": { "type": "file", "name": "Badge.tsx" },
-    "accordion": {
-      "type": "dir",
-      "name": "Accordion",
-      "files": ["index.ts", "Context.ts", "Component.tsx"]
+    "button": {
+      "type": "file",
+      "name": "Button.tsx",
+      "checksum": "f554d9dd76f649a2b1f33a8e047c485d1b9136e4b11149040a0ecc156cb5c464"
     },
-    "alert": { "type": "file", "name": "Alert.tsx" },
-    "avatar": { "type": "file", "name": "Avatar.tsx" },
-    "breadcrumb": { "type": "file", "name": "Breadcrumb.tsx" },
-    "button": { "type": "file", "name": "Button.tsx" },
-    "card": { "type": "file", "name": "Card.tsx" },
-    "checkbox": { "type": "file", "name": "Checkbox.tsx" },
+    "checkbox": {
+      "type": "file",
+      "name": "Checkbox.tsx",
+      "checksum": "c7586984374bded4d5bed58b54ec12f1e0a94aeead96974b6825161764ca6819"
+    },
     "dialog": {
       "type": "dir",
       "name": "Dialog",
-      "files": ["index.ts", "Component.tsx", "Context.ts"]
+      "files": [
+        {
+          "checksum": "2bcd90ca3af06f6e9744b5eaed67abb869f1f61b478032c8760fbaf807d036d9",
+          "name": "index.ts"
+        },
+        {
+          "checksum": "8cc4f1c7880df94cbd234a2346c5c93ef221a41130408a5eacbac53e387e47b2",
+          "name": "Component.tsx"
+        },
+        {
+          "checksum": "f9d22ac7a8d3bc06357aa69adeb572197ad28803865b8342352da31f880d8ff7",
+          "name": "Context.ts"
+        }
+      ]
     },
-    "drawer": { "type": "file", "name": "Drawer.tsx" },
-    "form": { "type": "file", "name": "Form.tsx" },
-    "input": { "type": "file", "name": "Input.tsx" },
-    "label": { "type": "file", "name": "Label.tsx" },
-    "pagination": { "type": "file", "name": "Pagination.tsx" },
-    "popover": { "type": "file", "name": "Popover.tsx" },
-    "progress": { "type": "file", "name": "Progress.tsx" },
-    "radio-group": { "type": "file", "name": "RadioGroup.tsx" },
-    "scroll-area": { "type": "file", "name": "ScrollArea.tsx" },
-    "separator": { "type": "file", "name": "Separator.tsx" },
-    "skeleton": { "type": "file", "name": "Skeleton.tsx" },
-    "switch": { "type": "file", "name": "Switch.tsx" },
-    "table": { "type": "file", "name": "Table.tsx" },
-    "toggle": { "type": "file", "name": "Toggle.tsx" },
+    "drawer": {
+      "type": "file",
+      "name": "Drawer.tsx",
+      "checksum": "637d8f5ab5ea55d48eff0d9a498c2b9dac23c68812dc4cf7088ce1ed89f97734"
+    },
+    "form": {
+      "type": "file",
+      "name": "Form.tsx",
+      "checksum": "7c9d18f88a260810bdb2e0d58867653bb86f92ce77bf6598b0d3a190cdeeb8ce"
+    },
+    "input": {
+      "type": "file",
+      "name": "Input.tsx",
+      "checksum": "52f3ac95d038275b28dbb3f74da211a7149b5e552c7dd78ca3deed70bb9d28a1"
+    },
+    "label": {
+      "type": "file",
+      "name": "Label.tsx",
+      "checksum": "d832854bcbc0070455c1f643910872d4f0f0e216919294b34314f819ebbbe8b6"
+    },
+    "popover": {
+      "type": "file",
+      "name": "Popover.tsx",
+      "checksum": "4963287e861644de7e0fa2722cf567e60a3927c7c1ea28f38a3e4a6de8e763d1"
+    },
+    "scroll-area": {
+      "type": "file",
+      "name": "ScrollArea.tsx",
+      "checksum": "2869883734755c875ad09e504d28f53b39aee9063bdac84e613e68e6fc121467"
+    },
+    "switch": {
+      "type": "file",
+      "name": "Switch.tsx",
+      "checksum": "1a4ef190e084f6dee1f5ec9adbf62ae44022fce141856eb5a2382ef956210b32"
+    },
     "tabs": {
       "type": "dir",
       "name": "Tabs",
-      "files": ["index.ts", "Context.ts", "Hook.ts", "Component.tsx"]
+      "files": [
+        {
+          "checksum": "999fe4d4d3cee80a52cd61b935d2dbab0e7db60011691f5475070bf07e8f18af",
+          "name": "index.ts"
+        },
+        {
+          "checksum": "865993b268c0c81d8b345df53f59f15023e78369538ab0663428c082454a2776",
+          "name": "Context.ts"
+        },
+        {
+          "checksum": "bca8793fe2724764433fbdd5bf8a9182b46422014b2bc7367d5b1e9b611a8796",
+          "name": "Hook.ts"
+        },
+        {
+          "checksum": "f4df0a01eb75dce8e9ea5ad5bbe162c644202435cf9a95b66be52f59e1021897",
+          "name": "Component.tsx"
+        }
+      ]
     },
-    "textarea": { "type": "file", "name": "Textarea.tsx" },
     "toast": {
       "type": "dir",
       "name": "Toast",
       "files": [
-        "index.ts",
-        "Component.tsx",
-        "Hook.ts",
-        "Store.ts",
-        "Variant.ts"
+        {
+          "checksum": "362b69ac0742bd1c03cca59e9440916891fe8b690f05d97d3ec980da3dbf35ae",
+          "name": "index.ts"
+        },
+        {
+          "checksum": "82d3baede3ad16cebe4fca6bf13334d2fb444fea773fb1e558a94d867b8e358b",
+          "name": "Component.tsx"
+        },
+        {
+          "checksum": "ce79891bd06199a8d7f802aa11c7c24cabcacac1c3d13aff5cf092ccaa75486d",
+          "name": "Hook.ts"
+        },
+        {
+          "checksum": "5cb04ab0fdc2d4f0393219e252c973d044f30be6f90a43d386476145d57f305b",
+          "name": "Store.ts"
+        },
+        {
+          "checksum": "817477bcfc9f3d2e8dec4838cf3233546c0f87de14ebf36fab7fbe3d9a4e7fb0",
+          "name": "Variant.ts"
+        }
       ]
     },
-    "tooltip": { "type": "file", "name": "Tooltip.tsx" }
+    "tooltip": {
+      "type": "file",
+      "name": "Tooltip.tsx",
+      "checksum": "c6631fcc6deb821f788389dc940e24f8f43bbda2ddd414b27dc644870ce7d9a4"
+    }
   }
 }

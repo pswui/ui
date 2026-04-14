@@ -17,10 +17,7 @@ const [progressVariant, resolveProgressVariantProps] = vcn({
 
 interface ProgressProps
   extends VariantProps<typeof progressVariant>,
-    Omit<
-      React.ComponentPropsWithoutRef<"progress">,
-      "className" | "max" | "value"
-    > {
+    Omit<React.ComponentPropsWithoutRef<"progress">, "max" | "value"> {
   max?: number;
   value?: number | null;
 }
