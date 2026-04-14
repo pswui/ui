@@ -61,6 +61,10 @@ const Popover = ({ children, opened, asChild }: PopoverProps) => {
 const PopoverTrigger = ({ children }: { children: React.ReactNode }) => {
   const [state, setState, triggerRef] = React.useContext(PopoverContext);
   function toggleOpen() {
+    if (state.controlled) {
+      return;
+    }
+
     setState((prev) => ({ ...prev, opened: !prev.opened }));
   }
 
