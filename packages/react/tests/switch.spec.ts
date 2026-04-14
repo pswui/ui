@@ -6,10 +6,24 @@ test("switch toggles checked state", async ({ page }) => {
   await gotoHarness(page);
 
   const section = page.getByTestId("switch-section");
-  const control = section.getByTestId("switch-control");
-  const input = control.locator('input[type="checkbox"]');
+  const input = section.getByRole("switch", { name: "Enable notifications" });
 
-  await control.click();
+  await input.click();
+
+  await expect(input).toBeChecked();
+  await expect(section.getByTestId("switch-state")).toHaveText("true");
+});
+
+test("switch toggles with Space from keyboard focus", async ({ page }) => {
+  await gotoHarness(page);
+
+  const section = page.getByTestId("switch-section");
+  const input = section.getByRole("switch", { name: "Enable notifications" });
+
+  await input.focus();
+  await expect(input).toBeFocused();
+
+  await page.keyboard.press("Space");
 
   await expect(input).toBeChecked();
   await expect(section.getByTestId("switch-state")).toHaveText("true");

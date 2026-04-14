@@ -109,6 +109,7 @@ bun install --frozen-lockfile
 # Script running in workspace
 bun run react:dev  # `bun run dev` in react workspace
 bun run cli:build  # `bun run build` in cli workspace
+bun run registry:checksums  # regenerate registry.json file checksums
 ```
 
 ## Project Structure

@@ -6,11 +6,15 @@ test("tabs show default content and switch on click", async ({ page }) => {
   await gotoHarness(page);
 
   const section = page.getByTestId("tabs-section");
+  const submitCount = section.getByTestId("tabs-submit-count");
+
   await expect(section.getByText("Account content")).toBeVisible();
   await expect(section.getByText("Security content")).toHaveCount(0);
+  await expect(submitCount).toHaveText("0");
 
   await section.getByRole("button", { name: "Security" }).click();
 
   await expect(section.getByText("Account content")).toHaveCount(0);
   await expect(section.getByText("Security content")).toBeVisible();
+  await expect(submitCount).toHaveText("0");
 });
