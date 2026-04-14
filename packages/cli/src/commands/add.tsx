@@ -1,5 +1,5 @@
 import { existsSync } from "node:fs";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { Args, Command, Flags } from "@oclif/core";
 import { colorize } from "@oclif/core/ux";
@@ -9,6 +9,7 @@ import React from "react";
 import { Choice } from "../components/Choice.js";
 import { SearchBox } from "../components/SearchBox.js";
 import { loadConfig, validateConfig } from "../helpers/config.js";
+import { installRegistryAsset } from "../helpers/install-registry-asset.js";
 import {
   checkComponentInstalled,
   getDirComponentRequiredFiles,
@@ -18,7 +19,6 @@ import {
   getDirComponentURL,
   getRegistry,
 } from "../helpers/registry.js";
-import { safeFetch } from "../helpers/safe-fetcher.js";
 
 type SearchBoxComponent = {
   displayName: string;
@@ -226,21 +226,23 @@ export default class Add extends Command {
     const libFileOra = ora("Installing required library...").start();
     let successCount = 0;
     for await (const libFile of registry.lib) {
-      const filePath = join(libFolder, libFile);
+      const filePath = join(libFolder, libFile.name);
       if (!existsSync(filePath)) {
-        const libFileContentResponse = await safeFetch(
-          registry.base + registry.paths.lib.replace("{libName}", libFile),
-        );
+        const libFileContentResponse = await installRegistryAsset({
+          asset: libFile,
+          destination: filePath,
+          url:
+            registry.base +
+            registry.paths.lib.replace("{libName}", libFile.name),
+        });
         if (!libFileContentResponse.ok) {
           libFileOra.fail(libFileContentResponse.message);
           return;
         }
-        const libFileContent = await libFileContentResponse.response.text();
-        await writeFile(filePath, libFileContent);
         successCount++;
       }
     }
-    if (successCount > 1) {
+    if (successCount > 0) {
       libFileOra.succeed("Successfully installed library files!");
     } else {
       libFileOra.succeed("Library files are already installed!");
@@ -258,19 +260,20 @@ export default class Add extends Command {
           `Component is already installed! (${componentFile})`,
         );
       } else {
-        const componentFileContentResponse = await safeFetch(
-          await getComponentURL(registry, componentObject),
-        );
+        const componentFileContentResponse = await installRegistryAsset({
+          asset: componentObject,
+          destination: componentFile,
+          transform: (content) =>
+            content.replaceAll(
+              /import\s+{[^}]*}\s+from\s+"@pswui-lib"/g,
+              (match) => match.replace(/@pswui-lib/, resolvedConfig.import.lib),
+            ),
+          url: await getComponentURL(registry, componentObject),
+        });
         if (!componentFileContentResponse.ok) {
           componentFileOra.fail(componentFileContentResponse.message);
           return;
         }
-        const componentFileContent = (
-          await componentFileContentResponse.response.text()
-        ).replaceAll(/import\s+{[^}]*}\s+from\s+"@pswui-lib"/g, (match) =>
-          match.replace(/@pswui-lib/, resolvedConfig.import.lib),
-        );
-        await writeFile(componentFile, componentFileContent);
         componentFileOra.succeed("Component is successfully installed!");
       }
     } else if (componentObject.type === "dir") {
@@ -295,17 +298,30 @@ export default class Add extends Command {
         for await (const [filename, url] of requiredFilesURLs) {
           const componentFile = join(componentDir, filename);
           if (!existsSync(componentFile) || force) {
-            const componentFileContentResponse = await safeFetch(url);
+            const asset = componentObject.files.find(
+              (file) => file.name === filename,
+            );
+            if (!asset) {
+              componentFileOra.fail(
+                `Registry metadata is missing checksum data for ${componentObject.name}/${filename}.`,
+              );
+              return;
+            }
+            const componentFileContentResponse = await installRegistryAsset({
+              asset,
+              destination: componentFile,
+              transform: (content) =>
+                content.replaceAll(
+                  /import\s+{[^}]*}\s+from\s+"@pswui-lib"/g,
+                  (match) =>
+                    match.replace(/@pswui-lib/, resolvedConfig.import.lib),
+                ),
+              url,
+            });
             if (!componentFileContentResponse.ok) {
               componentFileOra.fail(componentFileContentResponse.message);
               return;
             }
-            const componentFileContent = (
-              await componentFileContentResponse.response.text()
-            ).replaceAll(/import\s+{[^}]*}\s+from\s+"@pswui-lib"/g, (match) =>
-              match.replace(/@pswui-lib/, resolvedConfig.import.lib),
-            );
-            await writeFile(componentFile, componentFileContent);
           }
         }
         componentFileOra.succeed("Component is successfully installed!");

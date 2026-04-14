@@ -5,6 +5,7 @@ import {
   forwardRef,
   useContext,
   useEffect,
+  useId,
   useRef,
 } from "react";
 
@@ -13,8 +14,30 @@ Form Item Context
 **/
 interface IFormItemContext {
   invalid?: string | null | undefined;
+  labelId?: string;
+  helperId?: string;
+  errorId?: string;
 }
 const FormItemContext = createContext<IFormItemContext>({});
+
+const mergeIds = (...parts: Array<string | null | undefined>) => {
+  const ids = parts.flatMap((part) => part?.split(/\s+/) ?? []).filter(Boolean);
+
+  return ids.length ? Array.from(new Set(ids)).join(" ") : undefined;
+};
+
+const setOrRemoveAttribute = (
+  element: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
+  name: string,
+  value?: string,
+) => {
+  if (value) {
+    element.setAttribute(name, value);
+    return;
+  }
+
+  element.removeAttribute(name);
+};
 
 /**
 FormItem
@@ -38,20 +61,69 @@ const FormItem = forwardRef<HTMLLabelElement, FormItemProps>((props, ref) => {
   const { asChild, children, invalid, ...restPropsExtracted } =
     restPropsCompressed;
   const innerRef = useRef<HTMLLabelElement | null>(null);
+  const labelId = useId();
+  const helperId = useId();
+  const errorId = useId();
+  const initialAriaLabelledBy = useRef<string | null | undefined>(undefined);
+  const initialAriaDescribedBy = useRef<string | null | undefined>(undefined);
+  const initialAriaErrorMessage = useRef<string | null | undefined>(undefined);
 
   useEffect(() => {
     const invalidAsString = invalid ? invalid : "";
 
-    const input = innerRef.current?.querySelector?.("input");
-    if (!input) return;
+    const field = innerRef.current?.querySelector?.<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >("input, textarea, select");
+    if (!field) return;
 
-    input.setCustomValidity(invalidAsString);
+    if (initialAriaLabelledBy.current === undefined) {
+      initialAriaLabelledBy.current = field.getAttribute("aria-labelledby");
+    }
+    if (initialAriaDescribedBy.current === undefined) {
+      initialAriaDescribedBy.current = field.getAttribute("aria-describedby");
+    }
+    if (initialAriaErrorMessage.current === undefined) {
+      initialAriaErrorMessage.current = field.getAttribute("aria-errormessage");
+    }
+
+    const label =
+      innerRef.current?.querySelector<HTMLElement>("[data-form-label]");
+    const helper =
+      innerRef.current?.querySelector<HTMLElement>("[data-form-helper]");
+    const error =
+      innerRef.current?.querySelector<HTMLElement>("[data-form-error]");
+
+    field.setCustomValidity(invalidAsString);
+    setOrRemoveAttribute(
+      field,
+      "aria-labelledby",
+      mergeIds(initialAriaLabelledBy.current, label?.id),
+    );
+    setOrRemoveAttribute(
+      field,
+      "aria-describedby",
+      mergeIds(initialAriaDescribedBy.current, helper?.id, error?.id),
+    );
+    setOrRemoveAttribute(
+      field,
+      "aria-errormessage",
+      invalid
+        ? mergeIds(initialAriaErrorMessage.current, error?.id)
+        : initialAriaErrorMessage.current ?? undefined,
+    );
+
+    if (invalid) {
+      field.setAttribute("aria-invalid", "true");
+      return;
+    }
+
+    field.removeAttribute("aria-invalid");
   }, [invalid]);
 
   const Comp = asChild ? Slot : "label";
 
   return (
-    <FormItemContext.Provider value={{ invalid }}>
+    <FormItemContext.Provider value={{ invalid, labelId, helperId, errorId }}>
       <Comp
         ref={(el: HTMLLabelElement | null) => {
           innerRef.current = el;
@@ -89,12 +161,15 @@ const FormLabel = forwardRef<HTMLSpanElement, FormLabelProps>((props, ref) => {
   const [variantProps, otherPropsCompressed] =
     resolveFormLabelVariantProps(props);
   const { children, asChild, ...otherPropsExtracted } = otherPropsCompressed;
+  const item = useContext(FormItemContext);
 
   const Comp = asChild ? Slot : "span";
 
   return (
     <Comp
       ref={ref}
+      id={otherPropsExtracted.id ?? item.labelId}
+      data-form-label=""
       className={formLabelVariant(variantProps)}
       {...otherPropsExtracted}
     >
@@ -135,6 +210,8 @@ const FormHelper = forwardRef<HTMLSpanElement, FormHelperProps>(
     return (
       <Comp
         ref={ref}
+        id={otherPropsExtracted.id ?? item.helperId}
+        data-form-helper=""
         className={formHelperVariant(variantProps)}
         {...otherPropsExtracted}
       >
@@ -171,6 +248,8 @@ const FormError = forwardRef<HTMLSpanElement, FormErrorProps>((props, ref) => {
   return item.invalid ? (
     <Comp
       ref={ref}
+      id={otherPropsExtracted.id ?? item.errorId}
+      data-form-error=""
       className={formErrorVariant(variantProps)}
       {...otherPropsExtracted}
     >
