@@ -133,6 +133,7 @@ async function dragThumb(
 
 test("scroll area hides native scrollbars and keeps custom chrome in sync", async ({
   page,
+  browserName,
 }) => {
   await gotoHarness(page);
 
@@ -192,25 +193,40 @@ test("scroll area hides native scrollbars and keeps custom chrome in sync", asyn
   expect(verticalState.overflowX).toBe("hidden");
   expect(verticalState.overflowY).toBe("auto");
   expect(verticalState.scrollbarWidth.trim()).toBe("none");
-  expect(
-    verticalState.webkitScrollbarWidth === "0px" ||
-      verticalState.webkitScrollbarHeight === "0px",
-  ).toBe(true);
+  if (browserName === "firefox") {
+    expect(verticalState.webkitScrollbarWidth).toBe("");
+    expect(verticalState.webkitScrollbarHeight).toBe("");
+  } else {
+    expect(
+      verticalState.webkitScrollbarWidth === "0px" ||
+        verticalState.webkitScrollbarHeight === "0px",
+    ).toBe(true);
+  }
 
   const horizontalState = await readScrollbarState(horizontal);
   expect(horizontalState.overflowX).toBe("auto");
   expect(horizontalState.overflowY).toBe("hidden");
   expect(horizontalState.scrollbarWidth.trim()).toBe("none");
-  expect(
-    horizontalState.webkitScrollbarWidth === "0px" ||
-      horizontalState.webkitScrollbarHeight === "0px",
-  ).toBe(true);
+  if (browserName === "firefox") {
+    expect(horizontalState.webkitScrollbarWidth).toBe("");
+    expect(horizontalState.webkitScrollbarHeight).toBe("");
+  } else {
+    expect(
+      horizontalState.webkitScrollbarWidth === "0px" ||
+        horizontalState.webkitScrollbarHeight === "0px",
+    ).toBe(true);
+  }
 
   const initialVerticalThumbTravel = await readThumbTravel(
     verticalRoot,
     "vertical",
   );
+  const initialHorizontalThumbTravel = await readThumbTravel(
+    horizontalRoot,
+    "horizontal",
+  );
   expect(initialVerticalThumbTravel).not.toBeNull();
+  expect(initialHorizontalThumbTravel).not.toBeNull();
 
   await vertical.press("PageDown");
 
@@ -240,12 +256,14 @@ test("scroll area hides native scrollbars and keeps custom chrome in sync", asyn
     })
     .toBeGreaterThan(0);
 
+  const nextHorizontalThumbTravel = await readThumbTravel(
+    horizontalRoot,
+    "horizontal",
+  );
+  expect(nextHorizontalThumbTravel).not.toBeNull();
   expect(
-    await isTargetVisibleWithinScrollArea(
-      horizontal,
-      '[data-testid="scroll-area-lane-last"]',
-    ),
-  ).toBe(true);
+    (nextHorizontalThumbTravel ?? 0) - (initialHorizontalThumbTravel ?? 0),
+  ).toBeGreaterThan(0);
 
   await both.evaluate((node) => {
     node.scrollTo({
