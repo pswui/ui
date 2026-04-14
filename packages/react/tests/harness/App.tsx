@@ -253,6 +253,34 @@ const PopoverShowcase = () => {
   );
 };
 
+const ControlledPopoverShowcase = () => {
+  const [opened, setOpened] = React.useState(false);
+
+  return (
+    <Section
+      testId="popover-controlled"
+      title="Controlled Popover"
+      description="Trigger clicks should not mutate prop-driven popover state."
+    >
+      <div className="flex items-center gap-3">
+        <Button onClick={() => setOpened((prev) => !prev)}>
+          Toggle controlled popover
+        </Button>
+        <span data-testid="popover-controlled-state">{String(opened)}</span>
+      </div>
+
+      <Popover opened={opened}>
+        <PopoverTrigger>
+          <Button>Controlled popover trigger</Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <div>Controlled popover content</div>
+        </PopoverContent>
+      </Popover>
+    </Section>
+  );
+};
+
 const SwitchShowcase = () => {
   const [checked, setChecked] = React.useState(false);
 
@@ -362,6 +390,7 @@ const showcases = [
   InputShowcase,
   LabelShowcase,
   PopoverShowcase,
+  ControlledPopoverShowcase,
   SwitchShowcase,
   TabsShowcase,
   ToastShowcase,
