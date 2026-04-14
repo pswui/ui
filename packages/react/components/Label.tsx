@@ -19,13 +19,14 @@ interface LabelProps
     React.ComponentPropsWithoutRef<"label"> {}
 
 const Label = React.forwardRef<HTMLLabelElement, LabelProps>((props, ref) => {
+  const { className } = props;
   const [variantProps, otherPropsCompressed] = resolveLabelVariantProps(props);
 
   return (
     <label
       ref={ref}
       {...otherPropsCompressed}
-      className={labelVariant(variantProps)}
+      className={labelVariant({ ...variantProps, className })}
     />
   );
 });

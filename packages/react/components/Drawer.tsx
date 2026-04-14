@@ -137,6 +137,7 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
   (props, ref) => {
     const internalRef = useRef<HTMLDivElement | null>(null);
     const [state, setState] = useContext(DrawerContext);
+    const document = useDocument();
 
     const { isMounted, isRendered } = useAnimatedMount(
       state.isDragging ? true : state.opened,
@@ -155,6 +156,20 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
       setState((prev) => ({ ...prev, opened: false }));
     }
 
+    useEffect(() => {
+      if (!document || !state.opened) return;
+
+      function onKeyDown(event: KeyboardEvent) {
+        if (event.key !== "Escape" || event.defaultPrevented) return;
+        setState((prev) => (prev.opened ? { ...prev, opened: false } : prev));
+      }
+
+      document.addEventListener("keydown", onKeyDown);
+      return () => {
+        document.removeEventListener("keydown", onKeyDown);
+      };
+    }, [document, state.opened, setState]);
+
     const Comp = asChild ? Slot : "div";
     const backdropFilter = `brightness(${
       state.isDragging
@@ -164,7 +179,6 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
           : 1
     })`;
 
-    const document = useDocument();
     if (!document) return null;
 
     return (
@@ -280,6 +294,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
       asChild,
       id,
       onClick,
+      onKeyDown,
       role,
       tabIndex,
       ...restPropsExtracted
@@ -288,6 +303,11 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
     const Comp = asChild ? Slot : "div";
 
     const internalRef = useRef<HTMLDivElement | null>(null);
+
+    function onEscapeKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
+      if (event.key !== "Escape" || event.defaultPrevented) return;
+      setState((prev) => (prev.opened ? { ...prev, opened: false } : prev));
+    }
 
     useEffect(() => {
       if (!state.isRendered || !internalRef.current) return;
@@ -485,6 +505,10 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
           onClick={(e) => {
             e.stopPropagation();
             onClick?.(e);
+          }}
+          onKeyDown={(e) => {
+            onKeyDown?.(e);
+            onEscapeKeyDown(e);
           }}
           onMouseDown={onMouseDown}
           onMouseLeave={() =>

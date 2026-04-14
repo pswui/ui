@@ -9,10 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
       - uses: actions/setup-node@v4
         with:
           node-version: latest
-      - run: yarn
+      - run: bun install --frozen-lockfile
       - uses: JS-DevTools/npm-publish@19c28f1ef146469e409470805ea4279d47c3d35c
         with:
           token: ${{ secrets.NPM_TOKEN }}

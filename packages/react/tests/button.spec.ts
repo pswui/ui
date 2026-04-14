@@ -15,3 +15,15 @@ test("button clicks update state and disabled button remains disabled", async ({
     section.getByRole("button", { name: "Disabled action" }),
   ).toBeDisabled();
 });
+
+test("asChild anchor keeps link semantics", async ({ page }) => {
+  await gotoHarness(page);
+
+  const section = page.getByTestId("button-section");
+  const link = section.getByRole("link", { name: "Button asChild link" });
+
+  await expect(link).toHaveAttribute("href", "#button-as-child-link");
+  await expect(
+    section.getByRole("button", { name: "Button asChild link" }),
+  ).toHaveCount(0);
+});

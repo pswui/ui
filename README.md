@@ -84,16 +84,16 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] Progress
   - [ ] Radio Group
   - [ ] Scroll Area
-  - [ ] Select
-  - [ ] Separator
-  - [ ] Skeleton
-  - [ ] Slider
+  - [x] Select
+  - [x] Separator
+  - [x] Skeleton
+  - [x] Slider
   - [x] Switch
   - [ ] Table
   - [x] Tabs
   - [x] Toast
-  - [ ] Toggle
-  - [ ] Toggle Group
+  - [x] Toggle
+  - [x] Toggle Group
   - [x] Tooltip
 - CLI
   - [x] Add
@@ -103,12 +103,13 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
 ## Building local development environment
 
 ```bash
-# Install Packages
-bun install
+# Bun is the only supported package manager for local development.
+bun install --frozen-lockfile
 
 # Script running in workspace
 bun run react:dev  # `bun run dev` in react workspace
 bun run cli:build  # `bun run build` in cli workspace
+bun run registry:checksums  # regenerate registry.json file checksums
 ```
 
 ## Project Structure
