@@ -95,6 +95,7 @@ import {
 import { Textarea, TextareaFrame } from "../../components/Textarea";
 import { Toaster, useToast } from "../../components/Toast";
 import { Toggle } from "../../components/Toggle";
+import { ToggleGroup, ToggleGroupItem } from "../../components/ToggleGroup";
 import { Tooltip, TooltipContent } from "../../components/Tooltip";
 
 const avatarImageSrc = "/avatar-demo.svg";
@@ -576,6 +577,34 @@ const PopoverShowcase = () => {
   );
 };
 
+const ControlledPopoverShowcase = () => {
+  const [opened, setOpened] = React.useState(false);
+
+  return (
+    <Section
+      testId="popover-controlled"
+      title="Controlled Popover"
+      description="Trigger clicks should not mutate prop-driven popover state."
+    >
+      <div className="flex items-center gap-3">
+        <Button onClick={() => setOpened((prev) => !prev)}>
+          Toggle controlled popover
+        </Button>
+        <span data-testid="popover-controlled-state">{String(opened)}</span>
+      </div>
+
+      <Popover opened={opened}>
+        <PopoverTrigger>
+          <Button>Controlled popover trigger</Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <div>Controlled popover content</div>
+        </PopoverContent>
+      </Popover>
+    </Section>
+  );
+};
+
 const ProgressShowcase = () => {
   const [value, setValue] = React.useState(40);
 
@@ -588,6 +617,7 @@ const ProgressShowcase = () => {
       <div className="flex flex-col gap-4">
         <Progress
           aria-label="Upload progress"
+          className="bg-emerald-200"
           value={value}
           max={100}
         />
@@ -829,6 +859,59 @@ const ToggleShowcase = () => {
   );
 };
 
+const ToggleGroupShowcase = () => {
+  const [alignment, setAlignment] = React.useState<string | undefined>(
+    "center",
+  );
+  const [formats, setFormats] = React.useState<string[]>(["bold"]);
+  const alignmentState = alignment ?? "none";
+  const formatState = formats.join(",") || "none";
+
+  return (
+    <Section
+      testId="toggle-group"
+      title="Toggle Group"
+      description="Single and multiple selection with disabled and orientation semantics."
+    >
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-3">
+          <ToggleGroup
+            aria-label="Text alignment"
+            value={alignment}
+            onValueChange={setAlignment}
+          >
+            <ToggleGroupItem value="left">Left</ToggleGroupItem>
+            <ToggleGroupItem value="center">Center</ToggleGroupItem>
+            <ToggleGroupItem value="right">Right</ToggleGroupItem>
+            <ToggleGroupItem
+              value="justify"
+              disabled
+            >
+              Justify
+            </ToggleGroupItem>
+          </ToggleGroup>
+          <span data-testid="toggle-group-single-state">{alignmentState}</span>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          <ToggleGroup
+            type="multiple"
+            aria-label="Text format"
+            orientation="vertical"
+            defaultValue={["bold"]}
+            onValueChange={setFormats}
+          >
+            <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
+            <ToggleGroupItem value="italic">Italic</ToggleGroupItem>
+            <ToggleGroupItem value="underline">Underline</ToggleGroupItem>
+          </ToggleGroup>
+          <span data-testid="toggle-group-multiple-state">{formatState}</span>
+        </div>
+      </div>
+    </Section>
+  );
+};
+
 const TabsShowcase = () => {
   const [submitCount, setSubmitCount] = React.useState(0);
 
@@ -948,6 +1031,7 @@ const showcases = [
   LabelShowcase,
   PaginationShowcase,
   PopoverShowcase,
+  ControlledPopoverShowcase,
   ProgressShowcase,
   RadioGroupShowcase,
   SeparatorShowcase,
@@ -956,6 +1040,7 @@ const showcases = [
   SwitchShowcase,
   TableShowcase,
   ToggleShowcase,
+  ToggleGroupShowcase,
   TabsShowcase,
   ToastShowcase,
   TooltipShowcase,
