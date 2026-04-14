@@ -4,13 +4,33 @@ export const registryURL = (branch: string) =>
   `https://raw.githubusercontent.com/pswui/ui/${branch}/registry.json`;
 export const CONFIG_DEFAULT_PATH = "pswui.config.js";
 
+export interface RegistryAsset {
+  checksum?: string;
+  name: string;
+}
+
+export type RawRegistryAsset = string | RegistryAsset;
+
 export type RegistryComponent =
   | {
-      files: string[];
+      files: RegistryAsset[];
       name: string;
       type: "dir";
     }
   | {
+      checksum?: string;
+      name: string;
+      type: "file";
+    };
+
+export type RawRegistryComponent =
+  | {
+      files: RawRegistryAsset[];
+      name: string;
+      type: "dir";
+    }
+  | {
+      checksum?: string;
       name: string;
       type: "file";
     };
@@ -18,7 +38,17 @@ export type RegistryComponent =
 export interface Registry {
   base: string;
   components: Record<string, RegistryComponent>;
-  lib: string[];
+  lib: RegistryAsset[];
+  paths: {
+    components: string;
+    lib: string;
+  };
+}
+
+export interface RawRegistry {
+  base: string;
+  components: Record<string, RawRegistryComponent>;
+  lib: RawRegistryAsset[];
   paths: {
     components: string;
     lib: string;

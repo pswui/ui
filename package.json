@@ -10,6 +10,7 @@
     "postinstall": "lefthook install",
     "react": "bun --filter react",
     "cli": "bun --filter @psw-ui/cli",
+    "registry:checksums": "bun ./scripts/registry-checksums.ts",
     "react:build": "bun --filter react build",
     "react:dev": "bun --filter react dev",
     "react:test:e2e": "bun --filter react test:e2e",
