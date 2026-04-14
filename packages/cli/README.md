@@ -16,7 +16,7 @@ CLI for PSW/UI
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g @psw-ui/cli
+$ bun add -g @psw-ui/cli
 $ pswui COMMAND
 running command...
 $ pswui (--version)
