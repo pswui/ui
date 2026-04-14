@@ -61,15 +61,15 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [x] Input
   - [ ] FileInput
   - [ ] ImageInput
-  - [ ] Form
-  - [ ] Textarea
-  - [ ] Accordion
-  - [ ] Alert
-  - [ ] Avatar
-  - [ ] Badge
-  - [ ] Breadcrumb
+  - [x] Form
+  - [x] Textarea
+  - [x] Accordion
+  - [x] Alert
+  - [x] Avatar
+  - [x] Badge
+  - [x] Breadcrumb
   - [x] Button
-  - [ ] Card
+  - [x] Card
   - [x] Checkbox
   - [ ] Context Menu
   - [ ] Data Table
@@ -79,17 +79,17 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [x] Label
   - [ ] Menubar
   - [ ] Navigation Menu
-  - [ ] Pagination
+  - [x] Pagination
   - [x] Popover
-  - [ ] Progress
-  - [ ] Radio Group
-  - [] Scroll Area
+  - [x] Progress
+  - [x] Radio Group
+  - [x] Scroll Area
   - [x] Select
   - [x] Separator
   - [x] Skeleton
   - [x] Slider
   - [x] Switch
-  - [ ] Table
+  - [x] Table
   - [x] Tabs
   - [x] Toast
   - [x] Toggle
