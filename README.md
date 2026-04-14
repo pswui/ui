@@ -92,8 +92,8 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] Table
   - [x] Tabs
   - [x] Toast
-  - [ ] Toggle
-  - [ ] Toggle Group
+  - [x] Toggle
+  - [x] Toggle Group
   - [x] Tooltip
 - CLI
   - [x] Add
