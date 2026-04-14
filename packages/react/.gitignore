@@ -23,9 +23,12 @@ dist-ssr
 
 *storybook.log
 
-src
-src/main.tsx
+src/*
 !src/tailwind.css
+!src/main.tsx
+!src/App.tsx
+!src/docs/
+!src/docs/**
 
 playwright-report
 test-results
