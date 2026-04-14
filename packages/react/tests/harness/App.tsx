@@ -196,6 +196,16 @@ const AlertShowcase = () => {
             Your profile settings were stored successfully.
           </AlertDescription>
         </Alert>
+        <Alert
+          status="danger"
+          className="alert-custom-frame"
+          data-testid="alert-custom"
+        >
+          <AlertTitle>Action required</AlertTitle>
+          <AlertDescription>
+            Custom class names should be preserved with danger styling.
+          </AlertDescription>
+        </Alert>
       </div>
     </Section>
   );
