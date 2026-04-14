@@ -62,14 +62,14 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [ ] FileInput
   - [ ] ImageInput
   - [ ] Form
-  - [x] Textarea
-  - [x] Accordion
-  - [x] Alert
-  - [x] Avatar
-  - [x] Badge
-  - [x] Breadcrumb
+  - [ ] Textarea
+  - [ ] Accordion
+  - [ ] Alert
+  - [ ] Avatar
+  - [ ] Badge
+  - [ ] Breadcrumb
   - [x] Button
-  - [x] Card
+  - [ ] Card
   - [x] Checkbox
   - [ ] Context Menu
   - [ ] Data Table
@@ -79,17 +79,17 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
   - [x] Label
   - [ ] Menubar
   - [ ] Navigation Menu
-  - [x] Pagination
+  - [ ] Pagination
   - [x] Popover
-  - [x] Progress
-  - [x] Radio Group
+  - [ ] Progress
+  - [ ] Radio Group
   - [ ] Scroll Area
   - [ ] Select
-  - [x] Separator
-  - [x] Skeleton
+  - [ ] Separator
+  - [ ] Skeleton
   - [ ] Slider
   - [x] Switch
-  - [x] Table
+  - [ ] Table
   - [x] Tabs
   - [x] Toast
   - [x] Toggle
@@ -103,12 +103,13 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
 ## Building local development environment
 
 ```bash
-# Install Packages
-bun install
+# Bun is the only supported package manager for local development.
+bun install --frozen-lockfile
 
 # Script running in workspace
 bun run react:dev  # `bun run dev` in react workspace
 bun run cli:build  # `bun run build` in cli workspace
+bun run registry:checksums  # regenerate registry.json file checksums
 ```
 
 ## Project Structure

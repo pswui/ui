@@ -13,12 +13,14 @@ export async function getDirComponentRequiredFiles<
     componentObject.name,
   );
   if (!existsSync(componentPath)) {
-    return componentObject.files;
+    return componentObject.files.map(({ name }) => name);
   }
 
   const dir = await readdir(componentPath);
 
-  return componentObject.files.filter((filename) => !dir.includes(filename));
+  return componentObject.files
+    .map(({ name }) => name)
+    .filter((filename) => !dir.includes(filename));
 }
 
 export async function checkComponentInstalled(
@@ -36,9 +38,7 @@ export async function checkComponentInstalled(
   const componentDir = path.join(componentDirRoot, component.name);
   if (!existsSync(componentDir)) return false;
   const dir = await readdir(componentDir);
-  return (
-    component.files.filter((filename) => !dir.includes(filename)).length === 0
-  );
+  return component.files.filter(({ name }) => !dir.includes(name)).length === 0;
 }
 
 export async function changeExtension(
