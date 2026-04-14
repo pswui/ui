@@ -5,6 +5,7 @@ const TRACK_THICKNESS = 8;
 const TRACK_INSET = 4;
 const TRACK_CORNER_GAP = 12;
 const MIN_THUMB_SIZE = 24;
+const SCROLLBAR_IDLE_DELAY = 700;
 
 const [scrollAreaVariant, resolveScrollAreaVariantProps] = vcn({
   base: "overscroll-contain focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-neutral-700 dark:focus-visible:ring-offset-black [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-0",
@@ -151,8 +152,10 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
     const verticalTrackRef = React.useRef<HTMLDivElement | null>(null);
     const horizontalTrackRef = React.useRef<HTMLDivElement | null>(null);
     const frameRef = React.useRef<number | null>(null);
+    const hideChromeTimeoutRef = React.useRef<number | null>(null);
     const metricsRef = React.useRef<ScrollMetrics>(emptyScrollMetrics());
     const dragStateRef = React.useRef<DragState | null>(null);
+    const [isChromeVisible, setIsChromeVisible] = React.useState(true);
     const [metrics, setMetrics] =
       React.useState<ScrollMetrics>(emptyScrollMetrics);
 
@@ -212,9 +215,46 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
       });
     }, [updateMetrics]);
 
+    const clearHideChromeTimeout = React.useCallback(() => {
+      if (
+        hideChromeTimeoutRef.current === null ||
+        typeof window === "undefined"
+      )
+        return;
+
+      window.clearTimeout(hideChromeTimeoutRef.current);
+      hideChromeTimeoutRef.current = null;
+    }, []);
+
+    const revealChrome = React.useCallback(() => {
+      if (typeof window === "undefined") return;
+
+      setIsChromeVisible(true);
+      clearHideChromeTimeout();
+      hideChromeTimeoutRef.current = window.setTimeout(() => {
+        if (dragStateRef.current) {
+          revealChrome();
+          return;
+        }
+
+        hideChromeTimeoutRef.current = null;
+        setIsChromeVisible(false);
+      }, SCROLLBAR_IDLE_DELAY);
+    }, [clearHideChromeTimeout]);
+
     useIsomorphicLayoutEffect(() => {
       scheduleMetricsUpdate();
     });
+
+    React.useEffect(() => {
+      if (typeof window === "undefined") return;
+
+      revealChrome();
+
+      return () => {
+        clearHideChromeTimeout();
+      };
+    }, [clearHideChromeTimeout, revealChrome]);
 
     React.useEffect(() => {
       const node = localRef.current;
@@ -223,6 +263,7 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
       scheduleMetricsUpdate();
 
       const handleScroll = () => {
+        revealChrome();
         scheduleMetricsUpdate();
       };
 
@@ -244,6 +285,7 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
           frameRef.current = null;
         }
 
+        clearHideChromeTimeout();
         dragStateRef.current = null;
         resizeObserver?.disconnect();
         node.removeEventListener("scroll", handleScroll);
@@ -253,13 +295,15 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
           scheduleMetricsUpdate,
         );
       };
-    }, [scheduleMetricsUpdate]);
+    }, [clearHideChromeTimeout, revealChrome, scheduleMetricsUpdate]);
 
     const updateScrollFromPointer = React.useCallback(
       (axis: Axis, coordinate: number, trackRect: DOMRect) => {
         const node = localRef.current;
         const dragState = dragStateRef.current;
         if (!node || !dragState || dragState.axis !== axis) return;
+
+        revealChrome();
 
         const axisMetrics = metricsRef.current[axis];
         const maxThumbOffset = Math.max(
@@ -288,7 +332,7 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
 
         scheduleMetricsUpdate();
       },
-      [scheduleMetricsUpdate],
+      [revealChrome, scheduleMetricsUpdate],
     );
 
     React.useEffect(() => {
@@ -304,6 +348,7 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
             : horizontalTrackRef.current;
         if (!track) return;
 
+        revealChrome();
         updateScrollFromPointer(
           dragState.axis,
           dragState.axis === "vertical" ? event.clientY : event.clientX,
@@ -316,6 +361,7 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
         if (!dragState || dragState.pointerId !== event.pointerId) return;
 
         dragStateRef.current = null;
+        revealChrome();
       };
 
       window.addEventListener("pointermove", handlePointerMove);
@@ -327,13 +373,14 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
         window.removeEventListener("pointerup", handlePointerEnd);
         window.removeEventListener("pointercancel", handlePointerEnd);
       };
-    }, [updateScrollFromPointer]);
+    }, [revealChrome, updateScrollFromPointer]);
 
     const createTrackPointerDownHandler = React.useCallback(
       (axis: Axis) => (event: React.PointerEvent<HTMLDivElement>) => {
         const axisMetrics = metricsRef.current[axis];
         if (!axisMetrics.visible) return;
         event.preventDefault();
+        revealChrome();
 
         const target = event.target;
         if (!(target instanceof HTMLElement)) return;
@@ -365,7 +412,7 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
           track.getBoundingClientRect(),
         );
       },
-      [updateScrollFromPointer],
+      [revealChrome, updateScrollFromPointer],
     );
 
     const createTrackPointerMoveHandler = React.useCallback(
@@ -374,13 +421,14 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
         if (!dragState || dragState.axis !== axis) return;
         if (dragState.pointerId !== event.pointerId) return;
 
+        revealChrome();
         updateScrollFromPointer(
           axis,
           axis === "vertical" ? event.clientY : event.clientX,
           event.currentTarget.getBoundingClientRect(),
         );
       },
-      [updateScrollFromPointer],
+      [revealChrome, updateScrollFromPointer],
     );
 
     const createTrackPointerEndHandler = React.useCallback(
@@ -390,6 +438,7 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
         if (dragState.pointerId !== event.pointerId) return;
 
         dragStateRef.current = null;
+        revealChrome();
 
         try {
           if (event.currentTarget.hasPointerCapture(event.pointerId)) {
@@ -399,7 +448,7 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
           // Ignore release failures when capture was never established.
         }
       },
-      [],
+      [revealChrome],
     );
 
     const showVertical = metrics.vertical.visible;
@@ -409,6 +458,11 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
       <div
         data-scroll-area-root=""
         className="relative"
+        onFocusCapture={revealChrome}
+        onPointerDownCapture={revealChrome}
+        onPointerEnter={revealChrome}
+        onPointerMoveCapture={revealChrome}
+        onWheelCapture={revealChrome}
       >
         <div
           ref={setRefs}
@@ -424,10 +478,13 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
           <div
             aria-hidden="true"
             data-scrollbar-track="vertical"
+            data-scrollbar-state={isChromeVisible ? "visible" : "hidden"}
             ref={verticalTrackRef}
-            className="absolute z-10 rounded-full bg-neutral-200/80 dark:bg-neutral-800/80"
+            className="absolute z-10 bg-transparent transition-opacity duration-150 ease-out"
             style={{
               bottom: TRACK_INSET + (showHorizontal ? TRACK_CORNER_GAP : 0),
+              opacity: isChromeVisible ? 1 : 0,
+              pointerEvents: isChromeVisible ? "auto" : "none",
               right: TRACK_INSET,
               top: TRACK_INSET,
               touchAction: "none",
@@ -454,12 +511,15 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
           <div
             aria-hidden="true"
             data-scrollbar-track="horizontal"
+            data-scrollbar-state={isChromeVisible ? "visible" : "hidden"}
             ref={horizontalTrackRef}
-            className="absolute z-10 rounded-full bg-neutral-200/80 dark:bg-neutral-800/80"
+            className="absolute z-10 bg-transparent transition-opacity duration-150 ease-out"
             style={{
               bottom: TRACK_INSET,
               height: TRACK_THICKNESS,
               left: TRACK_INSET,
+              opacity: isChromeVisible ? 1 : 0,
+              pointerEvents: isChromeVisible ? "auto" : "none",
               right: TRACK_INSET + (showVertical ? TRACK_CORNER_GAP : 0),
               touchAction: "none",
             }}

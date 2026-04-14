@@ -2,6 +2,8 @@ import { type Locator, expect, test } from "@playwright/test";
 
 import { gotoHarness } from "./helpers";
 
+type Axis = "vertical" | "horizontal";
+
 async function readScrollbarState(locator: Locator) {
   return locator.evaluate((node) => {
     const styles = window.getComputedStyle(node);
@@ -27,6 +29,55 @@ async function readScrollbarState(locator: Locator) {
   });
 }
 
+async function readScrollbarChrome(scrollAreaRoot: Locator, axis: Axis) {
+  return scrollAreaRoot.evaluate((node, currentAxis) => {
+    const track = node.querySelector(`[data-scrollbar-track="${currentAxis}"]`);
+    const thumb = node.querySelector(`[data-scrollbar-thumb="${currentAxis}"]`);
+    if (!(track instanceof HTMLElement) || !(thumb instanceof HTMLElement)) {
+      return null;
+    }
+
+    const trackStyles = window.getComputedStyle(track);
+    const thumbStyles = window.getComputedStyle(thumb);
+
+    return {
+      thumbBackgroundColor: thumbStyles.backgroundColor,
+      trackBackgroundColor: trackStyles.backgroundColor,
+      trackBackgroundImage: trackStyles.backgroundImage,
+      trackOpacity: Number.parseFloat(trackStyles.opacity),
+    };
+  }, axis);
+}
+
+function isTransparentColor(color: string) {
+  return color === "rgba(0, 0, 0, 0)" || color === "transparent";
+}
+
+async function expectScrollbarChromeVisible(
+  scrollAreaRoot: Locator,
+  axis: Axis,
+) {
+  await expect
+    .poll(
+      async () =>
+        (await readScrollbarChrome(scrollAreaRoot, axis))?.trackOpacity ?? -1,
+    )
+    .toBeGreaterThan(0.8);
+}
+
+async function expectScrollbarChromeHidden(
+  scrollAreaRoot: Locator,
+  axis: Axis,
+) {
+  await expect
+    .poll(
+      async () =>
+        (await readScrollbarChrome(scrollAreaRoot, axis))?.trackOpacity ?? 1,
+      { timeout: 2_000 },
+    )
+    .toBeLessThan(0.1);
+}
+
 async function isTargetVisibleWithinScrollArea(
   scrollArea: Locator,
   selector: string,
@@ -49,10 +100,7 @@ async function isTargetVisibleWithinScrollArea(
   }, selector);
 }
 
-async function readThumbTravel(
-  scrollAreaRoot: Locator,
-  axis: "vertical" | "horizontal",
-) {
+async function readThumbTravel(scrollAreaRoot: Locator, axis: Axis) {
   return scrollAreaRoot.evaluate((node, currentAxis) => {
     const track = node.querySelector(`[data-scrollbar-track="${currentAxis}"]`);
     const thumb = node.querySelector(`[data-scrollbar-thumb="${currentAxis}"]`);
@@ -69,11 +117,7 @@ async function readThumbTravel(
   }, axis);
 }
 
-async function dragThumb(
-  scrollAreaRoot: Locator,
-  axis: "vertical" | "horizontal",
-  delta: number,
-) {
+async function dragThumb(scrollAreaRoot: Locator, axis: Axis, delta: number) {
   return scrollAreaRoot.evaluate(
     (node, { currentAxis, currentDelta }) => {
       const thumb = node.querySelector(
@@ -131,7 +175,7 @@ async function dragThumb(
   );
 }
 
-test("scroll area hides native scrollbars and keeps custom chrome in sync", async ({
+test("scroll area renders thumb-only chrome and keeps it in sync", async ({
   page,
   browserName,
 }) => {
@@ -182,12 +226,50 @@ test("scroll area hides native scrollbars and keeps custom chrome in sync", asyn
     '[data-scrollbar-track="horizontal"]',
   );
 
-  await expect(verticalTrack).toBeVisible();
-  await expect(verticalThumb).toBeVisible();
-  await expect(horizontalTrack).toBeVisible();
-  await expect(horizontalThumb).toBeVisible();
-  await expect(bothVerticalTrack).toBeVisible();
-  await expect(bothHorizontalTrack).toBeVisible();
+  await expect(verticalTrack).toHaveCount(1);
+  await expect(verticalThumb).toHaveCount(1);
+  await expect(horizontalTrack).toHaveCount(1);
+  await expect(horizontalThumb).toHaveCount(1);
+  await expect(bothVerticalTrack).toHaveCount(1);
+  await expect(bothHorizontalTrack).toHaveCount(1);
+
+  const verticalChrome = await readScrollbarChrome(verticalRoot, "vertical");
+  const horizontalChrome = await readScrollbarChrome(
+    horizontalRoot,
+    "horizontal",
+  );
+  const bothVerticalChrome = await readScrollbarChrome(bothRoot, "vertical");
+  const bothHorizontalChrome = await readScrollbarChrome(
+    bothRoot,
+    "horizontal",
+  );
+
+  expect(verticalChrome).not.toBeNull();
+  expect(horizontalChrome).not.toBeNull();
+  expect(bothVerticalChrome).not.toBeNull();
+  expect(bothHorizontalChrome).not.toBeNull();
+  expect(isTransparentColor(verticalChrome?.trackBackgroundColor ?? "")).toBe(
+    true,
+  );
+  expect(isTransparentColor(horizontalChrome?.trackBackgroundColor ?? "")).toBe(
+    true,
+  );
+  expect(
+    isTransparentColor(bothVerticalChrome?.trackBackgroundColor ?? ""),
+  ).toBe(true);
+  expect(
+    isTransparentColor(bothHorizontalChrome?.trackBackgroundColor ?? ""),
+  ).toBe(true);
+  expect(verticalChrome?.trackBackgroundImage).toBe("none");
+  expect(horizontalChrome?.trackBackgroundImage).toBe("none");
+  expect(bothVerticalChrome?.trackBackgroundImage).toBe("none");
+  expect(bothHorizontalChrome?.trackBackgroundImage).toBe("none");
+  expect(isTransparentColor(verticalChrome?.thumbBackgroundColor ?? "")).toBe(
+    false,
+  );
+  expect(isTransparentColor(horizontalChrome?.thumbBackgroundColor ?? "")).toBe(
+    false,
+  );
 
   const verticalState = await readScrollbarState(vertical);
   expect(verticalState.overflowX).toBe("hidden");
@@ -228,6 +310,15 @@ test("scroll area hides native scrollbars and keeps custom chrome in sync", asyn
   expect(initialVerticalThumbTravel).not.toBeNull();
   expect(initialHorizontalThumbTravel).not.toBeNull();
 
+  await vertical.hover();
+  await expectScrollbarChromeVisible(verticalRoot, "vertical");
+  await horizontal.hover();
+  await expectScrollbarChromeVisible(horizontalRoot, "horizontal");
+  await expectScrollbarChromeHidden(verticalRoot, "vertical");
+  await expectScrollbarChromeHidden(horizontalRoot, "horizontal");
+
+  await vertical.hover();
+  await expectScrollbarChromeVisible(verticalRoot, "vertical");
   await vertical.press("PageDown");
 
   await expect
@@ -245,8 +336,10 @@ test("scroll area hides native scrollbars and keeps custom chrome in sync", asyn
   expect(
     (nextVerticalThumbTravel ?? 0) - (initialVerticalThumbTravel ?? 0),
   ).toBeGreaterThan(0);
+  await expectScrollbarChromeVisible(verticalRoot, "vertical");
 
   await horizontal.hover();
+  await expectScrollbarChromeVisible(horizontalRoot, "horizontal");
   await page.mouse.wheel(4000, 0);
 
   await expect
@@ -265,6 +358,7 @@ test("scroll area hides native scrollbars and keeps custom chrome in sync", asyn
     (nextHorizontalThumbTravel ?? 0) - (initialHorizontalThumbTravel ?? 0),
   ).toBeGreaterThan(0);
 
+  await both.hover();
   await both.evaluate((node) => {
     node.scrollTo({
       top: node.scrollHeight,
@@ -275,6 +369,8 @@ test("scroll area hides native scrollbars and keeps custom chrome in sync", asyn
   const bothState = await readScrollbarState(both);
   expect(bothState.scrollTop).toBeGreaterThan(0);
   expect(bothState.scrollLeft).toBeGreaterThan(0);
+  await expectScrollbarChromeVisible(bothRoot, "vertical");
+  await expectScrollbarChromeVisible(bothRoot, "horizontal");
   expect(
     await isTargetVisibleWithinScrollArea(
       both,
@@ -283,7 +379,9 @@ test("scroll area hides native scrollbars and keeps custom chrome in sync", asyn
   ).toBe(true);
 });
 
-test("scroll area thumbs support pointer dragging", async ({ page }) => {
+test("scroll area thumbs support pointer dragging after idle fade", async ({
+  page,
+}) => {
   await gotoHarness(page);
 
   const section = page.getByTestId("scroll-area-section");
@@ -292,6 +390,11 @@ test("scroll area thumbs support pointer dragging", async ({ page }) => {
   const verticalRoot = vertical.locator("xpath=..");
   const horizontalRoot = horizontal.locator("xpath=..");
 
+  await expectScrollbarChromeHidden(verticalRoot, "vertical");
+  await expectScrollbarChromeHidden(horizontalRoot, "horizontal");
+
+  await vertical.hover();
+  await expectScrollbarChromeVisible(verticalRoot, "vertical");
   expect(await dragThumb(verticalRoot, "vertical", 72)).toBe(true);
 
   await expect
@@ -301,6 +404,8 @@ test("scroll area thumbs support pointer dragging", async ({ page }) => {
     })
     .toBeGreaterThan(0);
 
+  await horizontal.hover();
+  await expectScrollbarChromeVisible(horizontalRoot, "horizontal");
   expect(await dragThumb(horizontalRoot, "horizontal", 96)).toBe(true);
 
   await expect
