@@ -14,10 +14,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node_version }}
-          cache: yarn
-      - run: yarn
-      - run: yarn build
-      - run: yarn test
+      - run: bun install --frozen-lockfile
+      - run: bun --filter @psw-ui/cli lint
+      - run: bun --filter @psw-ui/cli build
+      - run: node packages/cli/bin/run.js --version
