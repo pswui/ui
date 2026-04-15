@@ -59,7 +59,7 @@ If you have any ideas or suggestions, please let me know in [Github Issues](http
 - Component Implementation
   - [ ] DateTimeInput
   - [x] Input
-  - [ ] FileInput
+  - [x] FileInput
   - [ ] ImageInput
   - [x] Form
   - [x] Textarea

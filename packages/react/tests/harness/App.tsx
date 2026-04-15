@@ -48,6 +48,7 @@ import {
   DrawerRoot,
   DrawerTrigger,
 } from "../../components/Drawer";
+import { FileInput } from "../../components/FileInput";
 import {
   FormError,
   FormHelper,
@@ -467,6 +468,50 @@ const FormShowcase = () => {
           </FormHelper>
           <FormError />
         </FormItem>
+      </div>
+    </Section>
+  );
+};
+
+const FileInputShowcase = () => {
+  const [selectedFiles, setSelectedFiles] = React.useState<string[]>([]);
+  const invalid =
+    selectedFiles.length === 0 ? "Select at least one file" : undefined;
+
+  return (
+    <Section
+      testId="file-input"
+      title="FileInput"
+      description="Native file selection with custom validity that clears after upload."
+    >
+      <div className="flex w-full max-w-md flex-col gap-3">
+        <Label htmlFor="roadmap-file-input">
+          <span>Project assets</span>
+          <FileInput
+            id="roadmap-file-input"
+            aria-describedby="file-input-selection"
+            accept=".pdf,.png"
+            full
+            invalid={invalid}
+            multiple
+            onChange={(event) => {
+              setSelectedFiles(
+                Array.from(event.currentTarget.files ?? []).map(
+                  (file) => file.name,
+                ),
+              );
+            }}
+          />
+        </Label>
+        <output
+          id="file-input-selection"
+          data-testid="file-input-selection"
+          className="text-sm opacity-70"
+        >
+          {selectedFiles.length > 0
+            ? selectedFiles.join(", ")
+            : "No files selected"}
+        </output>
       </div>
     </Section>
   );
@@ -1203,6 +1248,7 @@ const showcases = [
   DialogShowcase,
   DrawerShowcase,
   FormShowcase,
+  FileInputShowcase,
   InputShowcase,
   TextareaShowcase,
   LabelShowcase,
