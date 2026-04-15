@@ -84,6 +84,7 @@ const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>((props, ref) => {
     ...otherPropsExtracted
   } = otherPropsCompressed;
   const isAriaHidden = ariaHidden === true || ariaHidden === "true";
+  const imageRef = React.useRef<HTMLImageElement | null>(null);
 
   const [imageStatus, setImageStatus] = React.useState<ImageStatus>(
     src ? "loading" : "idle",
@@ -91,6 +92,38 @@ const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>((props, ref) => {
 
   React.useEffect(() => {
     setImageStatus(src ? "loading" : "idle");
+  }, [src]);
+
+  React.useEffect(() => {
+    if (!src) {
+      return;
+    }
+
+    const image = imageRef.current;
+
+    if (!image) {
+      return;
+    }
+
+    if (image.complete) {
+      setImageStatus(image.naturalWidth > 0 ? "loaded" : "error");
+      return;
+    }
+
+    const handleLoad = () => {
+      setImageStatus(image.naturalWidth > 0 ? "loaded" : "error");
+    };
+    const handleError = () => {
+      setImageStatus("error");
+    };
+
+    image.addEventListener("load", handleLoad);
+    image.addEventListener("error", handleError);
+
+    return () => {
+      image.removeEventListener("load", handleLoad);
+      image.removeEventListener("error", handleError);
+    };
   }, [src]);
 
   const fallbackContent = fallback ?? getInitials(name) ?? "?";
@@ -114,6 +147,7 @@ const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>((props, ref) => {
           src={src}
           alt={alt ?? name ?? ""}
           ref={(element) => {
+            imageRef.current = element;
             if (element?.complete) {
               setImageStatus(element.naturalWidth > 0 ? "loaded" : "error");
             }
