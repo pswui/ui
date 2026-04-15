@@ -108,7 +108,7 @@ const [drawerOverlayVariant, resolveDrawerOverlayVariantProps] = vcn({
   base: "fixed inset-0 transition-[backdrop-filter] duration-75",
   variants: {
     opened: {
-      true: "pointer-events-auto select-auto touch-none", // touch-none to prevent outside scrolling
+      true: "pointer-events-auto select-auto",
       false: "pointer-events-none select-none",
     },
   },
@@ -224,6 +224,21 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
         document.removeEventListener("keydown", onKeyDown);
       };
     }, [document, state.opened, setState]);
+
+    useEffect(() => {
+      const overlay = internalRef.current;
+      if (!overlay || !state.opened || !isMounted) return;
+
+      function onTouchMove(event: TouchEvent) {
+        if (event.target !== overlay || !event.cancelable) return;
+        event.preventDefault();
+      }
+
+      overlay.addEventListener("touchmove", onTouchMove, { passive: false });
+      return () => {
+        overlay.removeEventListener("touchmove", onTouchMove);
+      };
+    }, [isMounted, state.opened]);
 
     const Comp = asChild ? Slot : "div";
     const backdropFilter = `brightness(${
