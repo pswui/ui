@@ -1,4 +1,4 @@
-import { type Locator, expect, test } from "@playwright/test";
+import { type Locator, type Page, expect, test } from "@playwright/test";
 
 import { gotoHarness } from "./helpers";
 
@@ -78,6 +78,28 @@ async function dispatchSyntheticTouchEvent(
   );
 }
 
+async function openScrollableDrawer(page: Page) {
+  const section = page.getByTestId("drawer-scroll-section");
+  await section
+    .getByRole("button", { name: "Open scrollable drawer" })
+    .click({ force: true });
+
+  const dialog = page.getByRole("dialog", {
+    name: "Scrollable drawer title",
+  });
+  const closeButton = dialog.getByRole("button", {
+    name: "Close scrollable drawer",
+  });
+
+  await expect(dialog).toBeVisible();
+  await expect(closeButton).toBeFocused();
+
+  return {
+    dialog,
+    scrollRegion: dialog.getByTestId("drawer-scroll-region"),
+  };
+}
+
 test("drawer exposes dialog semantics and moves focus inside on open", async ({
   page,
 }) => {
@@ -141,15 +163,7 @@ test.describe("drawer touch interactions", () => {
   }) => {
     await gotoHarness(page);
 
-    const section = page.getByTestId("drawer-scroll-section");
-    await section
-      .getByRole("button", { name: "Open scrollable drawer" })
-      .click({ force: true });
-
-    const dialog = page.getByRole("dialog", {
-      name: "Scrollable drawer title",
-    });
-    const scrollRegion = dialog.getByTestId("drawer-scroll-region");
+    const { dialog, scrollRegion } = await openScrollableDrawer(page);
 
     await dialog.evaluate((element) => {
       element.scrollTop = 0;
@@ -194,15 +208,7 @@ test.describe("drawer touch interactions", () => {
   }) => {
     await gotoHarness(page);
 
-    const section = page.getByTestId("drawer-scroll-section");
-    await section
-      .getByRole("button", { name: "Open scrollable drawer" })
-      .click({ force: true });
-
-    const dialog = page.getByRole("dialog", {
-      name: "Scrollable drawer title",
-    });
-    const scrollRegion = dialog.getByTestId("drawer-scroll-region");
+    const { dialog, scrollRegion } = await openScrollableDrawer(page);
 
     await dialog.evaluate((element) => {
       element.scrollTop = 0;
