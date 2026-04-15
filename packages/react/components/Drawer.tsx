@@ -8,7 +8,6 @@ import {
 } from "@pswui-lib";
 import React, {
   type ComponentPropsWithoutRef,
-  type TouchEvent as ReactTouchEvent,
   forwardRef,
   useContext,
   useEffect,
@@ -20,24 +19,14 @@ import { createPortal } from "react-dom";
 
 interface IDrawerContext {
   opened: boolean;
-  closeThreshold: number;
-  movePercentage: number;
-  isDragging: boolean;
-  isMounted: boolean;
   isRendered: boolean;
-  leaveWhileDragging: boolean;
   ids: {
     content: string;
   };
 }
 const DrawerContextInitial: IDrawerContext = {
   opened: false,
-  closeThreshold: 0.3,
-  movePercentage: 0,
-  isDragging: false,
-  isMounted: false,
   isRendered: false,
-  leaveWhileDragging: false,
   ids: {
     content: "",
   },
@@ -57,18 +46,16 @@ const DrawerContext = React.createContext<
 
 interface DrawerRootProps {
   children: React.ReactNode;
-  closeThreshold?: number;
   opened?: boolean;
 }
 
-const DrawerRoot = ({ children, closeThreshold, opened }: DrawerRootProps) => {
+const DrawerRoot = ({ children, opened }: DrawerRootProps) => {
   const state = useState<IDrawerContext>({
     ...DrawerContextInitial,
     ids: {
       content: useId(),
     },
     opened: opened ?? DrawerContextInitial.opened,
-    closeThreshold: closeThreshold ?? DrawerContextInitial.closeThreshold,
   });
   const setState = state[1];
 
@@ -76,9 +63,8 @@ const DrawerRoot = ({ children, closeThreshold, opened }: DrawerRootProps) => {
     setState((prev) => ({
       ...prev,
       opened: opened ?? prev.opened,
-      closeThreshold: closeThreshold ?? prev.closeThreshold,
     }));
-  }, [closeThreshold, opened, setState]);
+  }, [opened, setState]);
 
   return (
     <DrawerContext.Provider value={state}>{children}</DrawerContext.Provider>
@@ -105,11 +91,11 @@ const DrawerTrigger = ({ children }: { children: React.ReactNode }) => {
 };
 
 const [drawerOverlayVariant, resolveDrawerOverlayVariantProps] = vcn({
-  base: "fixed inset-0 transition-[backdrop-filter] duration-75",
+  base: "fixed inset-0 transition-opacity duration-150 backdrop-blur-md backdrop-brightness-75",
   variants: {
     opened: {
-      true: "pointer-events-auto select-auto",
-      false: "pointer-events-none select-none",
+      true: "pointer-events-auto select-auto opacity-100",
+      false: "pointer-events-none select-none opacity-0",
     },
   },
   defaults: {
@@ -117,7 +103,6 @@ const [drawerOverlayVariant, resolveDrawerOverlayVariantProps] = vcn({
   },
 });
 
-const DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS = 0.3;
 const DRAWER_INITIAL_FOCUS_SELECTOR = [
   "[autofocus]",
   "button:not([disabled])",
@@ -127,61 +112,6 @@ const DRAWER_INITIAL_FOCUS_SELECTOR = [
   "textarea:not([disabled])",
   '[tabindex]:not([tabindex="-1"]):not([disabled])',
 ].join(", ");
-const DRAWER_TOUCH_DRAG_INTENT_OFFSET = 8;
-
-type DrawerPosition = "top" | "bottom" | "left" | "right";
-
-function isVerticalDrawer(position: DrawerPosition) {
-  return ["top", "bottom"].includes(position);
-}
-
-function isScrollableOverflow(overflow: string) {
-  return ["auto", "overlay", "scroll"].includes(overflow);
-}
-
-function canScrollableAncestorConsumeTouchGesture(
-  target: EventTarget | null,
-  container: HTMLElement,
-  position: DrawerPosition,
-  movement: number,
-) {
-  const vertical = isVerticalDrawer(position);
-  let current = target instanceof Element ? target : null;
-
-  while (current && container.contains(current)) {
-    if (current instanceof HTMLElement) {
-      const computedStyle = window.getComputedStyle(current);
-      const axisOverflow = vertical
-        ? computedStyle.overflowY
-        : computedStyle.overflowX;
-      const scrollSize = vertical
-        ? current.scrollHeight - current.clientHeight
-        : current.scrollWidth - current.clientWidth;
-
-      if (
-        scrollSize > 0 &&
-        (isScrollableOverflow(axisOverflow) ||
-          isScrollableOverflow(computedStyle.overflow))
-      ) {
-        const currentScroll = vertical ? current.scrollTop : current.scrollLeft;
-        if (movement > 0 ? currentScroll > 0 : currentScroll < scrollSize) {
-          return true;
-        }
-      }
-    }
-
-    if (current === container) {
-      break;
-    }
-    current = current.parentElement;
-  }
-
-  return false;
-}
-
-function isCloseGesture(position: DrawerPosition, movement: number) {
-  return ["top", "left"].includes(position) ? movement < 0 : movement > 0;
-}
 
 interface DrawerOverlayProps
   extends Omit<VariantProps<typeof drawerOverlayVariant>, "opened">,
@@ -195,21 +125,13 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
     const document = useDocument();
 
     const { isMounted, isRendered } = useAnimatedMount(
-      state.isDragging ? true : state.opened,
+      state.opened,
       internalRef,
     );
 
     const [variantProps, restPropsCompressed] =
       resolveDrawerOverlayVariantProps(props);
-    const { asChild, ...restPropsExtracted } = restPropsCompressed;
-
-    function onOutsideClick() {
-      if (state.leaveWhileDragging) {
-        setState((prev) => ({ ...prev, leaveWhileDragging: false }));
-        return;
-      }
-      setState((prev) => ({ ...prev, opened: false }));
-    }
+    const { asChild, onClick, ...restPropsExtracted } = restPropsCompressed;
 
     useEffect(() => {
       if (!document || !state.opened) return;
@@ -225,37 +147,13 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
       };
     }, [document, state.opened, setState]);
 
-    useEffect(() => {
-      const overlay = internalRef.current;
-      if (!overlay || !state.opened || !isMounted) return;
-
-      function onTouchMove(event: TouchEvent) {
-        if (event.target !== overlay || !event.cancelable) return;
-        event.preventDefault();
-      }
-
-      overlay.addEventListener("touchmove", onTouchMove, { passive: false });
-      return () => {
-        overlay.removeEventListener("touchmove", onTouchMove);
-      };
-    }, [isMounted, state.opened]);
-
     const Comp = asChild ? Slot : "div";
-    const backdropFilter = `brightness(${
-      state.isDragging
-        ? state.movePercentage + DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS
-        : state.opened
-          ? DRAWER_OVERLAY_BACKDROP_FILTER_BRIGHTNESS
-          : 1
-    })`;
 
     if (!document) return null;
 
     return (
       <>
-        <DrawerContext.Provider
-          value={[{ ...state, isMounted, isRendered }, setState]}
-        >
+        <DrawerContext.Provider value={[{ ...state, isRendered }, setState]}>
           {isMounted
             ? createPortal(
                 <Comp
@@ -264,11 +162,9 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
                     ...variantProps,
                     opened: isRendered,
                   })}
-                  onClick={onOutsideClick}
-                  style={{
-                    backdropFilter,
-                    WebkitBackdropFilter: backdropFilter,
-                    transitionDuration: state.isDragging ? "0s" : undefined,
+                  onClick={(event) => {
+                    setState((prev) => ({ ...prev, opened: false }));
+                    onClick?.(event);
                   }}
                   ref={(el: HTMLDivElement) => {
                     internalRef.current = el;
@@ -295,7 +191,7 @@ const drawerContentColors = {
 };
 
 const [drawerContentVariant, resolveDrawerContentVariantProps] = vcn({
-  base: `fixed ${drawerContentColors.background} ${drawerContentColors.border} transition-all p-4 flex flex-col justify-between gap-8 overflow-auto`,
+  base: `fixed ${drawerContentColors.background} ${drawerContentColors.border} transition-transform duration-300 p-4 flex flex-col justify-between gap-8 overflow-auto`,
   variants: {
     position: {
       top: "top-0 w-full max-w-screen rounded-t-lg border-b-2",
@@ -314,51 +210,33 @@ const [drawerContentVariant, resolveDrawerContentVariantProps] = vcn({
       false:
         "[&.top-0]:-translate-y-full [&.bottom-0]:translate-y-full [&.left-0]:-translate-x-full [&.right-0]:translate-x-full",
     },
-    internal: {
-      true: "relative",
-      false: "fixed",
-    },
   },
   defaults: {
     position: "left",
     opened: false,
     maxSize: "sm",
-    internal: false,
   },
   dynamics: [
-    ({ position, internal }) => {
-      if (!internal) {
-        if (["top", "bottom"].includes(position)) {
-          return "inset-x-0";
-        }
-        return "inset-y-0";
+    ({ position }) => {
+      if (["top", "bottom"].includes(position)) {
+        return "inset-x-0";
       }
 
-      return "w-fit";
+      return "inset-y-0";
     },
   ],
 });
 
 interface DrawerContentProps
-  extends Omit<
-      VariantProps<typeof drawerContentVariant>,
-      "opened" | "internal"
-    >,
+  extends Omit<VariantProps<typeof drawerContentVariant>, "opened">,
     AsChild,
     ComponentPropsWithoutRef<"div"> {}
 
 const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
   (props, ref) => {
     const [state, setState] = useContext(DrawerContext);
-    const [dragState, setDragState] = useState({
-      isDragging: false,
-      prevTouch: { x: 0, y: 0 },
-      delta: 0,
-    });
-
     const [variantProps, restPropsCompressed] =
       resolveDrawerContentVariantProps(props);
-    const { position = "left" } = variantProps;
     const {
       "aria-modal": ariaModal,
       asChild,
@@ -373,18 +251,6 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
     const Comp = asChild ? Slot : "div";
 
     const internalRef = useRef<HTMLDivElement | null>(null);
-    const isDraggingRef = useRef(false);
-    const dragDeltaRef = useRef(0);
-    const dragTouchRef = useRef({ x: 0, y: 0 });
-    const touchGestureRef = useRef<{
-      mode: "idle" | "pending" | "dragging" | "scrolling";
-      startTouch: { x: number; y: number };
-      target: EventTarget | null;
-    }>({
-      mode: "idle",
-      startTouch: { x: 0, y: 0 },
-      target: null,
-    });
 
     function onEscapeKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
       if (event.key !== "Escape" || event.defaultPrevented) return;
@@ -408,288 +274,34 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
 
       return () => window.cancelAnimationFrame(frame);
     }, [state.isRendered]);
-
-    function onMouseDown() {
-      isDraggingRef.current = true;
-      dragDeltaRef.current = 0;
-      dragTouchRef.current = { x: 0, y: 0 };
-      setState((prev) => ({ ...prev, isDragging: true }));
-      setDragState({
-        isDragging: true,
-        delta: 0,
-        prevTouch: { x: 0, y: 0 },
-      });
-    }
-
-    function onTouchStart(e: ReactTouchEvent<HTMLDivElement>) {
-      touchGestureRef.current = {
-        mode: "pending",
-        startTouch: { x: e.touches[0].pageX, y: e.touches[0].pageY },
-        target: e.target,
-      };
-    }
-
-    useEffect(() => {
-      function onMouseUp(_: TouchEvent): void;
-      function onMouseUp(_: MouseEvent): void;
-      function onMouseUp(_e: TouchEvent | MouseEvent) {
-        if (isDraggingRef.current && internalRef.current) {
-          const size = isVerticalDrawer(position)
-            ? internalRef.current.getBoundingClientRect().height
-            : internalRef.current.getBoundingClientRect().width;
-          setState((prev) => ({
-            ...prev,
-            isDragging: false,
-            opened:
-              Math.abs(dragDeltaRef.current) > state.closeThreshold * size
-                ? false
-                : prev.opened,
-            movePercentage: 0,
-          }));
-        }
-
-        isDraggingRef.current = false;
-        dragDeltaRef.current = 0;
-        dragTouchRef.current = { x: 0, y: 0 };
-        touchGestureRef.current = {
-          mode: "idle",
-          startTouch: { x: 0, y: 0 },
-          target: null,
-        };
-        setDragState({
-          isDragging: false,
-          delta: 0,
-          prevTouch: { x: 0, y: 0 },
-        });
-      }
-
-      function onMouseMove(e: TouchEvent): void;
-      function onMouseMove(e: MouseEvent): void;
-      function onMouseMove(e: MouseEvent | TouchEvent) {
-        if ("touches" in e) {
-          const currentTouch = { x: e.touches[0].pageX, y: e.touches[0].pageY };
-          const touchGesture = touchGestureRef.current;
-
-          if (touchGesture.mode === "pending") {
-            const primaryMovement = isVerticalDrawer(position)
-              ? currentTouch.y - touchGesture.startTouch.y
-              : currentTouch.x - touchGesture.startTouch.x;
-            const secondaryMovement = isVerticalDrawer(position)
-              ? currentTouch.x - touchGesture.startTouch.x
-              : currentTouch.y - touchGesture.startTouch.y;
-
-            if (
-              Math.abs(secondaryMovement) >= DRAWER_TOUCH_DRAG_INTENT_OFFSET &&
-              Math.abs(secondaryMovement) > Math.abs(primaryMovement)
-            ) {
-              touchGestureRef.current = { ...touchGesture, mode: "scrolling" };
-              return;
-            }
-
-            if (Math.abs(primaryMovement) < DRAWER_TOUCH_DRAG_INTENT_OFFSET) {
-              return;
-            }
-
-            if (
-              !internalRef.current ||
-              !isCloseGesture(position, primaryMovement) ||
-              canScrollableAncestorConsumeTouchGesture(
-                touchGesture.target,
-                internalRef.current,
-                position,
-                primaryMovement,
-              )
-            ) {
-              touchGestureRef.current = { ...touchGesture, mode: "scrolling" };
-              return;
-            }
-
-            touchGestureRef.current = { ...touchGesture, mode: "dragging" };
-            isDraggingRef.current = true;
-            dragDeltaRef.current = primaryMovement;
-            dragTouchRef.current = currentTouch;
-
-            if (internalRef.current) {
-              const size = isVerticalDrawer(position)
-                ? internalRef.current.getBoundingClientRect().height
-                : internalRef.current.getBoundingClientRect().width;
-              const movePercentage = primaryMovement / size;
-              setState((prev) => ({
-                ...prev,
-                isDragging: true,
-                movePercentage: ["top", "left"].includes(position)
-                  ? -movePercentage
-                  : movePercentage,
-              }));
-            }
-
-            setDragState({
-              isDragging: true,
-              delta: primaryMovement,
-              prevTouch: currentTouch,
-            });
-
-            if (e.cancelable) {
-              e.preventDefault();
-            }
-
-            return;
-          }
-
-          if (touchGesture.mode !== "dragging" || !isDraggingRef.current) {
-            return;
-          }
-
-          if (e.cancelable) {
-            e.preventDefault();
-          }
-        }
-
-        if (isDraggingRef.current) {
-          const currentTouch =
-            "touches" in e
-              ? { x: e.touches[0].pageX, y: e.touches[0].pageY }
-              : null;
-          let movement = isVerticalDrawer(position)
-            ? "movementY" in e
-              ? e.movementY
-              : (currentTouch?.y ?? 0) - dragTouchRef.current.y
-            : "movementX" in e
-              ? e.movementX
-              : (currentTouch?.x ?? 0) - dragTouchRef.current.x;
-
-          if (
-            (["top", "left"].includes(position) &&
-              dragDeltaRef.current >= 0 &&
-              movement > 0) ||
-            (["bottom", "right"].includes(position) &&
-              dragDeltaRef.current <= 0 &&
-              movement < 0)
-          ) {
-            movement =
-              movement /
-              Math.abs(dragDeltaRef.current === 0 ? 1 : dragDeltaRef.current);
-          }
-
-          const nextDelta = dragDeltaRef.current + movement;
-          dragDeltaRef.current = nextDelta;
-          if (currentTouch) {
-            dragTouchRef.current = currentTouch;
-          }
-
-          setDragState((prev) => ({
-            ...prev,
-            delta: nextDelta,
-            ...(currentTouch ? { prevTouch: currentTouch } : {}),
-          }));
-
-          if (internalRef.current) {
-            const size = isVerticalDrawer(position)
-              ? internalRef.current.getBoundingClientRect().height
-              : internalRef.current.getBoundingClientRect().width;
-            const movePercentage = nextDelta / size;
-            setState((prev) => ({
-              ...prev,
-              movePercentage: ["top", "left"].includes(position)
-                ? -movePercentage
-                : movePercentage,
-            }));
-          }
-        }
-      }
-
-      window.addEventListener("mousemove", onMouseMove);
-      window.addEventListener("mouseup", onMouseUp);
-      window.addEventListener("touchmove", onMouseMove, { passive: false });
-      window.addEventListener("touchend", onMouseUp);
-      return () => {
-        window.removeEventListener("mousemove", onMouseMove);
-        window.removeEventListener("mouseup", onMouseUp);
-        window.removeEventListener("touchmove", onMouseMove);
-        window.removeEventListener("touchend", onMouseUp);
-      };
-    }, [position, setState, state.closeThreshold]);
-
     return (
-      <div
+      <Comp
+        {...restPropsExtracted}
+        id={id ?? state.ids.content}
         className={drawerContentVariant({
           ...variantProps,
           opened: state.isRendered,
-          className: dragState.isDragging
-            ? "transition-[width] duration-0"
-            : variantProps.className,
         })}
-        style={
-          state.opened
-            ? ["top", "bottom"].includes(position)
-              ? {
-                  height:
-                    (internalRef.current?.getBoundingClientRect?.()?.height ??
-                      0) +
-                    (position === "top" ? dragState.delta : -dragState.delta),
-                  padding: 0,
-                  [`padding${position.slice(0, 1).toUpperCase()}${position.slice(1)}`]: `${dragState.delta}px`,
-                }
-              : {
-                  width:
-                    (internalRef.current?.getBoundingClientRect?.()?.width ??
-                      0) +
-                    (position === "left" ? dragState.delta : -dragState.delta),
-                  padding: 0,
-                  [`padding${position.slice(0, 1).toUpperCase()}${position.slice(1)}`]: `${dragState.delta}px`,
-                }
-            : { width: 0, height: 0, padding: 0 }
-        }
-      >
-        <Comp
-          {...restPropsExtracted}
-          id={id ?? state.ids.content}
-          className={drawerContentVariant({
-            ...variantProps,
-            opened: state.isRendered,
-            internal: true,
-          })}
-          role={role ?? "dialog"}
-          aria-modal={ariaModal ?? true}
-          style={{
-            transform:
-              dragState.isDragging &&
-              ((["top", "left"].includes(position) && dragState.delta < 0) ||
-                (["bottom", "right"].includes(position) && dragState.delta > 0))
-                ? `translate${["top", "bottom"].includes(position) ? "Y" : "X"}(${dragState.delta}px)`
-                : undefined,
-            transitionDuration: dragState.isDragging ? "0s" : undefined,
-            userSelect: dragState.isDragging ? "none" : undefined,
-          }}
-          ref={(el: HTMLDivElement | null) => {
-            internalRef.current = el;
-            if (typeof ref === "function") {
-              ref(el);
-            } else if (ref) {
-              ref.current = el;
-            }
-          }}
-          tabIndex={tabIndex ?? -1}
-          onClick={(e) => {
-            e.stopPropagation();
-            onClick?.(e);
-          }}
-          onKeyDown={(e) => {
-            onKeyDown?.(e);
-            onEscapeKeyDown(e);
-          }}
-          onMouseDown={onMouseDown}
-          onMouseLeave={() =>
-            dragState.isDragging &&
-            setState((prev) => ({ ...prev, leaveWhileDragging: true }))
+        role={role ?? "dialog"}
+        aria-modal={ariaModal ?? true}
+        ref={(el: HTMLDivElement | null) => {
+          internalRef.current = el;
+          if (typeof ref === "function") {
+            ref(el);
+          } else if (ref) {
+            ref.current = el;
           }
-          onMouseEnter={() =>
-            dragState.isDragging &&
-            setState((prev) => ({ ...prev, leaveWhileDragging: false }))
-          }
-          onTouchStart={onTouchStart}
-        />
-      </div>
+        }}
+        tabIndex={tabIndex ?? -1}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick?.(e);
+        }}
+        onKeyDown={(e) => {
+          onKeyDown?.(e);
+          onEscapeKeyDown(e);
+        }}
+      />
     );
   },
 );

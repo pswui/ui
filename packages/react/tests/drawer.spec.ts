@@ -1,106 +1,8 @@
-import { type Locator, type Page, expect, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 import { gotoHarness } from "./helpers";
 
-async function dispatchSyntheticTouchEvent(
-  locator: Locator,
-  type: "touchend" | "touchmove" | "touchstart",
-  point: { x: number; y: number },
-) {
-  await locator.evaluate(
-    (element, { type, point }) => {
-      const touchInit = {
-        clientX: point.x,
-        clientY: point.y,
-        identifier: 0,
-        pageX: point.x,
-        pageY: point.y,
-        screenX: point.x,
-        screenY: point.y,
-        target: element,
-      };
-      const createTouch = () =>
-        (() => {
-          try {
-            if (typeof Touch === "function") {
-              return new Touch(touchInit);
-            }
-          } catch {}
-
-          return touchInit;
-        })();
-      const touches = type === "touchend" ? [] : [createTouch()];
-      const changedTouches = [createTouch()];
-
-      let event: Event;
-      try {
-        event =
-          typeof TouchEvent === "function"
-            ? new TouchEvent(type, {
-                bubbles: true,
-                cancelable: true,
-                changedTouches,
-                targetTouches: touches,
-                touches,
-              })
-            : new Event(type, {
-                bubbles: true,
-                cancelable: true,
-              });
-      } catch {
-        event = new Event(type, {
-          bubbles: true,
-          cancelable: true,
-        });
-      }
-
-      if (!("touches" in event)) {
-        Object.defineProperties(event, {
-          changedTouches: {
-            configurable: true,
-            value: changedTouches,
-          },
-          targetTouches: {
-            configurable: true,
-            value: touches,
-          },
-          touches: {
-            configurable: true,
-            value: touches,
-          },
-        });
-      }
-
-      const dispatchTarget = type === "touchstart" ? element : window;
-      dispatchTarget.dispatchEvent(event);
-    },
-    { type, point },
-  );
-}
-
-async function openScrollableDrawer(page: Page) {
-  const section = page.getByTestId("drawer-scroll-section");
-  await section
-    .getByRole("button", { name: "Open scrollable drawer" })
-    .click({ force: true });
-
-  const dialog = page.getByRole("dialog", {
-    name: "Scrollable drawer title",
-  });
-  const closeButton = dialog.getByRole("button", {
-    name: "Close scrollable drawer",
-  });
-
-  await expect(dialog).toBeVisible();
-  await expect(closeButton).toBeFocused();
-
-  return {
-    dialog,
-    scrollRegion: dialog.getByTestId("drawer-scroll-region"),
-  };
-}
-
-test("drawer exposes dialog semantics and moves focus inside on open", async ({
+test("drawer exposes dialog semantics and closes from its close button", async ({
   page,
 }) => {
   await gotoHarness(page);
@@ -124,8 +26,8 @@ test("drawer exposes dialog semantics and moves focus inside on open", async ({
   await expect(dialog).toHaveAttribute("aria-modal", "true");
   await expect(openButton).toHaveAttribute("aria-expanded", "true");
   await expect(openButton).toHaveAttribute("aria-controls");
-
   await expect(closeButton).toBeFocused();
+
   await closeButton.click();
   await expect(dialog).not.toBeVisible();
   await expect(openButton).toHaveAttribute("aria-expanded", "false");
@@ -135,148 +37,31 @@ test("drawer closes on Escape", async ({ page }) => {
   await gotoHarness(page);
 
   const section = page.getByTestId("drawer-section");
-  await section.getByRole("button", { name: "Open drawer" }).click();
+  const openButton = section.getByRole("button", { name: "Open drawer" });
 
-  const closeButton = page.getByRole("button", { name: "Close drawer" });
+  await openButton.click();
 
-  await expect(closeButton).toBeVisible();
-  await closeButton.focus();
-  await closeButton.press("Escape");
-  await expect(closeButton).not.toBeVisible();
+  const dialog = page.getByRole("dialog", { name: "Drawer title" });
+
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).not.toBeVisible();
+  await expect(openButton).toHaveAttribute("aria-expanded", "false");
 });
 
-test.describe("drawer touch interactions", () => {
-  test.use({
-    hasTouch: true,
-    viewport: { width: 390, height: 844 },
-  });
+test("drawer closes on outside click", async ({ page }) => {
+  await gotoHarness(page);
 
-  test.beforeEach(async ({ browserName }) => {
-    test.skip(
-      browserName === "firefox",
-      "Firefox does not support the touch emulation used by this regression.",
-    );
-  });
+  const section = page.getByTestId("drawer-section");
+  const openButton = section.getByRole("button", { name: "Open drawer" });
 
-  test("nested scrollable content does not start a close drag while it can still scroll", async ({
-    page,
-  }) => {
-    await gotoHarness(page);
+  await openButton.click();
 
-    const { dialog, scrollRegion } = await openScrollableDrawer(page);
+  const dialog = page.getByRole("dialog", { name: "Drawer title" });
+  const overlay = dialog.locator("xpath=..");
 
-    await dialog.evaluate((element) => {
-      element.scrollTop = 0;
-    });
-    await scrollRegion.evaluate((element) => {
-      element.scrollTop = 80;
-    });
-
-    const box = await scrollRegion.boundingBox();
-    if (!box) {
-      throw new Error("Expected drawer scroll region to have a bounding box");
-    }
-
-    const x = box.x + box.width / 2;
-    const startY = box.y + box.height / 2;
-
-    await dispatchSyntheticTouchEvent(scrollRegion, "touchstart", {
-      x,
-      y: startY,
-    });
-    await dispatchSyntheticTouchEvent(scrollRegion, "touchmove", {
-      x,
-      y: startY + 140,
-    });
-
-    expect(
-      await dialog.evaluate(
-        (element) => (element as HTMLElement).style.transform,
-      ),
-    ).toBe("");
-
-    await dispatchSyntheticTouchEvent(scrollRegion, "touchend", {
-      x,
-      y: startY + 140,
-    });
-
-    await expect(dialog).toBeVisible();
-  });
-
-  test("overlay keeps drawer touch scrolling enabled while cancelling scrim touch moves", async ({
-    page,
-  }) => {
-    await gotoHarness(page);
-
-    const { dialog } = await openScrollableDrawer(page);
-
-    const overlayState = await dialog.evaluate((element) => {
-      const overlay = element.parentElement?.parentElement;
-      if (!(overlay instanceof HTMLElement)) {
-        throw new Error("Expected drawer overlay to wrap the dialog");
-      }
-
-      const event = new Event("touchmove", {
-        bubbles: true,
-        cancelable: true,
-      });
-
-      overlay.dispatchEvent(event);
-
-      return {
-        defaultPrevented: event.defaultPrevented,
-        overlayTouchAction: window.getComputedStyle(overlay).touchAction,
-      };
-    });
-
-    expect(overlayState.overlayTouchAction).not.toBe("none");
-    expect(overlayState.defaultPrevented).toBe(true);
-    await expect(dialog).toBeVisible();
-  });
-
-  test("drawer starts a close drag with a downward swipe once nested content is already at the top", async ({
-    page,
-  }) => {
-    await gotoHarness(page);
-
-    const { dialog, scrollRegion } = await openScrollableDrawer(page);
-
-    await dialog.evaluate((element) => {
-      element.scrollTop = 0;
-    });
-    await scrollRegion.evaluate((element) => {
-      element.scrollTop = 0;
-    });
-
-    const box = await scrollRegion.boundingBox();
-    if (!box) {
-      throw new Error("Expected drawer scroll region to have a bounding box");
-    }
-
-    const x = box.x + box.width / 2;
-    const startY = box.y + 48;
-    const swipeDistance = await dialog.evaluate(
-      (element) => element.getBoundingClientRect().height * 0.75,
-    );
-
-    await dispatchSyntheticTouchEvent(scrollRegion, "touchstart", {
-      x,
-      y: startY,
-    });
-    await dispatchSyntheticTouchEvent(scrollRegion, "touchmove", {
-      x,
-      y: startY + swipeDistance,
-    });
-
-    await expect
-      .poll(() =>
-        dialog.evaluate((element) => (element as HTMLElement).style.transform),
-      )
-      .toContain("translateY");
-
-    await dispatchSyntheticTouchEvent(scrollRegion, "touchend", {
-      x,
-      y: startY + swipeDistance,
-    });
-  });
+  await expect(dialog).toBeVisible();
+  await overlay.click({ position: { x: 16, y: 16 } });
+  await expect(dialog).not.toBeVisible();
+  await expect(openButton).toHaveAttribute("aria-expanded", "false");
 });
