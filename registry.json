@@ -103,6 +103,11 @@
       "name": "Drawer.tsx",
       "checksum": "610c6287f8166c7684c184867808e8c78d795765be3ea460bda8eb7f03408c73"
     },
+    "file-input": {
+      "type": "file",
+      "name": "FileInput.tsx",
+      "checksum": "03a4d341612a3534a0f0f022c41d2af37a32fcd03cfc86b6f6a5bdd0e221aaec"
+    },
     "form": {
       "type": "file",
       "name": "Form.tsx",
