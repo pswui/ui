@@ -127,6 +127,61 @@ const DRAWER_INITIAL_FOCUS_SELECTOR = [
   "textarea:not([disabled])",
   '[tabindex]:not([tabindex="-1"]):not([disabled])',
 ].join(", ");
+const DRAWER_TOUCH_DRAG_INTENT_OFFSET = 8;
+
+type DrawerPosition = "top" | "bottom" | "left" | "right";
+
+function isVerticalDrawer(position: DrawerPosition) {
+  return ["top", "bottom"].includes(position);
+}
+
+function isScrollableOverflow(overflow: string) {
+  return ["auto", "overlay", "scroll"].includes(overflow);
+}
+
+function canScrollableAncestorConsumeTouchGesture(
+  target: EventTarget | null,
+  container: HTMLElement,
+  position: DrawerPosition,
+  movement: number,
+) {
+  const vertical = isVerticalDrawer(position);
+  let current = target instanceof Element ? target : null;
+
+  while (current && container.contains(current)) {
+    if (current instanceof HTMLElement) {
+      const computedStyle = window.getComputedStyle(current);
+      const axisOverflow = vertical
+        ? computedStyle.overflowY
+        : computedStyle.overflowX;
+      const scrollSize = vertical
+        ? current.scrollHeight - current.clientHeight
+        : current.scrollWidth - current.clientWidth;
+
+      if (
+        scrollSize > 0 &&
+        (isScrollableOverflow(axisOverflow) ||
+          isScrollableOverflow(computedStyle.overflow))
+      ) {
+        const currentScroll = vertical ? current.scrollTop : current.scrollLeft;
+        if (movement > 0 ? currentScroll > 0 : currentScroll < scrollSize) {
+          return true;
+        }
+      }
+    }
+
+    if (current === container) {
+      break;
+    }
+    current = current.parentElement;
+  }
+
+  return false;
+}
+
+function isCloseGesture(position: DrawerPosition, movement: number) {
+  return ["top", "left"].includes(position) ? movement < 0 : movement > 0;
+}
 
 interface DrawerOverlayProps
   extends Omit<VariantProps<typeof drawerOverlayVariant>, "opened">,
@@ -303,6 +358,18 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
     const Comp = asChild ? Slot : "div";
 
     const internalRef = useRef<HTMLDivElement | null>(null);
+    const isDraggingRef = useRef(false);
+    const dragDeltaRef = useRef(0);
+    const dragTouchRef = useRef({ x: 0, y: 0 });
+    const touchGestureRef = useRef<{
+      mode: "idle" | "pending" | "dragging" | "scrolling";
+      startTouch: { x: number; y: number };
+      target: EventTarget | null;
+    }>({
+      mode: "idle",
+      startTouch: { x: 0, y: 0 },
+      target: null,
+    });
 
     function onEscapeKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
       if (event.key !== "Escape" || event.defaultPrevented) return;
@@ -328,6 +395,9 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
     }, [state.isRendered]);
 
     function onMouseDown() {
+      isDraggingRef.current = true;
+      dragDeltaRef.current = 0;
+      dragTouchRef.current = { x: 0, y: 0 };
       setState((prev) => ({ ...prev, isDragging: true }));
       setDragState({
         isDragging: true,
@@ -337,42 +407,40 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
     }
 
     function onTouchStart(e: ReactTouchEvent<HTMLDivElement>) {
-      setState((prev) => ({ ...prev, isDragging: true }));
-      setDragState({
-        isDragging: true,
-        delta: 0,
-        prevTouch: { x: e.touches[0].pageX, y: e.touches[0].pageY },
-      });
+      touchGestureRef.current = {
+        mode: "pending",
+        startTouch: { x: e.touches[0].pageX, y: e.touches[0].pageY },
+        target: e.target,
+      };
     }
 
     useEffect(() => {
-      function onMouseUp(e: TouchEvent): void;
-      function onMouseUp(e: MouseEvent): void;
-      function onMouseUp(e: TouchEvent | MouseEvent) {
-        if (
-          e.target instanceof Element &&
-          internalRef.current &&
-          internalRef.current.contains(e.target)
-        ) {
-          const size = ["top", "bottom"].includes(position)
-            ? e.target.getBoundingClientRect().height
-            : e.target.getBoundingClientRect().width;
+      function onMouseUp(_: TouchEvent): void;
+      function onMouseUp(_: MouseEvent): void;
+      function onMouseUp(_e: TouchEvent | MouseEvent) {
+        if (isDraggingRef.current && internalRef.current) {
+          const size = isVerticalDrawer(position)
+            ? internalRef.current.getBoundingClientRect().height
+            : internalRef.current.getBoundingClientRect().width;
           setState((prev) => ({
             ...prev,
             isDragging: false,
             opened:
-              Math.abs(dragState.delta) > state.closeThreshold * size
+              Math.abs(dragDeltaRef.current) > state.closeThreshold * size
                 ? false
                 : prev.opened,
             movePercentage: 0,
           }));
-        } else {
-          setState((prev) => ({
-            ...prev,
-            isDragging: false,
-            movePercentage: 0,
-          }));
         }
+
+        isDraggingRef.current = false;
+        dragDeltaRef.current = 0;
+        dragTouchRef.current = { x: 0, y: 0 };
+        touchGestureRef.current = {
+          mode: "idle",
+          startTouch: { x: 0, y: 0 },
+          target: null,
+        };
         setDragState({
           isDragging: false,
           delta: 0,
@@ -383,43 +451,128 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
       function onMouseMove(e: TouchEvent): void;
       function onMouseMove(e: MouseEvent): void;
       function onMouseMove(e: MouseEvent | TouchEvent) {
-        if (dragState.isDragging) {
-          setDragState((prev) => {
-            let movement = ["top", "bottom"].includes(position)
-              ? "movementY" in e
-                ? e.movementY
-                : e.touches[0].pageY - prev.prevTouch.y
-              : "movementX" in e
-                ? e.movementX
-                : e.touches[0].pageX - prev.prevTouch.x;
+        if ("touches" in e) {
+          const currentTouch = { x: e.touches[0].pageX, y: e.touches[0].pageY };
+          const touchGesture = touchGestureRef.current;
+
+          if (touchGesture.mode === "pending") {
+            const primaryMovement = isVerticalDrawer(position)
+              ? currentTouch.y - touchGesture.startTouch.y
+              : currentTouch.x - touchGesture.startTouch.x;
+            const secondaryMovement = isVerticalDrawer(position)
+              ? currentTouch.x - touchGesture.startTouch.x
+              : currentTouch.y - touchGesture.startTouch.y;
+
             if (
-              (["top", "left"].includes(position) &&
-                dragState.delta >= 0 &&
-                movement > 0) ||
-              (["bottom", "right"].includes(position) &&
-                dragState.delta <= 0 &&
-                movement < 0)
+              Math.abs(secondaryMovement) >= DRAWER_TOUCH_DRAG_INTENT_OFFSET &&
+              Math.abs(secondaryMovement) > Math.abs(primaryMovement)
             ) {
-              movement =
-                movement /
-                Math.abs(dragState.delta === 0 ? 1 : dragState.delta);
+              touchGestureRef.current = { ...touchGesture, mode: "scrolling" };
+              return;
             }
-            return {
-              ...prev,
-              delta: prev.delta + movement,
-              ...("touches" in e
-                ? {
-                    prevTouch: { x: e.touches[0].pageX, y: e.touches[0].pageY },
-                  }
-                : {}),
-            };
-          });
+
+            if (Math.abs(primaryMovement) < DRAWER_TOUCH_DRAG_INTENT_OFFSET) {
+              return;
+            }
+
+            if (
+              !internalRef.current ||
+              !isCloseGesture(position, primaryMovement) ||
+              canScrollableAncestorConsumeTouchGesture(
+                touchGesture.target,
+                internalRef.current,
+                position,
+                primaryMovement,
+              )
+            ) {
+              touchGestureRef.current = { ...touchGesture, mode: "scrolling" };
+              return;
+            }
+
+            touchGestureRef.current = { ...touchGesture, mode: "dragging" };
+            isDraggingRef.current = true;
+            dragDeltaRef.current = primaryMovement;
+            dragTouchRef.current = currentTouch;
+
+            if (internalRef.current) {
+              const size = isVerticalDrawer(position)
+                ? internalRef.current.getBoundingClientRect().height
+                : internalRef.current.getBoundingClientRect().width;
+              const movePercentage = primaryMovement / size;
+              setState((prev) => ({
+                ...prev,
+                isDragging: true,
+                movePercentage: ["top", "left"].includes(position)
+                  ? -movePercentage
+                  : movePercentage,
+              }));
+            }
+
+            setDragState({
+              isDragging: true,
+              delta: primaryMovement,
+              prevTouch: currentTouch,
+            });
+
+            if (e.cancelable) {
+              e.preventDefault();
+            }
+
+            return;
+          }
+
+          if (touchGesture.mode !== "dragging" || !isDraggingRef.current) {
+            return;
+          }
+
+          if (e.cancelable) {
+            e.preventDefault();
+          }
+        }
+
+        if (isDraggingRef.current) {
+          const currentTouch =
+            "touches" in e
+              ? { x: e.touches[0].pageX, y: e.touches[0].pageY }
+              : null;
+          let movement = isVerticalDrawer(position)
+            ? "movementY" in e
+              ? e.movementY
+              : (currentTouch?.y ?? 0) - dragTouchRef.current.y
+            : "movementX" in e
+              ? e.movementX
+              : (currentTouch?.x ?? 0) - dragTouchRef.current.x;
+
+          if (
+            (["top", "left"].includes(position) &&
+              dragDeltaRef.current >= 0 &&
+              movement > 0) ||
+            (["bottom", "right"].includes(position) &&
+              dragDeltaRef.current <= 0 &&
+              movement < 0)
+          ) {
+            movement =
+              movement /
+              Math.abs(dragDeltaRef.current === 0 ? 1 : dragDeltaRef.current);
+          }
+
+          const nextDelta = dragDeltaRef.current + movement;
+          dragDeltaRef.current = nextDelta;
+          if (currentTouch) {
+            dragTouchRef.current = currentTouch;
+          }
+
+          setDragState((prev) => ({
+            ...prev,
+            delta: nextDelta,
+            ...(currentTouch ? { prevTouch: currentTouch } : {}),
+          }));
 
           if (internalRef.current) {
-            const size = ["top", "bottom"].includes(position)
+            const size = isVerticalDrawer(position)
               ? internalRef.current.getBoundingClientRect().height
               : internalRef.current.getBoundingClientRect().width;
-            const movePercentage = dragState.delta / size;
+            const movePercentage = nextDelta / size;
             setState((prev) => ({
               ...prev,
               movePercentage: ["top", "left"].includes(position)
@@ -432,7 +585,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
 
       window.addEventListener("mousemove", onMouseMove);
       window.addEventListener("mouseup", onMouseUp);
-      window.addEventListener("touchmove", onMouseMove);
+      window.addEventListener("touchmove", onMouseMove, { passive: false });
       window.addEventListener("touchend", onMouseUp);
       return () => {
         window.removeEventListener("mousemove", onMouseMove);
@@ -440,7 +593,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
         window.removeEventListener("touchmove", onMouseMove);
         window.removeEventListener("touchend", onMouseUp);
       };
-    }, [state, setState, dragState, position]);
+    }, [position, setState, state.closeThreshold]);
 
     return (
       <div
