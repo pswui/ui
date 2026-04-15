@@ -203,6 +203,37 @@ test.describe("drawer touch interactions", () => {
     await expect(dialog).toBeVisible();
   });
 
+  test("overlay keeps drawer touch scrolling enabled while cancelling scrim touch moves", async ({
+    page,
+  }) => {
+    await gotoHarness(page);
+
+    const { dialog } = await openScrollableDrawer(page);
+
+    const overlayState = await dialog.evaluate((element) => {
+      const overlay = element.parentElement?.parentElement;
+      if (!(overlay instanceof HTMLElement)) {
+        throw new Error("Expected drawer overlay to wrap the dialog");
+      }
+
+      const event = new Event("touchmove", {
+        bubbles: true,
+        cancelable: true,
+      });
+
+      overlay.dispatchEvent(event);
+
+      return {
+        defaultPrevented: event.defaultPrevented,
+        overlayTouchAction: window.getComputedStyle(overlay).touchAction,
+      };
+    });
+
+    expect(overlayState.overlayTouchAction).not.toBe("none");
+    expect(overlayState.defaultPrevented).toBe(true);
+    await expect(dialog).toBeVisible();
+  });
+
   test("drawer starts a close drag with a downward swipe once nested content is already at the top", async ({
     page,
   }) => {
