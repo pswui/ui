@@ -125,6 +125,7 @@ const scrollAreaTimelineLanes = [
   "QA",
   "Release",
 ];
+const scrollAreaBoardColumns = ["Intake", "Spec", "Build", "Verify", "Ship"];
 
 const Section = ({
   testId,
@@ -851,7 +852,7 @@ const ScrollAreaShowcase = () => {
     <Section
       testId="scroll-area"
       title="Scroll Area"
-      description="Keyboard-focusable scroll containers with vertical and horizontal overflow."
+      description="Keyboard-focusable scroll containers with hidden native scrollbars and custom overflow chrome."
     >
       <div className="grid gap-4 md:grid-cols-2">
         <div className="flex flex-col gap-2">
@@ -860,7 +861,7 @@ const ScrollAreaShowcase = () => {
             role="region"
             aria-label="Activity feed"
             data-testid="scroll-area-vertical"
-            className="h-56 rounded-lg border border-neutral-200 p-3 dark:border-neutral-800"
+            className="h-56 rounded-lg border border-neutral-200 p-3 pr-5 dark:border-neutral-800"
           >
             <div className="flex flex-col gap-3 pr-2">
               {scrollAreaActivityItems.map((item, index) => (
@@ -886,7 +887,7 @@ const ScrollAreaShowcase = () => {
             role="region"
             aria-label="Timeline lanes"
             data-testid="scroll-area-horizontal"
-            className="rounded-lg border border-neutral-200 p-3 dark:border-neutral-800"
+            className="rounded-lg border border-neutral-200 p-3 pb-5 dark:border-neutral-800"
           >
             <div className="flex min-w-max gap-3 pb-2">
               {scrollAreaTimelineLanes.map((lane, index) => (
@@ -903,6 +904,47 @@ const ScrollAreaShowcase = () => {
                   <p className="text-sm text-neutral-600 dark:text-neutral-400">
                     Step {index + 1}
                   </p>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+        </div>
+
+        <div className="flex flex-col gap-2 md:col-span-2">
+          <p className="text-sm font-medium">Delivery board</p>
+          <ScrollArea
+            orientation="both"
+            role="region"
+            aria-label="Delivery board"
+            data-testid="scroll-area-both"
+            className="h-72 rounded-lg border border-neutral-200 p-3 pr-5 pb-5 dark:border-neutral-800"
+          >
+            <div className="grid min-w-max grid-cols-5 gap-3">
+              {scrollAreaBoardColumns.map((column, columnIndex) => (
+                <div
+                  key={column}
+                  className="w-56 rounded-lg border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-800 dark:bg-neutral-950"
+                >
+                  <p className="mb-3 text-sm font-medium">{column}</p>
+                  <div className="grid gap-3">
+                    {Array.from({ length: 5 }, (_, rowIndex) => {
+                      const cardIndex = columnIndex * 5 + rowIndex + 1;
+
+                      return (
+                        <div
+                          key={`${column}-${cardIndex}`}
+                          data-testid={
+                            cardIndex === scrollAreaBoardColumns.length * 5
+                              ? "scroll-area-board-card-last"
+                              : undefined
+                          }
+                          className="flex h-24 items-end rounded-md border border-neutral-200 bg-white p-3 text-sm dark:border-neutral-800 dark:bg-black"
+                        >
+                          Card {cardIndex}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               ))}
             </div>
