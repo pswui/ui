@@ -438,67 +438,6 @@ const DrawerShowcase = () => {
   );
 };
 
-const drawerScrollItems = Array.from({ length: 24 }, (_, index) => index + 1);
-
-const DrawerScrollShowcase = () => {
-  return (
-    <Section
-      testId="drawer-scroll"
-      title="Drawer Mobile Scroll"
-      description="Scrollable content should not trigger a close swipe until it reaches the edge."
-    >
-      <DrawerRoot closeThreshold={0.1}>
-        <DrawerTrigger>
-          <Button>Open scrollable drawer</Button>
-        </DrawerTrigger>
-        <DrawerOverlay>
-          <DrawerContent
-            position="bottom"
-            className="max-h-96"
-            aria-labelledby="drawer-scroll-title"
-            aria-describedby="drawer-scroll-description"
-          >
-            <DrawerHeader>
-              <h3
-                id="drawer-scroll-title"
-                className="text-lg font-semibold"
-              >
-                Scrollable drawer title
-              </h3>
-            </DrawerHeader>
-            <DrawerBody>
-              <p id="drawer-scroll-description">
-                Use touch scrolling in the nested region before swiping down to
-                close.
-              </p>
-              <div
-                data-testid="drawer-scroll-region"
-                className="mt-4 max-h-48 overflow-y-auto rounded-lg border border-neutral-200 p-3 dark:border-neutral-800"
-              >
-                <div className="flex flex-col gap-3">
-                  {drawerScrollItems.map((item) => (
-                    <p
-                      key={item}
-                      className="text-sm"
-                    >
-                      Scroll item {item}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            </DrawerBody>
-            <DrawerFooter>
-              <DrawerClose>
-                <Button>Close scrollable drawer</Button>
-              </DrawerClose>
-            </DrawerFooter>
-          </DrawerContent>
-        </DrawerOverlay>
-      </DrawerRoot>
-    </Section>
-  );
-};
-
 const FormShowcase = () => {
   return (
     <Section
@@ -1350,7 +1289,6 @@ const showcases = [
   CheckboxShowcase,
   DialogShowcase,
   DrawerShowcase,
-  DrawerScrollShowcase,
   FormShowcase,
   FileInputShowcase,
   InputShowcase,
