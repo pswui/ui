@@ -27,6 +27,7 @@ import {
   CardTitle,
 } from "../../components/Card";
 import { Checkbox } from "../../components/Checkbox";
+import { DateTimeInput } from "../../components/DateTimeInput";
 import {
   DialogClose,
   DialogContent,
@@ -512,6 +513,42 @@ const FileInputShowcase = () => {
           {selectedFiles.length > 0
             ? selectedFiles.join(", ")
             : "No files selected"}
+        </output>
+      </div>
+    </Section>
+  );
+};
+
+const DateTimeInputShowcase = () => {
+  const [value, setValue] = React.useState("");
+  const invalid = value ? undefined : "Choose a launch date and time";
+
+  return (
+    <Section
+      testId="datetime-input"
+      title="DateTimeInput"
+      description="Native date and time selection with custom validity."
+    >
+      <div className="flex w-full max-w-md flex-col gap-3">
+        <Label htmlFor="roadmap-datetime-input">
+          <span>Launch window</span>
+          <DateTimeInput
+            id="roadmap-datetime-input"
+            aria-describedby="datetime-input-value"
+            full
+            invalid={invalid}
+            min="2026-01-01T00:00"
+            step={60}
+            value={value}
+            onChange={(event) => setValue(event.currentTarget.value)}
+          />
+        </Label>
+        <output
+          id="datetime-input-value"
+          data-testid="datetime-input-value"
+          className="text-sm opacity-70"
+        >
+          {value || "No launch window selected"}
         </output>
       </div>
     </Section>
@@ -1290,6 +1327,7 @@ const showcases = [
   DialogShowcase,
   DrawerShowcase,
   FormShowcase,
+  DateTimeInputShowcase,
   FileInputShowcase,
   InputShowcase,
   TextareaShowcase,
