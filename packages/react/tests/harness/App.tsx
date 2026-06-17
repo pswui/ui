@@ -329,18 +329,43 @@ const CardShowcase = () => {
       title="Card"
       description="Static content grouped with header, body, and footer."
     >
-      <Card data-testid="card-root">
-        <CardHeader data-testid="card-header">
-          <CardTitle>Design review</CardTitle>
-          <CardDescription>Ready for a focused component pass.</CardDescription>
-        </CardHeader>
-        <CardContent data-testid="card-content">
-          <p>Review spacing, contrast, and responsive structure.</p>
-        </CardContent>
-        <CardFooter data-testid="card-footer">
-          <Button>Open review</Button>
-        </CardFooter>
-      </Card>
+      <div className="flex flex-col gap-4">
+        <Card data-testid="card-root">
+          <CardHeader data-testid="card-header">
+            <CardTitle>Design review</CardTitle>
+            <CardDescription>
+              Ready for a focused component pass.
+            </CardDescription>
+          </CardHeader>
+          <CardContent data-testid="card-content">
+            <p>Review spacing, contrast, and responsive structure.</p>
+          </CardContent>
+          <CardFooter data-testid="card-footer">
+            <Button>Open review</Button>
+          </CardFooter>
+        </Card>
+
+        <Card
+          asChild
+          data-testid="card-as-child-root"
+        >
+          <section>
+            <CardHeader>
+              <CardTitle asChild>
+                <h4 id="card-as-child-title">Linked review</h4>
+              </CardTitle>
+              <CardDescription asChild>
+                <div id="card-as-child-description">
+                  Custom elements still label the card.
+                </div>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Slot-based composition keeps the same accessible wiring.</p>
+            </CardContent>
+          </section>
+        </Card>
+      </div>
     </Section>
   );
 };

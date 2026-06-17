@@ -1,6 +1,36 @@
 import { type AsChild, Slot, type VariantProps, vcn } from "@pswui-lib";
 import React from "react";
 
+function mergeAriaIds(...values: Array<string | undefined>) {
+  const ids = new Set<string>();
+
+  for (const value of values) {
+    if (!value) continue;
+
+    for (const token of value.split(/\s+/)) {
+      if (token) ids.add(token);
+    }
+  }
+
+  return ids.size > 0 ? Array.from(ids).join(" ") : undefined;
+}
+
+function resolveSlottedId(children: React.ReactNode) {
+  if (!React.isValidElement(children)) return undefined;
+
+  const { id } = children.props as { id?: unknown };
+  return typeof id === "string" && id.length > 0 ? id : undefined;
+}
+
+interface CardContextValue {
+  titleId?: string;
+  descriptionId?: string;
+  registerTitle: (id: string) => () => void;
+  registerDescription: (id: string) => () => void;
+}
+
+const CardContext = React.createContext<CardContextValue | null>(null);
+
 const [cardVariant, resolveCardVariantProps] = vcn({
   base: "flex flex-col gap-4 rounded-lg border border-neutral-200 bg-white p-6 text-neutral-950 shadow-sm dark:border-neutral-800 dark:bg-black dark:text-neutral-50",
   variants: {},
@@ -13,17 +43,51 @@ interface CardProps
     AsChild {}
 
 const Card = React.forwardRef<HTMLElement, CardProps>((props, ref) => {
+  const [titleId, setTitleId] = React.useState<string>();
+  const [descriptionId, setDescriptionId] = React.useState<string>();
+  const registerTitle = React.useRef((id: string) => {
+    setTitleId(id);
+
+    return () => {
+      setTitleId((currentId) => (currentId === id ? undefined : currentId));
+    };
+  }).current;
+  const registerDescription = React.useRef((id: string) => {
+    setDescriptionId(id);
+
+    return () => {
+      setDescriptionId((currentId) =>
+        currentId === id ? undefined : currentId,
+      );
+    };
+  }).current;
   const [variantProps, otherPropsCompressed] = resolveCardVariantProps(props);
-  const { asChild, ...otherPropsExtracted } = otherPropsCompressed;
+  const {
+    asChild,
+    "aria-describedby": ariaDescribedBy,
+    "aria-labelledby": ariaLabelledBy,
+    ...otherPropsExtracted
+  } = otherPropsCompressed;
 
   const Comp = asChild ? Slot : "article";
 
   return (
-    <Comp
-      ref={ref}
-      className={cardVariant(variantProps)}
-      {...otherPropsExtracted}
-    />
+    <CardContext.Provider
+      value={{
+        titleId,
+        descriptionId,
+        registerTitle,
+        registerDescription,
+      }}
+    >
+      <Comp
+        ref={ref}
+        className={cardVariant(variantProps)}
+        aria-labelledby={mergeAriaIds(ariaLabelledBy, titleId)}
+        aria-describedby={mergeAriaIds(ariaDescribedBy, descriptionId)}
+        {...otherPropsExtracted}
+      />
+    </CardContext.Provider>
   );
 });
 Card.displayName = "Card";
@@ -71,15 +135,29 @@ interface CardTitleProps
 
 const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
   (props, ref) => {
+    const cardContext = React.useContext(CardContext);
+    const generatedId = React.useId();
     const [variantProps, otherPropsCompressed] =
       resolveCardTitleVariantProps(props);
-    const { asChild, ...otherPropsExtracted } = otherPropsCompressed;
+    const { asChild, id, ...otherPropsExtracted } = otherPropsCompressed;
+    const registerTitle = cardContext?.registerTitle;
+    const resolvedId =
+      id ??
+      (asChild ? resolveSlottedId(otherPropsExtracted.children) : undefined) ??
+      (cardContext ? generatedId : undefined);
 
     const Comp = asChild ? Slot : "h3";
+
+    React.useEffect(() => {
+      if (!registerTitle || !resolvedId) return undefined;
+
+      return registerTitle(resolvedId);
+    }, [registerTitle, resolvedId]);
 
     return (
       <Comp
         ref={ref}
+        id={resolvedId}
         className={cardTitleVariant(variantProps)}
         {...otherPropsExtracted}
       />
@@ -103,15 +181,29 @@ const CardDescription = React.forwardRef<
   HTMLParagraphElement,
   CardDescriptionProps
 >((props, ref) => {
+  const cardContext = React.useContext(CardContext);
+  const generatedId = React.useId();
   const [variantProps, otherPropsCompressed] =
     resolveCardDescriptionVariantProps(props);
-  const { asChild, ...otherPropsExtracted } = otherPropsCompressed;
+  const { asChild, id, ...otherPropsExtracted } = otherPropsCompressed;
+  const registerDescription = cardContext?.registerDescription;
+  const resolvedId =
+    id ??
+    (asChild ? resolveSlottedId(otherPropsExtracted.children) : undefined) ??
+    (cardContext ? generatedId : undefined);
 
   const Comp = asChild ? Slot : "p";
+
+  React.useEffect(() => {
+    if (!registerDescription || !resolvedId) return undefined;
+
+    return registerDescription(resolvedId);
+  }, [registerDescription, resolvedId]);
 
   return (
     <Comp
       ref={ref}
+      id={resolvedId}
       className={cardDescriptionVariant(variantProps)}
       {...otherPropsExtracted}
     />
